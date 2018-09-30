@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
+
 import java.nio.file.Path;
 
 /**
@@ -18,6 +19,45 @@ import java.nio.file.Path;
 * @since   2018-09-27 
 */
 public class Main {
+	
+	/**
+	* This method is used to validate the new map line
+	* entered by the user.
+	* 
+	* @param isContinent A boolean value to denote if we
+	* are editing a continent, if false then it means we are
+	* editing a territory
+	* 
+	* @param newLine A String entered by the user to replace the old
+	* line in map
+	* 
+	* @return True if new line is valid otherwise False
+	*/
+	public static boolean validateMapLine(boolean isContinent, String newLine) {
+		if(isContinent) {
+			String continentParts[] = newLine.split("=");
+			if(continentParts.length != 2) {
+				return false;
+			}
+			else {
+				if(!continentParts[1].matches("-?\\d+(\\.\\d+)?")) {
+					return false;
+				}
+			}
+		}
+		else {
+			String territoryParts[] = newLine.split(",");
+			if(territoryParts.length < 5 ) {
+				return false;
+			}
+			else {
+				if(!territoryParts[1].matches("-?\\d+(\\.\\d+)?") || !territoryParts[2].matches("-?\\d+(\\.\\d+)?")) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 	/**
 	* This method lets user to build
@@ -72,6 +112,9 @@ public class Main {
 				lineNumber++;
 			}
 		    
+			System.out.println("Do you want to edit a continent? Yes or No?");			
+			boolean editContinent = keyboard.nextLine().equals("Yes");
+			
 		    System.out.println("Enter the correct line number to edit");
 		    int lineNumberToEdit = Integer.parseInt(keyboard.nextLine());
 		    while(lineNumberToEdit < 1 || lineNumberToEdit >= lineNumber)
@@ -81,7 +124,22 @@ public class Main {
 		    }
 		    
 		    System.out.println("Enter the line you want to replace it with");
+		    
+		    if(editContinent) {
+		    	System.out.println("Format of the line to edit a continent should be:\n"
+		    			+ "Continent Name=Continent Score");
+		    }
+		    else {
+		    	System.out.println("Format of the line to edit a Territory should be:\n"
+		    			+ "Territory Name, X-cord, Y-cord, Continent Name, Adjacent Territories");
+		    }
+		    
 		    String newLineText = keyboard.nextLine();
+		    
+		    while(!validateMapLine(editContinent, newLineText)) {
+		    	System.out.println("Please enter a valid format as described earlier to edit the line");
+		    	newLineText = keyboard.nextLine();
+		    }
 		    
 		    setLineText(lineNumberToEdit, newLineText, filePath);
 		    
