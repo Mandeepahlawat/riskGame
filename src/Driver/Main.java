@@ -6,10 +6,15 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 import java.nio.file.Path;
+
+import Map.Map;
+import Map.Map.Territory;
 
 /**
 * This class is the main driver class which
@@ -21,6 +26,11 @@ import java.nio.file.Path;
 * @since   2018-09-27 
 */
 public class Main {
+	
+	public static Map activeMap;
+	public static ArrayList<String> userEnteredContinentLines;
+	public static ArrayList<String> userEnteredTerritoryLines;
+	
 	
 	/**
 	* This method is used to validate the new map line
@@ -85,6 +95,7 @@ public class Main {
 	    		System.out.println("Enter a correct format for adding a Continent");
 	    		inputLine = keyboard.nextLine();
 	    	}
+	    	userEnteredContinentLines.add(inputLine);
 	    	inputFileText += inputLine + "\n";
 	    }
 	    return inputFileText;
@@ -114,6 +125,7 @@ public class Main {
 	    		System.out.println("Enter a correct format for adding a Territory");
 	    		inputLine = keyboard.nextLine();
 	    	}
+	    	userEnteredTerritoryLines.add(inputLine);
 	    	inputFileText += inputLine + "\n"; 
 	    }
 	    return inputFileText;
@@ -184,7 +196,7 @@ public class Main {
 			int lineNumber = 1;
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
 			for (String line : allLines) {
-				System.out.println(lineNumber + "." + line);
+				System.out.println(lineNumber + ". " + line);
 				lineNumber++;
 			}
 		    
@@ -222,10 +234,57 @@ public class Main {
 		    while(keyboard.nextLine().equals("Yes")) {
 		    	editMap(keyboard, filePath);
 		    }
-		    
+	    	populateUserEnteredContinentLines(allLines);
+	    	populateUserEnteredTerritoryLines(allLines);
 		}
 		catch(Exception e) {
 			System.out.println(e);
+		}
+	}
+	
+	/**
+	* This method is used for populating the data
+	* of userEnteredContinentLines array list
+	* 
+	* @param allLines A list of strings which contains
+	* all the lines inside map file
+	*/
+	public static void populateUserEnteredContinentLines(List<String> allLines) {
+		Integer continentLineStartIndex = null;
+		Integer continentLineEndIndex = null;
+		int lineCount = 0;
+		for(String line : allLines) {
+			if(line.matches("\\[Continents\\]")) {
+				continentLineStartIndex = lineCount + 1;
+			}
+			if(line.matches("\\[Territories\\]")) {
+				continentLineEndIndex = lineCount;
+			}
+			lineCount++;
+		}
+		if(continentLineStartIndex != null && continentLineEndIndex != null) {
+			userEnteredContinentLines.addAll(allLines.subList(continentLineStartIndex, continentLineEndIndex));
+		}
+	}
+	
+	/**
+	* This method is used for populating the data
+	* of userEnteredTerritoryLines array list
+	* 
+	* @param allLines A list of strings which contains
+	* all the lines inside map file
+	*/
+	public static void populateUserEnteredTerritoryLines(List<String> allLines) {
+		Integer territoryLineStartIndex = null;
+		int lineCount = 0;
+		for(String line : allLines) {
+			if(line.matches("\\[Territories\\]")) {
+				territoryLineStartIndex = lineCount + 1;
+			}
+			lineCount++;
+		}
+		if(territoryLineStartIndex != null) {
+			userEnteredTerritoryLines.addAll(allLines.subList(territoryLineStartIndex, allLines.size()));
 		}
 	}
 	
@@ -243,6 +302,8 @@ public class Main {
 			for (String line : allLines) {
 				System.out.println(line);
 			}
+			populateUserEnteredContinentLines(allLines);
+			populateUserEnteredTerritoryLines(allLines);
 		}
 		catch(Exception e) {
 			System.out.println(e);
@@ -258,6 +319,8 @@ public class Main {
 	* to take user input
 	*/
 	public static void mapSelection(Scanner keyboard) {
+		activeMap = new Map();
+		
 		System.out.println("Select one of the following options: \n"
 				+ "1. Create a new Map. \n"
 				+ "2. Edit a Map. \n"
@@ -276,6 +339,8 @@ public class Main {
 				loadMap(keyboard);
 				System.out.println("Do you want to edit this map? Answer in Yes or No.");
 				if(keyboard.nextLine().equals("Yes")) {
+					userEnteredContinentLines.clear();
+					userEnteredTerritoryLines.clear();
 					editMap(keyboard, null);
 				}
 				break;
@@ -293,8 +358,51 @@ public class Main {
 	* @param String[] args
 	*/
 	public static void main(String[] args) {
+		userEnteredContinentLines = new ArrayList<String>();
+		userEnteredTerritoryLines = new ArrayList<String>();
+		
 		Scanner keyboard = new Scanner(System.in);
+		
+		// startup phase
 		mapSelection(keyboard);
+		
+		userEnteredContinentLines.removeAll(Arrays.asList("", null));
+		userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
+		
+		activeMap = new Map();
+		for(String continentLines : userEnteredContinentLines) {
+			String continentName = continentLines.split("=")[0];
+			int continentScore = Integer.parseInt(continentLines.split("=")[1]);
+			
+			if(!activeMap.addContinent(continentName, continentScore)) {
+				System.out.println("Couldn't add continent because format is invalid"
+						+ "as the continent name already exists");
+				System.exit(0);
+			}
+			
+		}
+		
+		for(String territoryLines : userEnteredTerritoryLines) {
+			List<String> territoryLineArray = new ArrayList<String>(); 
+			for(String territoryLine : territoryLines.split(",")) {
+				territoryLineArray.add(territoryLine);
+			}
+			
+			Territory territory = Map.findTerritory(territoryLineArray.get(0));
+			if(territory == null) {
+				territory = new Territory(territoryLineArray.get(0));
+			}
+			territory.addNeighbours(String.join(",", territoryLineArray.subList(4, territoryLineArray.size())));
+			
+			if(!territory.assignContinent(territoryLineArray.get(3))) {
+				System.out.println("Couldn't assign continent because format is invalid as"
+						+ "the continent is already assigned to territory or doesn't exists.");
+				System.exit(0);
+			}
+			
+		}
+		
+		activeMap.connectContinents();
 		
 		System.out.println("\nEnter the number of players");
 		int playersCount = Integer.parseInt(keyboard.nextLine());
