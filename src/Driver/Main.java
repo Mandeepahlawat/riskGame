@@ -274,6 +274,10 @@ public class Main {
 				break;
 			case 3:
 				loadMap(keyboard);
+				System.out.println("Do you want to edit this map? Answer in Yes or No.");
+				if(keyboard.nextLine().equals("Yes")) {
+					editMap(keyboard, null);
+				}
 				break;
 			default:
 				System.out.println("Invalid Option.");
