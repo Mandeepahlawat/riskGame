@@ -1,6 +1,8 @@
 package Driver;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -60,6 +62,64 @@ public class Main {
 	}
 	
 	/**
+	* This method is used to add new Continents to the Map
+	* 
+	* @param keyboard A Scanner class object which is used
+	* to take user input for building the map
+	* @return A string output containing lines of new Continents
+	*/
+	public static String addContinent(Scanner keyboard) {
+		System.out.println("Enter a list of continents (Enter 'exit' to stop adding continents)");
+	    System.out.println("Format of the line to add continents should be:\n"
+	    			+ "Continent Name=Continent Score");
+	    
+	    String inputFileText = "";
+    	String inputLine;
+	    
+	    while(keyboard.hasNextLine()) {
+	    	inputLine = keyboard.nextLine();
+	    	if(inputLine.equals("exit")) {
+	    		break;
+	    	}
+	    	while(!validateMapLine(true, inputLine)) {
+	    		System.out.println("Enter a correct format for adding a Continent");
+	    		inputLine = keyboard.nextLine();
+	    	}
+	    	inputFileText += inputLine + "\n";
+	    }
+	    return inputFileText;
+	}
+	
+	/**
+	* This method is used to add new Territory to the Map
+	* 
+	* @param keyboard A Scanner class object which is used
+	* to take user input for building the map
+	* @return A string output containing lines of new Territories
+	*/
+	public static String addTerritory(Scanner keyboard) {		
+		System.out.println("Enter a list of Territories (Enter 'exit' to stop adding territories)");
+		System.out.println("Format of the line to add a Territory should be:\n"
+    			+ "Territory Name, X-cord, Y-cord, Continent Name, Adjacent Territories");;
+
+    	String inputFileText = "";
+    	String inputLine;
+    	
+	    while(keyboard.hasNextLine()) {
+	    	inputLine = keyboard.nextLine();
+	    	if(inputLine.equals("exit")) {
+	    		break;
+	    	}
+	    	while(!validateMapLine(false, inputLine)) {
+	    		System.out.println("Enter a correct format for adding a Territory");
+	    		inputLine = keyboard.nextLine();
+	    	}
+	    	inputFileText += inputLine + "\n"; 
+	    }
+	    return inputFileText;
+	}
+	
+	/**
 	* This method lets user to build
 	* a new map and then displays the full map to the user
 	* on the screen
@@ -68,7 +128,25 @@ public class Main {
 	* to take user input for building the map
 	*/
 	public static void createNewMap(Scanner keyboard) {
+		String newMapText = "";
+		newMapText += "[Map]\n"
+				+ "image=world.bmp\n"
+				+ "wrap=yes\n"
+				+ "scroll=horizontal\n"
+				+ "author=Your Name\n"
+				+ "warn=yes";
+		newMapText += "\n\n[Continents]\n" + addContinent(keyboard);
+		newMapText += "\n\n[Territories]\n" + addTerritory(keyboard);
 		
+		System.out.println("Enter the file name");
+		
+		try {  
+            Writer w = new FileWriter(keyboard.nextLine());  
+            w.write(newMapText);  
+            w.close();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }  
 	}
 	
 	/**
@@ -96,14 +174,12 @@ public class Main {
 	* then user will be asked to input the file path.
 	*/
 	public static void editMap(Scanner keyboard, String filePath) {
-		if(filePath == null)
-		{
+		if(filePath == null) {
 			System.out.println("Enter absolute path of the Map file to edit.");
 			filePath = keyboard.nextLine();
 		}
 		
-		try
-		{
+		try {
 			
 			int lineNumber = 1;
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
@@ -117,8 +193,7 @@ public class Main {
 			
 		    System.out.println("Enter the correct line number to edit");
 		    int lineNumberToEdit = Integer.parseInt(keyboard.nextLine());
-		    while(lineNumberToEdit < 1 || lineNumberToEdit >= lineNumber)
-		    {
+		    while(lineNumberToEdit < 1 || lineNumberToEdit >= lineNumber) {
 		    	System.out.println("Enter the correct line number to edit");
 			    lineNumberToEdit = Integer.parseInt(keyboard.nextLine());
 		    }
@@ -144,14 +219,12 @@ public class Main {
 		    setLineText(lineNumberToEdit, newLineText, filePath);
 		    
 		    System.out.print("Want to edit more lines? \nEnter Yes to edit more lines");
-		    while(keyboard.nextLine().equals("Yes"))
-		    {
+		    while(keyboard.nextLine().equals("Yes")) {
 		    	editMap(keyboard, filePath);
 		    }
 		    
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			System.out.println(e);
 		}
 	}
@@ -165,15 +238,13 @@ public class Main {
 	public static void loadMap(Scanner keyboard){
 		System.out.println("Enter absolute path of the Map file to load.");
 		String filePath = keyboard.nextLine();
-		try
-		{
+		try {
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
 			for (String line : allLines) {
 				System.out.println(line);
 			}
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			System.out.println(e);
 		}
 	}
@@ -194,8 +265,7 @@ public class Main {
 		
 		int selectedOption = Integer.parseInt(keyboard.nextLine());
 		
-		switch(selectedOption) 
-		{
+		switch(selectedOption) {
 			case 1:
 				createNewMap(keyboard);
 				break;
@@ -213,8 +283,12 @@ public class Main {
 		
 	}
 	
-	public static void main(String[] args)
-	{
+	/**
+	* This is the main method which runs the program
+	* 
+	* @param String[] args
+	*/
+	public static void main(String[] args) {
 		Scanner keyboard = new Scanner(System.in);
 		mapSelection(keyboard);
 		
