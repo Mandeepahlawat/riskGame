@@ -319,8 +319,6 @@ public class Main {
 	* to take user input
 	*/
 	public static void mapSelection(Scanner keyboard) {
-		activeMap = new Map();
-		
 		System.out.println("Select one of the following options: \n"
 				+ "1. Create a new Map. \n"
 				+ "2. Edit a Map. \n"
