@@ -52,7 +52,7 @@ public class Main {
 				return false;
 			}
 			else {
-				if(!continentParts[1].matches("-?\\d+(\\.\\d+)?")) {
+				if(!continentParts[1].trim().matches("-?\\d+(\\.\\d+)?")) {
 					return false;
 				}
 			}
@@ -63,7 +63,7 @@ public class Main {
 				return false;
 			}
 			else {
-				if(!territoryParts[1].matches("-?\\d+(\\.\\d+)?") || !territoryParts[2].matches("-?\\d+(\\.\\d+)?")) {
+				if(!territoryParts[1].trim().matches("-?\\d+(\\.\\d+)?") || !territoryParts[2].trim().matches("-?\\d+(\\.\\d+)?")) {
 					return false;
 				}
 			}
