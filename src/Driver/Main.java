@@ -222,7 +222,7 @@ public class Main {
 			    else if(editContinent && (lineNumberToEdit <= continentBegin || lineNumberToEdit >= territoryBegin)) {
 			    	System.out.println("INVALID continent line number entered");
 			    	continue;
-			    }
+			    }	
 			    else if(!editContinent && (lineNumberToEdit <= territoryBegin || lineNumberToEdit >= lineNumber)) {
 			    	System.out.println("INVALID territory line number entered");
 			    	continue;
