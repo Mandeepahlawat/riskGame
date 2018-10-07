@@ -125,6 +125,7 @@ public class Map {
 			if(territoryBeingVisited.continent == null) {
 				System.out.println("INVALID MAP");
 				System.out.println(territoryBeingVisited.name +" is not assigned any continent");
+				return false;
 			}
 			//makes sure all the continents are connected
 			else if(territoryBeingVisited.continent.visited == false) {
