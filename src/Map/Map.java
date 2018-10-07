@@ -169,10 +169,12 @@ public class Map {
 				Territory territory = null;
 				if((territory = findTerritory(neighbourName)) != null) {
 					this.neighbours.add(territory);
+					territory.neighbours.add(this);
 				}
 				else {
 					territory = new Territory(neighbourName);
 					this.neighbours.add(territory);
+					territory.neighbours.add(this);
 				}
 			}
 		}
