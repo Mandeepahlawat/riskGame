@@ -402,10 +402,13 @@ public class Main {
 			
 		}
 		
-		activeMap.connectContinents();
-		
-		System.out.println("\nEnter the number of players");
-		int playersCount = Integer.parseInt(keyboard.nextLine());
+		if(activeMap.validateMap()) {
+			System.out.println("\nEnter the number of players");
+			int playersCount = Integer.parseInt(keyboard.nextLine());
+		}
+		else {
+			System.out.println("INVALID MAP!");
+		}
 		
 		keyboard.close();
 	}
