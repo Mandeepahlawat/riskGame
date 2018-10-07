@@ -251,6 +251,7 @@ public class Main {
 		    }
 		    
 		    setLineText(lineNumberToEdit, newLineText, filePath);
+		    allLines.set(lineNumberToEdit - 1, newLineText);
 		    
 		    System.out.println("Want to edit more lines? \nEnter Yes to edit more lines");
 		    while(keyboard.nextLine().equalsIgnoreCase("Yes")) {
