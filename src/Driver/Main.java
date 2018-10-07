@@ -194,31 +194,53 @@ public class Main {
 		try {
 			
 			int lineNumber = 1;
+			int continentBegin = -1;
+			int territoryBegin = -1;
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
 			for (String line : allLines) {
 				System.out.println(lineNumber + ". " + line);
+				if(line.equals("[Continents]")) {
+					continentBegin = lineNumber;
+				}
+				if(line.equals("[Territories]")) {
+					territoryBegin = lineNumber;
+				}
 				lineNumber++;
 			}
 		    
 			System.out.println("Do you want to edit a continent? Yes or No?");			
-			boolean editContinent = keyboard.nextLine().equals("Yes");
+			boolean editContinent = keyboard.nextLine().equalsIgnoreCase("Yes");
 			
-		    System.out.println("Enter the correct line number to edit");
-		    int lineNumberToEdit = Integer.parseInt(keyboard.nextLine());
-		    while(lineNumberToEdit < 1 || lineNumberToEdit >= lineNumber) {
+		    int lineNumberToEdit;
+		    while(true) {
 		    	System.out.println("Enter the correct line number to edit");
 			    lineNumberToEdit = Integer.parseInt(keyboard.nextLine());
+			    if(lineNumberToEdit < 1 || lineNumberToEdit >= lineNumber) {
+			    	System.out.println("INVALID line number entered");
+			    	continue;
+			    }
+			    else if(editContinent && (lineNumberToEdit <= continentBegin || lineNumberToEdit >= territoryBegin)) {
+			    	System.out.println("INVALID continent line number entered");
+			    	continue;
+			    }
+			    else if(!editContinent && (lineNumberToEdit <= territoryBegin || lineNumberToEdit >= lineNumber)) {
+			    	System.out.println("INVALID territory line number entered");
+			    	continue;
+			    }
+			    else {
+			    	break;
+			    }
 		    }
 		    
 		    System.out.println("Enter the line you want to replace it with");
 		    
 		    if(editContinent) {
 		    	System.out.println("Format of the line to edit a continent should be:\n"
-		    			+ "Continent Name=Continent Score");
+		    			+ "Continent_Name=Continent_Score");
 		    }
 		    else {
 		    	System.out.println("Format of the line to edit a Territory should be:\n"
-		    			+ "Territory Name, X-cord, Y-cord, Continent Name, Adjacent Territories");
+		    			+ "Territory_Name, X-cord, Y-cord, Continent_Name, Adjacent Territories");
 		    }
 		    
 		    String newLineText = keyboard.nextLine();
@@ -230,8 +252,8 @@ public class Main {
 		    
 		    setLineText(lineNumberToEdit, newLineText, filePath);
 		    
-		    System.out.print("Want to edit more lines? \nEnter Yes to edit more lines");
-		    while(keyboard.nextLine().equals("Yes")) {
+		    System.out.println("Want to edit more lines? \nEnter Yes to edit more lines");
+		    while(keyboard.nextLine().equalsIgnoreCase("Yes")) {
 		    	editMap(keyboard, filePath);
 		    }
 	    	populateUserEnteredContinentLines(allLines);
@@ -371,8 +393,8 @@ public class Main {
 		
 		activeMap = new Map();
 		for(String continentLines : userEnteredContinentLines) {
-			String continentName = continentLines.split("=")[0];
-			int continentScore = Integer.parseInt(continentLines.split("=")[1]);
+			String continentName = continentLines.split("=")[0].trim();
+			int continentScore = Integer.parseInt(continentLines.split("=")[1].trim());
 			
 			if(!activeMap.addContinent(continentName, continentScore)) {
 				System.out.println("Couldn't add continent because format is invalid"
@@ -385,7 +407,7 @@ public class Main {
 		for(String territoryLines : userEnteredTerritoryLines) {
 			List<String> territoryLineArray = new ArrayList<String>(); 
 			for(String territoryLine : territoryLines.split(",")) {
-				territoryLineArray.add(territoryLine);
+				territoryLineArray.add(territoryLine.trim());
 			}
 			
 			Territory territory = Map.findTerritory(territoryLineArray.get(0));

@@ -21,6 +21,7 @@ public class Map {
 	public Map parentMap;
 	public static ArrayList<Territory> listOfAllTerritories;
 	public static ArrayList<Map> listOfAllContinents;
+	public boolean visited = false;
 	
 	/**
 	* This method is used to find a Territory.
@@ -108,14 +109,27 @@ public class Map {
 	* is not connected and the function returns false.
 	* Otherwise, if all the territories are visited, the resulting graph
 	* is connected and the method returns true.
+	* Also, this method marks continent as visited as we implement DFS,
+	* in order to check that there is no continent without any territory
+	* assigned to it.
 	*/
 	public boolean validateMap() {
+		//validate territories
 		this.territories.addAll(listOfAllTerritories);
 		Stack<Territory> stack = new Stack<>();
 		stack.push(this.territories.get(0));
 		while(!stack.isEmpty()) {
 			Territory territoryBeingVisited = stack.pop();
 			territoryBeingVisited.visited = true;
+			//check whether all the countries are assigned a continent
+			if(territoryBeingVisited.continent == null) {
+				System.out.println("INVALID MAP");
+				System.out.println(territoryBeingVisited.name +" is not assigned any continent");
+			}
+			//makes sure all the continents are connected
+			else if(territoryBeingVisited.continent.visited == false) {
+				territoryBeingVisited.continent.visited = true;
+			}
 			for(Territory neighbour: territoryBeingVisited.neighbours) {
 				if(!neighbour.visited) {
 					stack.push(neighbour);
@@ -125,6 +139,17 @@ public class Map {
 		
 		for(Territory territoryBeingVisited: this.territories) {
 			if(!territoryBeingVisited.visited) {
+				System.out.println("INVALID MAP");
+				System.out.println(territoryBeingVisited.name +" is not connected");
+				return false;
+			}
+		}
+		
+		//validate continents
+		for(Map continentBeingVisited: this.continents) {
+			if(!continentBeingVisited.visited) {
+				System.out.println("INVALID MAP");
+				System.out.println(continentBeingVisited.name +" doesn't have any territory inside it");
 				return false;
 			}
 		}
