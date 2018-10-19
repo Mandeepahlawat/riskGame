@@ -20,7 +20,7 @@ public class Map {
 	public Map parentMap;
 	public static ArrayList<Territory> listOfAllTerritories;
 	public static ArrayList<Map> listOfAllContinents;
-	
+	public static boolean jUnitTestOn=false;
 	/**
 	* This method is used to find a Territory.
 	* 
@@ -129,6 +129,9 @@ public class Map {
 			this.name = name;
 			this.continent = null;
 			this.neighbours = new ArrayList<Territory>();
+			if(jUnitTestOn) {
+				listOfAllTerritories=new ArrayList<>();
+			}
 			listOfAllTerritories.add(this);
 		}
 		

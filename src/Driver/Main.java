@@ -30,7 +30,7 @@ public class Main {
 	public static Map activeMap;
 	public static ArrayList<String> userEnteredContinentLines;
 	public static ArrayList<String> userEnteredTerritoryLines;
-	
+	public static boolean jUnitTestOn=false;
 	
 	/**
 	* This method is used to validate the new map line
@@ -262,6 +262,9 @@ public class Main {
 			}
 			lineCount++;
 		}
+		if(jUnitTestOn) {
+			userEnteredContinentLines=new ArrayList<>();
+		}
 		if(continentLineStartIndex != null && continentLineEndIndex != null) {
 			userEnteredContinentLines.addAll(allLines.subList(continentLineStartIndex, continentLineEndIndex));
 		}
@@ -282,6 +285,9 @@ public class Main {
 				territoryLineStartIndex = lineCount + 1;
 			}
 			lineCount++;
+		}
+		if(jUnitTestOn) {
+			userEnteredTerritoryLines=new ArrayList<>();
 		}
 		if(territoryLineStartIndex != null) {
 			userEnteredTerritoryLines.addAll(allLines.subList(territoryLineStartIndex, allLines.size()));
