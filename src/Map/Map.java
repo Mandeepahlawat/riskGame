@@ -170,7 +170,8 @@ public class Map {
 		public Map continent;
 		public ArrayList<Territory> neighbours;
 		public boolean visited = false;
-		
+		public int playerId = 0;						//CHANGED 18-10
+		public int numberOfArmies = 0;				//CHANGED 18-10
 		/**
 		* This method is the constructor of the Territory class
 		* 

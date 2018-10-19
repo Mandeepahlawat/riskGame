@@ -15,6 +15,7 @@ import java.nio.file.Path;
 
 import Map.Map;
 import Map.Map.Territory;
+import javafx.util.Pair;
 
 /**
 * This class is the main driver class which
@@ -30,6 +31,8 @@ public class Main {
 	public static Map activeMap;
 	public static ArrayList<String> userEnteredContinentLines;
 	public static ArrayList<String> userEnteredTerritoryLines;
+	public static ArrayList<Pair<String, Integer> > playerControllingTerritory;
+	public static ArrayList<Pair<String, Integer> > armiesAssignedToTerritory;
 	
 	
 	/**
