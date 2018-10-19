@@ -359,7 +359,7 @@ public class Main {
 			case 3:
 				loadMap(keyboard);
 				System.out.println("Do you want to edit this map? Answer in Yes or No.");
-				if(keyboard.nextLine().equals("Yes")) {
+				if(keyboard.nextLine().equalsIgnoreCase("Yes")) {
 					userEnteredContinentLines.clear();
 					userEnteredTerritoryLines.clear();
 					editMap(keyboard, null);
