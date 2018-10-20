@@ -173,4 +173,19 @@ public class StartupPhase {
 			}
 		}
 	}
+	/**
+	 * this is a helper method for the JUnit Testcase. it is to get the initial armies count which is a private variable
+	 * @return initialArmies
+	 */
+	public int jUnitTestReturnInitialArmies() {
+		return initialArmies[0];
+	}
+	/**
+	 * this is a helper method for the JUnit Testcase. it is to get the total initial armies which is a private variable
+	 * @return initialArmies
+	 */
+	public int jUnitTestReturntotalInitialArmies() {
+		return totalInitialArmies;
+	}
+	
 }
