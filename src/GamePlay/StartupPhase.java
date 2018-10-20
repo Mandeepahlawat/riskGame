@@ -2,7 +2,6 @@ package GamePlay;
 
 import java.util.Random;
 import java.util.Scanner;
-import java.util.Stack;
 
 import Map.Map;
 import Map.Map.Territory;
@@ -22,8 +21,6 @@ public class StartupPhase {
 		assignInitialArmies();
 		Random rand = new Random();
 		this.PlayerPlaying = rand.nextInt(numOfPlayers) + 1;
-		display();
-		placeArmies();
 	}
 
 	/* Determine the players turn to play next */
@@ -34,49 +31,15 @@ public class StartupPhase {
 			PlayerPlaying++;
 	}
 
-	// USING THE DFS IMPLEMENTED BY MEHAK DISPLAY THE ADJACENT TERRITORIES SEPERATED
-	// BY A '=' also
-	// depicting the player controlling it, with the number of armies and the
-	// continent that it is in
-	public void display() {
-
-		for (Territory terr : Map.listOfAllTerritories) {
-			terr.visited = false;
-		}
-
-		Stack<Territory> stack = new Stack<>();
-		stack.push(Map.listOfAllTerritories.get(0));
-		while (!stack.isEmpty()) {
-			Territory territoryBeingVisited = stack.pop();
-			if (territoryBeingVisited.visited == false) {
-				territoryBeingVisited.visited = true;
-
-				System.out.println(
-						"\n" + territoryBeingVisited.name + " is owned by Player " + territoryBeingVisited.playerId);
-				System.out.println("Player " + territoryBeingVisited.playerId + " has "
-						+ territoryBeingVisited.numberOfArmies + " armies in this territory");
-				System.out.println("This territory is connected to the following territoris: ");
-				for (Territory neighbour : territoryBeingVisited.neighbours) {
-					if (!neighbour.visited) {
-						stack.push(neighbour);
-					}
-					System.out.print(" -> " + neighbour.name);
-				}
-				System.out.println("\n");
-			}
-		}
-	}
-
 	/* Assigning the initial territories randomly to the players */
 	public void assignInitialTerritories() {
 		int count = 1;
 		for (Territory territory : Map.listOfAllTerritories) {
 			if (territory.playerId == 0) {
-				if(count <= numOfPlayers) {
+				if (count <= numOfPlayers) {
 					territory.playerId = count;
 					count++;
-				}
-				else {
+				} else {
 					Random rand = new Random();
 					territory.playerId = rand.nextInt(numOfPlayers) + 1;
 				}
@@ -111,32 +74,69 @@ public class StartupPhase {
 
 	/* Initial placement of the armies */
 	public void placeArmies() {
+		System.out.println("Write 'm' to place armies manually or 'a' to place armies automatically");
 		Scanner in = new Scanner(System.in);
 		String userInput = null;
-		boolean doneFlag = false;
-		while (totalInitialArmies != 0) {
-			System.out.println("Player " + PlayerPlaying + "enter name of the Country to place an army in:");
+		userInput = in.nextLine();
+		if (userInput.equalsIgnoreCase("m")) {
+			boolean doneFlag = false;
+			while (totalInitialArmies != 0) {
+				System.out.println("Player " + PlayerPlaying + " has " + initialArmies[PlayerPlaying - 1]
+						+ " armies left."
+						+ "\nEnter name of the Country and number of armies to place in that country separated by comma.");
 
-			do {
-				userInput = in.nextLine();
-				for (Territory territory : Map.listOfAllTerritories) {
-					if (territory.name.equalsIgnoreCase(userInput)) {
-						if (territory.playerId != PlayerPlaying) {
-							System.out.println("Wrong country! Try again!");
-							// userInput = in.nextLine();
+				do {
+					userInput = in.nextLine();
+					for (Territory territory : Map.listOfAllTerritories) {
+						if (territory.name.equalsIgnoreCase(userInput)) {
+							if (territory.playerId != PlayerPlaying) {
+								System.out.println("Wrong country! Try again!");
+								// userInput = in.nextLine();
+								break;
+							}
+							territory.numberOfArmies++;
+							initialArmies[PlayerPlaying - 1]--;
+							doneFlag = true;
 							break;
 						}
-						territory.numberOfArmies++;
-						initialArmies[PlayerPlaying]--;
-						doneFlag = true;
-						break;
 					}
-				}
-			} while (!doneFlag);
-			nextPlayerToPlay();
-			totalInitialArmies--;
+				} while (!doneFlag);
+				nextPlayerToPlay();
+				totalInitialArmies--;
+			}
+		} else if (userInput.equalsIgnoreCase("a")) {
+			placeArmiesAutomatically();
 		}
 		in.close();
 	}
 
+	public void placeArmiesAutomatically() {
+		Random rand = new Random();
+		int totalArmies = totalInitialArmies;
+		while (totalInitialArmies != 0) {
+			for (Territory territory : Map.listOfAllTerritories) {
+				if (initialArmies[territory.playerId - 1] != 0) {
+					int armiesToAssign = rand.nextInt(totalArmies / Map.listOfAllTerritories.size()) + 1;
+					if (armiesToAssign <= initialArmies[territory.playerId - 1]) {
+						territory.numberOfArmies += armiesToAssign;
+						initialArmies[territory.playerId - 1] -= armiesToAssign;
+						totalInitialArmies -= armiesToAssign;
+						System.out.println("Player " + territory.playerId + " placed " + armiesToAssign + " armies in "
+								+ territory.name);
+						System.out.println("Player " + territory.playerId + " has "
+								+ initialArmies[territory.playerId - 1] + " armies left.");
+					} else {
+						armiesToAssign = initialArmies[territory.playerId - 1];
+						territory.numberOfArmies += armiesToAssign;
+						initialArmies[territory.playerId - 1] -= armiesToAssign;
+						totalInitialArmies -= armiesToAssign;
+						System.out.println("Player " + territory.playerId + " placed " + armiesToAssign + " armies in "
+								+ territory.name);
+						System.out.println("Player " + territory.playerId + " has "
+								+ initialArmies[territory.playerId - 1] + " armies left.");
+					}
+				}
+			}
+		}
+	}
 }

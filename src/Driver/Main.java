@@ -352,7 +352,7 @@ public class Main {
 				+ "2. Edit a Map. \n"
 				+ "3. Load a previous Map.");
 		
-		int selectedOption = Integer.parseInt(keyboard.nextLine());
+		int selectedOption = Integer.parseInt(keyboard.nextLine().trim());
 		
 		switch(selectedOption) {
 			case 1:
@@ -363,7 +363,7 @@ public class Main {
 				break;
 			case 3:
 				loadMap(keyboard);
-				System.out.println("Do you want to edit this map? Answer in Yes or No.");
+				System.out.println("\nDo you want to edit this map? Answer in Yes or No.");
 				if(keyboard.nextLine().equals("Yes")) {
 					userEnteredContinentLines.clear();
 					userEnteredTerritoryLines.clear();
@@ -438,6 +438,7 @@ public class Main {
 			while(playersCount >= Map.listOfAllTerritories.size());
 			gameDriver driver = new gameDriver(playersCount);
 			driver.play();
+			driver.display();
 		}
 		else {
 			System.out.println("INVALID MAP!");

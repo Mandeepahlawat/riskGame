@@ -9,7 +9,7 @@ warn=yes
 Asia=9
 South America  = 10
 North America=4
-new=15
+
 [Territories]
 USA, 1, 3, North America, canada, mexico
 canada,44,5,North America, USA
