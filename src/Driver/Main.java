@@ -11,10 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import GamePlay.gameDriver;
+
 import java.nio.file.Path;
 
 import Map.Map;
 import Map.Map.Territory;
+import javafx.util.Pair;
 
 /**
 * This class is the main driver class which
@@ -30,6 +33,8 @@ public class Main {
 	public static Map activeMap;
 	public static ArrayList<String> userEnteredContinentLines;
 	public static ArrayList<String> userEnteredTerritoryLines;
+	public static ArrayList<Pair<String, Integer> > playerControllingTerritory;
+	public static ArrayList<Pair<String, Integer> > armiesAssignedToTerritory;
 	
 	/**
 	* This method is used to validate the new map line
@@ -348,7 +353,7 @@ public class Main {
 				+ "2. Edit a Map. \n"
 				+ "3. Load a previous Map.");
 		
-		int selectedOption = Integer.parseInt(keyboard.nextLine());
+		int selectedOption = Integer.parseInt(keyboard.nextLine().trim());
 		
 		switch(selectedOption) {
 			case 1:
@@ -359,7 +364,7 @@ public class Main {
 				break;
 			case 3:
 				loadMap(keyboard);
-				System.out.println("Do you want to edit this map? Answer in Yes or No.");
+				System.out.println("\nDo you want to edit this map? Answer in Yes or No.");
 				if(keyboard.nextLine().equalsIgnoreCase("Yes")) {
 					userEnteredContinentLines.clear();
 					userEnteredTerritoryLines.clear();
@@ -425,8 +430,16 @@ public class Main {
 		}
 		
 		if(activeMap.validateMap()) {
-			System.out.println("\nEnter the number of players");
-			int playersCount = Integer.parseInt(keyboard.nextLine());
+			int playersCount;
+			do {
+				System.out.println("\nEnter the number of players"
+						+ "\n(Note: the value should less than " + Map.listOfAllTerritories.size() + " i.e. the number of territories");
+				playersCount = Integer.parseInt(keyboard.nextLine());
+			}
+			while(playersCount >= Map.listOfAllTerritories.size());
+			gameDriver driver = new gameDriver(playersCount);
+			driver.play();
+			driver.display();
 		}
 		else {
 			System.out.println("INVALID MAP!");

@@ -169,7 +169,8 @@ public class Map {
 		public Map continent;
 		public ArrayList<Territory> neighbours;
 		public boolean visited = false;
-		
+		public int playerId = 0;						//CHANGED 18-10
+		public int numberOfArmies = 0;				//CHANGED 18-10
 		/**
 		* This method is the constructor of the Territory class
 		* 
@@ -193,13 +194,21 @@ public class Map {
 			for(String neighbourName : neigboursNameArray) {
 				Territory territory = null;
 				if((territory = findTerritory(neighbourName)) != null) {
-					this.neighbours.add(territory);
-					territory.neighbours.add(this);
+					if(!this.neighbours.contains(territory)) {
+						this.neighbours.add(territory);
+					}
+					if(!territory.neighbours.contains(this)) {
+						territory.neighbours.add(this);
+					}
 				}
 				else {
-					territory = new Territory(neighbourName);
-					this.neighbours.add(territory);
-					territory.neighbours.add(this);
+					if(!this.neighbours.contains(territory)) {
+						territory = new Territory(neighbourName);
+						this.neighbours.add(territory);
+					}
+					if(!territory.neighbours.contains(this)) {
+						territory.neighbours.add(this);
+					}
 				}
 			}
 		}
