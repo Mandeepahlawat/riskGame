@@ -115,6 +115,10 @@ public class Map_Test {
 		assertEquals(5, map.continents.get(0).score);
 	}
 	
+	@Test
+	public void testValidateMap() {
+		
+	}
 	/*@Test
 	public void testConnectContinents() {
 		fail("Not yet implemented");

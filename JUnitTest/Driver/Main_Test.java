@@ -21,8 +21,8 @@ import org.junit.*;
 public class Main_Test {
 	
 //	public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\returnMap.map";
-	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
-//	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+//	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
+	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
 
 	/**
 	* This method is used to validate the new map line
@@ -147,6 +147,7 @@ public class Main_Test {
 		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		ArrayList<String> userEnteredContinentLines = new ArrayList<String>(Arrays.asList("North America=5","Mexico=2","Africa=3","Asia=7",""));
 		Main.populateUserEnteredContinentLines(linesBeforeRunningMethod); 
+		System.out.println("Conti"+Main.userEnteredContinentLines);
 		assertTrue(userEnteredContinentLines.equals(Main.userEnteredContinentLines));
 	}
 	/**
@@ -162,9 +163,11 @@ public class Main_Test {
 		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		ArrayList<String> userEnteredTerritoryLines = new ArrayList<String>(Arrays.asList("Japan,322,104,North America,Kamchatka,Mongolia","Ural,241,68,Asia,Siberia,China,Afghanistan,Ukraine","Arab,241,68,Asia,Siberia,China,Afghanistan,Ukraine"));
 		Main.populateUserEnteredTerritoryLines(linesBeforeRunningMethod);
+		System.out.println("terri"+Main.userEnteredTerritoryLines);
 		assertTrue(userEnteredTerritoryLines.equals(Main.userEnteredTerritoryLines));
 	}
 
+	
 /*	@Test
 	void testLoadMap() {
 		fail("Not yet implemented");
