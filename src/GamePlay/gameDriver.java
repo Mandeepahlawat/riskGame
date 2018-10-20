@@ -5,31 +5,70 @@ import java.util.Stack;
 import Map.Map;
 import Map.Map.Territory;
 
+/**
+ * This class drives the entire gamePlay package
+ */
 public class gameDriver {
-
+	
 	private int numOfPlayers;
-	private StartupPhase StartupPhaseObj;
-	private ReinforcementPhase ReinforcementPhaseObj;
-
+	private StartupPhase startupPhaseObj;
+	private ReinforcementPhase reinforcementPhaseObj;
+	private FortificationPhase fortificationPhaseObj;
+	
+	/**
+	 * Constructor gameDriver
+	 * 
+	 * @param numOfPlayers number of players 
+	 * 
+	 */
 	public gameDriver(int numOfPlayers) {
 		this.numOfPlayers = numOfPlayers;
 	}
 
+	/**
+	 * this function calls all the phases of the game for all the players
+	 * in order
+	 * <ul>
+	 * <li>StartUp Phase</li>
+	 * <li>Reinforcement Phase</li>
+	 * <li>Fortification Phase</li>
+	 * </ul>
+	 */
 	public void play() {
-		StartupPhaseObj = new StartupPhase(numOfPlayers);
-		StartupPhaseObj.placeArmies();
-		ReinforcementPhaseObj = new ReinforcementPhase();
+		System.out.println("\n***********************STARTUP PHASE BEGINS*****************************\n");
+		startupPhaseObj = new StartupPhase(numOfPlayers);
+		startupPhaseObj.placeArmies();
+		System.out.println("\n***********************STARTUP PHASE ENDS*****************************\n");
+		System.out.println("\n***********************REINFORCEMENT PHASE BEGINS*****************************\n");		reinforcementPhaseObj = new ReinforcementPhase();
 		for(int i = 1; i<=numOfPlayers; i++) {
-			int reinforcementArmies = ReinforcementPhaseObj.calculateReinforcementArmies(i);
+			int reinforcementArmies = reinforcementPhaseObj.calculateReinforcementArmies(i);
 			display();
-			ReinforcementPhaseObj.placeReinforcements(reinforcementArmies, i);
+			reinforcementPhaseObj.placeReinforcements(reinforcementArmies, i);
 		}
+		System.out.println("\n***********************REINFORCEMENT PHASE ENDS*****************************\n");		
+		System.out.println("\n***********************FORTIFICATION PHASE BEGINS*****************************\n");
+		fortificationPhaseObj = new FortificationPhase();
+		java.util.Scanner keyboard = new java.util.Scanner(System.in);
+		for(int i = 1; i<=numOfPlayers; i++) {
+			while(true) {
+				fortificationPhaseObj.fortification(i);
+				System.out.println("Enter 'finish' when you are done, or 'c' to continue");
+				if(keyboard.nextLine().equalsIgnoreCase("finish")) {
+					break;
+				}
+			}
+		}
+		System.out.println("\n***********************FORTIFICATION PHASE ENDS*****************************\n");
 	}
 
-	// USING THE DFS IMPLEMENTED BY MEHAK DISPLAY THE ADJACENT TERRITORIES SEPERATED
-	// BY A '=' also
-	// depicting the player controlling it, with the number of armies and the
-	// continent that it is in
+	/**
+	 * this function displays the current status of map
+	 * <ul>
+	 * <li>Which player owns what country</li>
+	 * <li>How many armies that player has in that country</li>
+	 * <li>Which are the neighbouring territories of this country</li>
+	 * </ul>
+	 */
 	public void display() {
 
 		for (Territory terr : Map.listOfAllTerritories) {

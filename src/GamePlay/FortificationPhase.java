@@ -16,9 +16,6 @@ import Map.Map.Territory;
 
 public class FortificationPhase {
 	
-	public FortificationPhase() {
-		
-	}
 	/**
 	 * fortification method to allow a player to move one of 
 	 * his armies from one country he owns to another that 
@@ -30,18 +27,20 @@ public class FortificationPhase {
 	 * 
 	 */
 	public void fortification(int currentPlayerId) {
+		System.out.println("Player " + currentPlayerId);
 		String fromCountry = null;
 		String toCountry = null;
 		boolean doneFlag1 = false;
 		boolean doneFlag2 = false;
 		Scanner in = new Scanner(System.in);
-		System.out.println("Enter the country you would like to move an army from:");
-		fromCountry = in.nextLine();
+		
 		do {
-			if(validEntry(currentPlayerId, fromCountry)) {
-				System.out.println("Enter the neighbouring country you would like to move the army to:");
-				toCountry = in.nextLine();
+			System.out.println("Enter the country you would like to move an army from:");
+			fromCountry = in.nextLine();
+			if(validEntry(currentPlayerId, fromCountry)) {	
 				do {
+					System.out.println("Enter the neighbouring country you would like to move the army to:");
+					toCountry = in.nextLine();
 					if(validNeighborCountry(currentPlayerId, fromCountry, toCountry)) {
 						for(Territory territory : Map.listOfAllTerritories) {
 							if(territory.name.equals(fromCountry)) {
@@ -58,16 +57,16 @@ public class FortificationPhase {
 						doneFlag2 = true;
 					}
 					else {
-						System.out.println("Enter a valid Neighbour..");
+						System.out.println("Enter a valid Neighbour that you own.");
 					}
 				}while(!doneFlag2);
 				doneFlag1 = true;
 			}
 			else {
-				System.out.println("Enter a country you own!!");
+				System.out.println("Enter a country you own that is having at least one neighbour that you own too!!");
 			}
 		}while(!doneFlag1);
-		in.close();
+		//in.close();
 	}
 	
 	/**
@@ -86,10 +85,16 @@ public class FortificationPhase {
 	 */
 
 	private boolean validEntry(int currentPlayerId, String country) {
+		
 		for(Territory territory : Map.listOfAllTerritories) {
 			if(territory.name.equalsIgnoreCase(country) && territory.playerId == currentPlayerId) {
-				if(territory.numberOfArmies > 1)
-					return true;
+				for(Territory neighbour : Map.listOfAllTerritories) {
+					if(neighbour.playerId == currentPlayerId) {
+						if(territory.numberOfArmies > 1) {
+							return true;
+						}
+					}
+				}
 			}
 		}
 		return false;

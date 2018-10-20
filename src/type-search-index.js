@@ -1,1 +1,1 @@
-typeSearchIndex = [{"p":"Driver","l":"Main"}]
+typeSearchIndex = [{"p":"Map","l":"Map"},{"p":"Map","l":"Map.Territory"}]
