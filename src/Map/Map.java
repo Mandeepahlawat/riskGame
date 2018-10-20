@@ -22,7 +22,6 @@ public class Map {
 	public static ArrayList<Territory> listOfAllTerritories;
 	public static ArrayList<Map> listOfAllContinents;
 	public boolean visited = false;
-	
 	/**
 	* This method is used to find a Territory.
 	* 

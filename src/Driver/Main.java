@@ -31,7 +31,6 @@ public class Main {
 	public static ArrayList<String> userEnteredContinentLines;
 	public static ArrayList<String> userEnteredTerritoryLines;
 	
-	
 	/**
 	* This method is used to validate the new map line
 	* entered by the user.
@@ -285,6 +284,7 @@ public class Main {
 			}
 			lineCount++;
 		}
+		
 		if(continentLineStartIndex != null && continentLineEndIndex != null) {
 			userEnteredContinentLines.addAll(allLines.subList(continentLineStartIndex, continentLineEndIndex));
 		}
@@ -306,6 +306,7 @@ public class Main {
 			}
 			lineCount++;
 		}
+
 		if(territoryLineStartIndex != null) {
 			userEnteredTerritoryLines.addAll(allLines.subList(territoryLineStartIndex, allLines.size()));
 		}
