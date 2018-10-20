@@ -36,7 +36,6 @@ public class Main {
 	public static ArrayList<Pair<String, Integer> > playerControllingTerritory;
 	public static ArrayList<Pair<String, Integer> > armiesAssignedToTerritory;
 	
-	
 	/**
 	* This method is used to validate the new map line
 	* entered by the user.
@@ -290,6 +289,7 @@ public class Main {
 			}
 			lineCount++;
 		}
+		
 		if(continentLineStartIndex != null && continentLineEndIndex != null) {
 			userEnteredContinentLines.addAll(allLines.subList(continentLineStartIndex, continentLineEndIndex));
 		}
@@ -311,6 +311,7 @@ public class Main {
 			}
 			lineCount++;
 		}
+
 		if(territoryLineStartIndex != null) {
 			userEnteredTerritoryLines.addAll(allLines.subList(territoryLineStartIndex, allLines.size()));
 		}
@@ -364,7 +365,7 @@ public class Main {
 			case 3:
 				loadMap(keyboard);
 				System.out.println("\nDo you want to edit this map? Answer in Yes or No.");
-				if(keyboard.nextLine().equals("Yes")) {
+				if(keyboard.nextLine().equalsIgnoreCase("Yes")) {
 					userEnteredContinentLines.clear();
 					userEnteredTerritoryLines.clear();
 					editMap(keyboard, null);
