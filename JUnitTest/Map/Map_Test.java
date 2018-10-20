@@ -2,15 +2,27 @@ package Map;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import Driver.Main;
 import Map.Map.*;
 
  
 public class Map_Test {
+
+//	public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\returnMap.map";
+//	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
+	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
 
 	private Territory actualTerritory;
 	private Map map;
@@ -116,8 +128,53 @@ public class Map_Test {
 	}
 	
 	@Test
-	public void testValidateMap() {
+	public void testValidateMap() throws IOException {
+		Main.userEnteredContinentLines = new ArrayList<>(); // need to initialize it here as we are initializing static variable inside the main method
+		Main.userEnteredTerritoryLines = new ArrayList<>();
+		String path = FILE_NAME;
+		Path expPath = Paths.get(path);
+		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
+		Main.populateUserEnteredContinentLines(linesBeforeRunningMethod); 
+		Main.populateUserEnteredTerritoryLines(linesBeforeRunningMethod);
+		 
 		
+		Main.userEnteredContinentLines.removeAll(Arrays.asList("", null));
+		Main.userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
+		
+		Main.activeMap = new Map();
+		for(String continentLines : Main.userEnteredContinentLines) {
+			String continentName = continentLines.split("=")[0].trim();
+			int continentScore = Integer.parseInt(continentLines.split("=")[1].trim());
+			
+			if(!Main.activeMap.addContinent(continentName, continentScore)) {
+				System.out.println("Couldn't add continent because format is invalid"
+						+ "as the continent name already exists");
+				System.exit(0);
+			}
+			
+		}
+		
+		for(String territoryLines : Main.userEnteredTerritoryLines) {
+			List<String> territoryLineArray = new ArrayList<String>(); 
+			for(String territoryLine : territoryLines.split(",")) {
+				territoryLineArray.add(territoryLine.trim());
+			}
+			
+			Territory territory = Map.findTerritory(territoryLineArray.get(0));
+			if(territory == null) {
+				territory = new Territory(territoryLineArray.get(0));
+			}
+			territory.addNeighbours(String.join(",", territoryLineArray.subList(4, territoryLineArray.size())));
+			
+			if(!territory.assignContinent(territoryLineArray.get(3))) {
+				System.out.println("Couldn't assign continent because format is invalid as"
+						+ "the continent is already assigned to territory or doesn't exists.");
+				System.exit(0);
+			}
+			
+		}
+		System.out.println(Main.activeMap.validateMap());
+		assertTrue(Main.activeMap.validateMap());
 	}
 	/*@Test
 	public void testConnectContinents() {
