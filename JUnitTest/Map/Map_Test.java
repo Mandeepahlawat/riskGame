@@ -21,7 +21,8 @@ public class Map_Test {
 	 */
 	@Before
 	public void testBefore() {
-		Map.jUnitTestOn = true;
+		Map.listOfAllTerritories = new ArrayList<>();
+		Map.listOfAllContinents = new ArrayList<>();
 		actualTerritory =new Territory("Japan");
 		map=new Map();
 		map.addContinent("North America",5);
