@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import GamePlay.gameDriver;
+
 import java.nio.file.Path;
 
 import Map.Map;
@@ -427,8 +429,15 @@ public class Main {
 		}
 		
 		if(activeMap.validateMap()) {
-			System.out.println("\nEnter the number of players");
-			int playersCount = Integer.parseInt(keyboard.nextLine());
+			int playersCount;
+			do {
+				System.out.println("\nEnter the number of players"
+						+ "\n(Note: the value should less than " + Map.listOfAllTerritories.size() + " i.e. the number of territories");
+				playersCount = Integer.parseInt(keyboard.nextLine());
+			}
+			while(playersCount >= Map.listOfAllTerritories.size());
+			gameDriver driver = new gameDriver(playersCount);
+			driver.play();
 		}
 		else {
 			System.out.println("INVALID MAP!");
