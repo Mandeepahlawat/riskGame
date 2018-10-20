@@ -1,22 +1,36 @@
 package GamePlay;
 
 import java.util.Scanner;
-
 import Map.Map;
 import Map.Map.Territory;
 
+/**
+ * This class ReinforcementPhase consists a
+ *  Constructor ReinforcementPhase()  
+ * 
+ * @author bharath,shreyas 
+ * @version 1.0
+ * @since 19/10/2018
+ * 
+ *
+ */
+
 public class ReinforcementPhase {
 	
-	/*Conctructor*/
 	public ReinforcementPhase() {
 		
 	}
 
-	/*Calculate the number of reinforcements that the player gets in each turn*/
+	/**
+	 *This method Calculate's the number of reinforcements 
+	 *that the player gets in each turn of the game.
+	 *
+	 *@param currentPlayerId is a integer value which gives the present 
+	 * ID of the player in the game.
+	 *
+	 */
 	public int calculateReinforcementArmies(int currentPlayerId) {
 		int totalReinforcements = 0;
-		
-		//based on the number of territories controlled
 		int territoriesOwned = 0;
 		for(Territory territory : Map.listOfAllTerritories) {
 			if(territory.playerId == currentPlayerId) {
@@ -27,7 +41,6 @@ public class ReinforcementPhase {
 		if(totalReinforcements < 3)
 			totalReinforcements = 3;
 		
-		//Number of continents controlled, if yes then gets as many armies as the value of the continent controlled
 		for(Map continent : Map.listOfAllContinents) {
 			int i = 0;
 			for(Territory territory : continent.territories) {
@@ -41,8 +54,15 @@ public class ReinforcementPhase {
 		return totalReinforcements;
 	}
 	
-	
-	/*Place Reinforcements in territories*/
+	/**
+	 * This method defines Place Reinforcements in territories
+	 * 
+	 * @param reinforcements
+	 * 
+	 * @param currentPlayerId is a integer value which gives the present 
+	 * ID of the player in the game.
+	 * 
+	 */
 	public void placeReinforcements(int reinforcements, int currentPlayerId) {
 		Scanner in = new Scanner(System.in);
 		String userInput = null;

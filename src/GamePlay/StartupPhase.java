@@ -6,14 +6,28 @@ import java.util.Scanner;
 import Map.Map;
 import Map.Map.Territory;
 
+/**
+ * This class StartupPhase consists a Constructor
+ * StartupPhase() mentioned below 
+ * which as * @param numOfPlayers The number of players who will be playing
+ * 
+ * @author bharath,shreyas 
+ * @version 1.0
+ * @since 19/10/2018
+ * 
+ *
+ */
 public class StartupPhase {
 
 	private int numOfPlayers = 0; // The number of players who will be playing
 	private int PlayerPlaying = 0; // to store the current players who is playing
 	private int initialArmies[]; // Initial number of armies at the start of the game
 	private int totalInitialArmies = 0;
-
-	/* Constructor */
+	
+	/**
+	 * Constuctor StartupPhase() 
+	 * which as * @param numOfPlayers The number of players who will be playing
+	 */
 	public StartupPhase(int numOfPlayers) {
 		this.numOfPlayers = numOfPlayers;
 		initialArmies = new int[numOfPlayers];
@@ -22,16 +36,27 @@ public class StartupPhase {
 		Random rand = new Random();
 		this.PlayerPlaying = rand.nextInt(numOfPlayers) + 1;
 	}
-
-	/* Determine the players turn to play next */
+	
+	
+	/**
+	 * This Method determine's the which players turn to play next
+	 * 
+	 */
 	private void nextPlayerToPlay() {
 		if (PlayerPlaying == numOfPlayers)
 			PlayerPlaying = 1;
 		else
 			PlayerPlaying++;
 	}
-
-	/* Assigning the initial territories randomly to the players */
+	
+	//USING THE DFS IMPLEMENTED BY MEHAK DISPLAY THE ADJACENT TERRITORIES SEPERATED BY A '=' also 
+	//depicting the player controlling it, with the number of armies and the continent that it is in
+	
+	/**
+	 *This method Assigns the initial territories randomly
+	 * to the players in the game.
+	 *
+	 */
 	public void assignInitialTerritories() {
 		int count = 1;
 		for (Territory territory : Map.listOfAllTerritories) {
@@ -46,8 +71,12 @@ public class StartupPhase {
 			}
 		}
 	}
-
-	/* Assigning the initial number of armies each player gets */
+	
+	/**
+	 * This method defines Assigning the initial number of armies
+	 *  to each player who gets in the game.
+	 *  
+	 */
 	public void assignInitialArmies() {
 		if (numOfPlayers == 2) {
 			for (int i = 0; i < numOfPlayers; i++)
@@ -71,8 +100,13 @@ public class StartupPhase {
 			totalInitialArmies = 120;
 		}
 	}
-
-	/* Initial placement of the armies */
+	
+	/**
+	 * This method defines Initial placement of the armies
+	 * and also prints the player and the name of the country 
+	 * where they want to place a army 
+	 * 
+	 */
 	public void placeArmies() {
 		System.out.println("Write 'm' to place armies manually or 'a' to place armies automatically");
 		Scanner in = new Scanner(System.in);
