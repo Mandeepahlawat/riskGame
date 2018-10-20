@@ -195,13 +195,21 @@ public class Map {
 			for(String neighbourName : neigboursNameArray) {
 				Territory territory = null;
 				if((territory = findTerritory(neighbourName)) != null) {
-					this.neighbours.add(territory);
-					territory.neighbours.add(this);
+					if(!this.neighbours.contains(territory)) {
+						this.neighbours.add(territory);
+					}
+					if(!territory.neighbours.contains(this)) {
+						territory.neighbours.add(this);
+					}
 				}
 				else {
-					territory = new Territory(neighbourName);
-					this.neighbours.add(territory);
-					territory.neighbours.add(this);
+					if(!this.neighbours.contains(territory)) {
+						territory = new Territory(neighbourName);
+						this.neighbours.add(territory);
+					}
+					if(!territory.neighbours.contains(this)) {
+						territory.neighbours.add(this);
+					}
 				}
 			}
 		}
