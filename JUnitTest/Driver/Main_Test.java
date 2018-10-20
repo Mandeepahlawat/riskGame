@@ -1,6 +1,6 @@
 package Driver;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import java.util.*;
 import java.io.BufferedReader;
@@ -15,10 +15,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
+import org.junit.*;
 
 
-class Main_Test {
+public class Main_Test {
+	
+//	public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\returnMap.map";
+	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
+//	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
 
 	/**
 	* This method is used to validate the new map line
@@ -34,7 +38,7 @@ class Main_Test {
 	* @return True if new line is valid otherwise False
 	*/
 	@Test
-	void testValidateMapLineForInteger() {
+	public void testValidateMapLineForInteger() {
 		boolean returnStat=	Main.validateMapLine(true, "Northern Islands=12");			/*Continent Edit*/
 		//test for Continent
 		assertEquals(true, returnStat);	
@@ -45,7 +49,7 @@ class Main_Test {
 	 * @return false if entered with fractional Continent score
 	 */
 	@Test
-	void testValidateMapLineForFraction() {
+	public void testValidateMapLineForFraction() {
 		assertEquals(true, Main.validateMapLine(true, "Northern Islands=12.2"));		/*Continent Edit*/ /**return is good ? wrong  discarding any remainder**/
 	}
 	/**
@@ -54,7 +58,7 @@ class Main_Test {
 	 * @return false if entered with no Continent score
 	 */
 	@Test
-	void testValidateMapLineForZero() { 				
+	public void testValidateMapLineForZero() { 				
 		assertEquals(true, Main.validateMapLine(true, "Northern Islands=0"));			/*Continent Edit*/ /**return is good ? wrong  discarding any remainder**/
 	}
 	/**
@@ -64,7 +68,7 @@ class Main_Test {
 	 * @return true as its valid entry
 	 */
 	@Test
-	void testValidateMapLineForTerritoryAndTwoAdjecentCountry() {
+	public void testValidateMapLineForTerritoryAndTwoAdjecentCountry() {
 		assertEquals(true, Main.validateMapLine(false, "1,548,116,Northern Islands,2,12"));
 	}
 	/**
@@ -74,7 +78,7 @@ class Main_Test {
 	 * @return true as its valid entry
 	 */
 	@Test
-	void testValidateMapLineForTerritoryAndOneAdjecentCountry() { 
+	public void testValidateMapLineForTerritoryAndOneAdjecentCountry() { 
 		assertEquals(true, Main.validateMapLine(false, "1,548,116,Northern Islands,2"));
 	}
 	/**
@@ -84,7 +88,7 @@ class Main_Test {
 	 * @return false as its invalid entry
 	 */
 	@Test
-	void testValidateMapLineForTerritoryAndNoAdjecentCountry() {
+	public void testValidateMapLineForTerritoryAndNoAdjecentCountry() {
 		assertEquals(false, Main.validateMapLine(false, "1,548,116,Northern Islands"));
 	}
 
@@ -112,9 +116,9 @@ class Main_Test {
 	 * @return true if the entries of two files are compared to be same
 	 */ 
 	@Test
-	void testSetLineText() throws IOException {
+	public void testSetLineText() throws IOException {
 		Main main = new Main();
-		String path = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+		String path = FILE_NAME;
 		Path expPath = Paths.get(path);
 		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		//Main.setLineText(0, "line 0", path+"returnMap.map");//index out of bound exception
@@ -136,12 +140,12 @@ class Main_Test {
 	 * @return true if the entries continents are as expected
 	 */ 
 	@Test
-	void testPopulateUserEnteredContinentLines() throws IOException {
-		String path = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+	public void testPopulateUserEnteredContinentLines() throws IOException {
+		Main.userEnteredContinentLines = new ArrayList<>(); // need to initialize it here as we are initializing static variable inside the main method
+		String path = FILE_NAME;
 		Path expPath = Paths.get(path);
 		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		ArrayList<String> userEnteredContinentLines = new ArrayList<String>(Arrays.asList("North America=5","Mexico=2","Africa=3","Asia=7",""));
-		Main.jUnitTestOn=true;
 		Main.populateUserEnteredContinentLines(linesBeforeRunningMethod); 
 		assertTrue(userEnteredContinentLines.equals(Main.userEnteredContinentLines));
 	}
@@ -151,12 +155,12 @@ class Main_Test {
 	 * @return true if the entries of territories are as expected
 	 */
 	@Test
-	void testPopulateUserEnteredTerritoryLines() throws IOException {
-		String path = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+	public void testPopulateUserEnteredTerritoryLines() throws IOException {
+		Main.userEnteredTerritoryLines = new ArrayList<>(); // need to initialize it here as we are initializing static variable inside the main method
+		String path = FILE_NAME;
 		Path expPath = Paths.get(path);
 		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		ArrayList<String> userEnteredTerritoryLines = new ArrayList<String>(Arrays.asList("Japan,322,104,North America,Kamchatka,Mongolia","Ural,241,68,Asia,Siberia,China,Afghanistan,Ukraine","Arab,241,68,Asia,Siberia,China,Afghanistan,Ukraine"));
-		Main.jUnitTestOn=true;
 		Main.populateUserEnteredTerritoryLines(linesBeforeRunningMethod);
 		assertTrue(userEnteredTerritoryLines.equals(Main.userEnteredTerritoryLines));
 	}
