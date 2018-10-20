@@ -117,7 +117,7 @@ public class StartupPhase {
 			while (totalInitialArmies != 0) {
 				System.out.println("Player " + PlayerPlaying + " has " + initialArmies[PlayerPlaying - 1]
 						+ " armies left."
-						+ "\nEnter name of the Country and number of armies to place in that country separated by comma.");
+						+ "\nEnter name of the Country to place an army:");
 
 				do {
 					userInput = in.nextLine();
@@ -125,7 +125,6 @@ public class StartupPhase {
 						if (territory.name.equalsIgnoreCase(userInput)) {
 							if (territory.playerId != PlayerPlaying) {
 								System.out.println("Wrong country! Try again!");
-								// userInput = in.nextLine();
 								break;
 							}
 							territory.numberOfArmies++;
@@ -141,7 +140,7 @@ public class StartupPhase {
 		} else if (userInput.equalsIgnoreCase("a")) {
 			placeArmiesAutomatically();
 		}
-		in.close();
+		//in.close();
 	}
 
 	public void placeArmiesAutomatically() {

@@ -8,15 +8,22 @@ import Map.Map.Territory;
 public class gameDriver {
 
 	private int numOfPlayers;
-	private StartupPhase StartupPhase_obj;
+	private StartupPhase StartupPhaseObj;
+	private ReinforcementPhase ReinforcementPhaseObj;
 
 	public gameDriver(int numOfPlayers) {
 		this.numOfPlayers = numOfPlayers;
 	}
 
 	public void play() {
-		StartupPhase_obj = new StartupPhase(numOfPlayers);
-		StartupPhase_obj.placeArmies();
+		StartupPhaseObj = new StartupPhase(numOfPlayers);
+		StartupPhaseObj.placeArmies();
+		ReinforcementPhaseObj = new ReinforcementPhase();
+		for(int i = 1; i<=numOfPlayers; i++) {
+			int reinforcementArmies = ReinforcementPhaseObj.calculateReinforcementArmies(i);
+			display();
+			ReinforcementPhaseObj.placeReinforcements(reinforcementArmies, i);
+		}
 	}
 
 	// USING THE DFS IMPLEMENTED BY MEHAK DISPLAY THE ADJACENT TERRITORIES SEPERATED
@@ -47,7 +54,7 @@ public class gameDriver {
 					}
 					System.out.print(" -> " + neighbour.name);
 				}
-				System.out.println("\n");
+				System.out.println();
 			}
 		}
 	}

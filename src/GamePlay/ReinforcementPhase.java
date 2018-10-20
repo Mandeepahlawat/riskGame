@@ -16,10 +16,6 @@ import Map.Map.Territory;
  */
 
 public class ReinforcementPhase {
-	
-	public ReinforcementPhase() {
-		
-	}
 
 	/**
 	 *This method Calculate's the number of reinforcements 
@@ -51,43 +47,42 @@ public class ReinforcementPhase {
 			if(i == continent.territories.size())
 				totalReinforcements = totalReinforcements + continent.score;
 		}
+		System.out.println("Player " + currentPlayerId + " gets " + totalReinforcements + " reinforcement armies.");
 		return totalReinforcements;
 	}
 	
 	/**
 	 * This method defines Place Reinforcements in territories
 	 * 
-	 * @param reinforcements
+	 * @param reinforcements number of reinforcement armies the player in the second parameter gets
 	 * 
-	 * @param currentPlayerId is a integer value which gives the present 
+	 * @param currentPlayerId is an integer value which gives the present 
 	 * ID of the player in the game.
 	 * 
 	 */
 	public void placeReinforcements(int reinforcements, int currentPlayerId) {
-		Scanner in = new Scanner(System.in);
+		Scanner keyboard = new Scanner(System.in);
 		String userInput = null;
-		boolean doneFlag = false;
-		while(reinforcements != 0) {
-			System.out.println("Player " + currentPlayerId +"enter name of the Country to place an army in:");
-			userInput = in.nextLine();
-			do {
-				for(Territory territory : Map.listOfAllTerritories) {
-					if(territory.name.equalsIgnoreCase(userInput)) {
-						if(territory.playerId != currentPlayerId) {
-							System.out.println("Wrong country!!");
-							//userInput = in.nextLine();
+		
+		while (reinforcements != 0) {
+			System.out.println("\nPlayer " + currentPlayerId + " has " + reinforcements
+					+ " armies left."
+					+ "\nEnter name of the Country to place a reinforcement army:");
+			
+				userInput = keyboard.nextLine();
+				
+				for (Territory territory : Map.listOfAllTerritories) {
+					if (territory.name.equalsIgnoreCase(userInput)) {
+						if (territory.playerId != currentPlayerId) {
+							System.out.println("Wrong country! Try again!");
 							break;
 						}
 						territory.numberOfArmies++;
-						doneFlag = true;
+						reinforcements--;
 						break;
 					}
 				}
-			}while(!doneFlag);
-			reinforcements--;
-		}
-		in.close();
-	}
-	
-	
+			}
+		//keyboard.close();
+	}	
 }
