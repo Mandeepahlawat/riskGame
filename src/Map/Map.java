@@ -111,6 +111,8 @@ public class Map {
 	* Also, this method marks continent as visited as we implement DFS,
 	* in order to check that there is no continent without any territory
 	* assigned to it.
+	* 
+	* @return true if the map is connected
 	*/
 	public boolean validateMap() {
 		//validate territories

@@ -24,6 +24,7 @@ public class ReinforcementPhase {
 	 *@param currentPlayerId is a integer value which gives the present 
 	 * ID of the player in the game.
 	 *
+	 *@return int the number of reinforcement armies
 	 */
 	public int calculateReinforcementArmies(int currentPlayerId) {
 		int totalReinforcements = 0;

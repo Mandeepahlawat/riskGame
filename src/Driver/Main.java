@@ -172,6 +172,7 @@ public class Main {
 	* @param lineNumber The line number where we want to place the new content
 	* @param newData The new content which we want to replace the old data with
 	* @param filePath The path of the file to be edited.
+	* @throws java.io.IOException in some circumstance 
 	*/
 	public static void setLineText(int lineNumber, String newData, String filePath) throws IOException {
 	    Path path = Paths.get(filePath);
@@ -382,7 +383,7 @@ public class Main {
 	/**
 	* This is the main method which runs the program
 	* 
-	* @param String[] args
+	* @param args command line arguments
 	*/
 	public static void main(String[] args) {
 		userEnteredContinentLines = new ArrayList<String>();

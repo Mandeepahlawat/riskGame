@@ -25,8 +25,9 @@ public class StartupPhase {
 	private int totalInitialArmies = 0;
 	
 	/**
-	 * Constuctor StartupPhase() 
-	 * which as * @param numOfPlayers The number of players who will be playing
+	 * Constructor StartupPhase() 
+	 * 
+	 * @param numOfPlayers The number of players who will be playing
 	 */
 	public StartupPhase(int numOfPlayers) {
 		this.numOfPlayers = numOfPlayers;
