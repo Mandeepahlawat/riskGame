@@ -1,0 +1,328 @@
+package Player;
+
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+
+import Driver.Main;
+import Card.Card;
+import Map.Map;
+import Map.Map.Territory;
+
+/**
+* This class is used to create players,
+* and has all the functionality related to
+* a player like reinforcement, attacking and
+* fortification
+* 
+* @author Mandeep Ahlawat
+* @version 1.0
+* @since   2018-10-27 
+*/
+public class Player {
+	private ArrayList<Card> cards;
+	public ArrayList<Territory> assignedTerritories;
+	private int initialArmyCount;
+	public int armiesLeft;
+	private String name;
+	private int id;
+	private static int idCounter = 0;
+	
+	/**
+	* This method is the constructor of the Player class
+	* 
+	* @param name A String value of the player name
+	*/
+	public Player(String name) {
+		idCounter++;
+		this.name = name;
+		this.id = idCounter;
+		this.assignedTerritories = new ArrayList<Territory>();
+		this.cards = new ArrayList<Card>();
+	}
+	
+	/**
+	* This is a getter method, which gives the name of the player
+	* 
+	* @return name of the player
+	* 
+	*/
+	public String getName() {
+		return this.name;
+	}
+	
+	/**
+	* This is a setter method, which sets the
+	* initial army count and the number of armies left
+	* for each player
+	* 
+	* @param armyCount int value of the number of armies
+	* 
+	*/
+	public void setInitialArmyCount(int armyCount) {
+		initialArmyCount = armyCount;
+		armiesLeft = armyCount;
+	}
+	
+	/**
+	* This is a helper method which gives the number of
+	* countries a player has with the number of armies in that
+	* country
+	* 
+	* @return String value with a specific format.
+	* 
+	*/
+	public String assignedTerritoryNamesWithArmies() {
+		String territoriesWithArmies = "";
+		for(Territory territory : assignedTerritories) {
+			territoriesWithArmies += territory.name + " has armies: " + territory.numberOfArmies + "\n";
+		}
+		return territoriesWithArmies;
+	}
+	
+	/**
+	 * This method defines Initial placement of the armies
+	 * and also prints the player and the name of the country 
+	 * where they want to place a army 
+	 * 
+	 */
+	public void placeArmies() {
+		Scanner keyboard = new Scanner(System.in);
+		String userInput = null;
+		System.out.println("Player " + name + " has " + armiesLeft
+				+ " armies left."
+				+ "\nCountries assigned to him are: "
+				+ assignedTerritoryNamesWithArmies()
+				+ "\nEnter name of the Country to place an army:");
+		
+		userInput = keyboard.nextLine();
+		boolean wrongCountryName = true;
+		for (Territory territory : assignedTerritories) {
+			if (territory.name.equalsIgnoreCase(userInput)) {
+				territory.numberOfArmies++;
+				armiesLeft--;
+				wrongCountryName = false;
+				break;
+			}
+		}
+		if(wrongCountryName) {
+			System.out.println("Wrong Country, please select the country which is assigned to you.");
+			placeArmies();
+		}
+	}
+	
+	/**
+	 * This method defines in a helper method to place
+	 * number of armies for each player automatically
+	 * instead of going in a round robin fashion
+	 * 
+	 */
+	public void placeArmiesAutomatically() {
+		Random rand = new Random();
+		if(initialArmyCount < assignedTerritories.size()) {
+			System.out.println("Can't have initial army less than assigned countries as we need"
+					+ "to assign at least 1 army to each country");
+			System.exit(1);
+		}
+		for (Territory territory : assignedTerritories) {
+			territory.numberOfArmies++;
+			armiesLeft--;
+			System.out.println("Player " + name + " placed " + 1 + " army in "
+					+ territory.name + ". Total armies in this territory are: "
+							+ territory.numberOfArmies);
+		}
+		while(armiesLeft != 0) {
+			Territory territory = assignedTerritories.get(rand.nextInt(assignedTerritories.size()));
+			territory.numberOfArmies++;
+			armiesLeft--;
+			System.out.println("Player " + name + " placed " + 1 + " army in "
+					+ territory.name + ". Total armies in this territory are: "
+					+ territory.numberOfArmies);
+		}
+	}
+	
+	/**
+	 *This method Calculate's the number of reinforcements 
+	 *that the player gets in each turn of the game.
+	 *
+	 *@return int the number of reinforcement armies
+	 */
+	public int calculateReinforcementArmies() {
+		int totalReinforcements = 0;
+		totalReinforcements =  (assignedTerritories.size() / 3);
+		if(totalReinforcements < 3) {
+			totalReinforcements = 3;
+		}
+
+		for(Map continent : Main.activeMap.continents) {
+			int i = 0;
+			for(Territory territory : continent.territories) {
+				if(territory.owner != this) {
+					break;
+				}
+				i++;
+			}
+			if(i == continent.territories.size()) {
+				totalReinforcements = totalReinforcements + continent.score;
+			}
+		}
+		System.out.println("Player " + name + " gets " + totalReinforcements + " reinforcement armies.");
+		return totalReinforcements;
+	}
+	
+	/**
+	 * This method defines Place Reinforcements in territories
+	 * 
+	 * @param reinforcements number of reinforcement armies the player in the second parameter gets
+	 * 
+	 */
+	public void placeReinforcements(int reinforcements) {
+		Scanner keyboard = new Scanner(System.in);
+		String userInput = null;
+		
+		while (reinforcements != 0) {
+			System.out.println("\nPlayer " + name + " has " + reinforcements
+					+ " armies left."
+					+ "\nEnter name of the Country to place a reinforcement army:");
+			
+				userInput = keyboard.nextLine();
+				
+				for (Territory territory : Main.activeMap.territories) {
+					if (territory.name.equalsIgnoreCase(userInput)) {
+						if (territory.owner != this) {
+							System.out.println("Wrong country! Try again!");
+							break;
+						}
+						territory.numberOfArmies++;
+						reinforcements--;
+						break;
+					}
+				}
+			}
+	}
+	
+	/**
+	 * To check if the players owns the country and
+	 * the number of armies is greater than 1
+	 * 
+	 * @param currentPlayerId is a integer value which gives the present 
+	 * ID of the player
+	 * 
+	 * @param country is a string value in which 
+	 * the name of the country is mentioned 
+	 * 
+	 * @return true if the country belongs to the player 
+	 * 
+	 * @return false if the country doesn't belongs to player
+	 */
+	private boolean validAssignedCountry(String country) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(country)){
+				for(Territory neighbour : territory.neighbours) {
+					if(neighbour.owner == this) {
+						return true;
+					}
+				}				
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * To check if the neighbor is owned by the current player
+	 * 
+	 * @param currentPlayerId is a integer value which gives the present 
+	 * ID of the player
+	 * 
+	 * @param fromCountry is a string value in which a player can mention 
+	 * to move a army from a country
+	 *  
+	 * @param toCountry  is a string value in which a player can mention 
+	 * to move a army from a country to another country
+	 * 
+	 * @return true if the given condition satifies.
+	 * 
+	 * @return false if the given condition doesn't satifies.
+	 */
+	private boolean validNeighborCountry(String fromCountry, String toCountry) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(fromCountry)) {
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(toCountry) && neighbor.owner == this)
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * fortification method to allow a player to move one of 
+	 * his armies from one country he owns to another that 
+	 * is adjacent to it
+	 * 
+	 */
+	public void fortification() {
+		System.out.println("Player " + name);
+		String fromCountry = null;
+		String toCountry = null;
+		boolean doneFlag1 = false;
+		boolean doneFlag2 = false;
+		Scanner keyboard = new Scanner(System.in);
+		
+		do {
+			System.out.println("Enter the country you would like to move an army from:");
+			fromCountry = keyboard.nextLine();
+			if(validAssignedCountry(fromCountry)) {	
+				do {
+					System.out.println("Enter the neighbouring country you would like to move the army to:");
+					toCountry = keyboard.nextLine();
+					
+					int armiesInFromCountry = 0;
+					
+					for(Territory territory : assignedTerritories) {
+						if(territory.name.equals(fromCountry)) {
+							armiesInFromCountry = territory.numberOfArmies;
+						}
+					}
+					
+					if(validNeighborCountry(fromCountry, toCountry)) {
+						int armiesToMove = 0;
+						System.out.println("Enter the number of armies to move."
+								+ "\nNote the number of armies to move must be less than"
+								+ " number of armies in the from country as every country must have"
+								+ " at least 1 army");
+						armiesToMove = Integer.parseInt(keyboard.nextLine());
+						while(armiesToMove <= 0 || armiesToMove >= armiesInFromCountry) {
+							System.out.println("Wrong number of Armies!"
+									+ "\nNumber of armies should be less than: " + armiesInFromCountry);
+							armiesToMove = Integer.parseInt(keyboard.nextLine());
+						}
+						for(Territory territory : assignedTerritories) {
+							if(territory.name.equals(fromCountry)) {
+								territory.numberOfArmies -= armiesToMove;
+								for(Territory neighbour : territory.neighbours) {
+									if(neighbour.name.equalsIgnoreCase(toCountry)) {
+										neighbour.numberOfArmies += armiesToMove;
+										break;
+									}
+								}
+								break;
+							}
+						}
+						doneFlag2 = true;
+					}
+					else {
+						System.out.println("Enter a valid Neighbour that you own.");
+					}
+				}while(!doneFlag2);
+				doneFlag1 = true;
+			}
+			else {
+				System.out.println("Wrong Country!!"
+						+ "\nEnter a country you own that is having at least one neighbour that you own too!!");
+			}
+		}while(!doneFlag1);
+	}
+}

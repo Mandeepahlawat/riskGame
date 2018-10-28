@@ -1,1 +1,0 @@
-typeSearchIndex = [{"p":"Map","l":"Map"},{"p":"Map","l":"Map.Territory"}]
