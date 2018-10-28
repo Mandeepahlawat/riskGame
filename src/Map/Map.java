@@ -175,6 +175,7 @@ public class Map {
 		public boolean visited = false;
 		public Player owner;				
 		public int numberOfArmies;
+		
 		/**
 		* This method is the constructor of the Territory class
 		* 

@@ -34,8 +34,6 @@ public class Main {
 	public static ArrayList<String> userEnteredTerritoryLines;
 	public static ArrayList<Player> players;
 	public static int totalInitialArmies;
-//	public static ArrayList<Pair<String, Integer> > playerControllingTerritory;
-//	public static ArrayList<Pair<String, Integer> > armiesAssignedToTerritory;
 	
 	/**
 	* This method is used to validate the new map line
@@ -426,7 +424,7 @@ public class Main {
 	
 	
 	/**
-	 * this function displays the current status of map
+	 * this method displays the current status of map
 	 * <ul>
 	 * <li>Which player owns what country</li>
 	 * <li>How many armies that player has in that country</li>
@@ -464,7 +462,12 @@ public class Main {
 		}
 	}
 	
-	
+	/**
+	 * This method contains the reinforcement phase of
+	 * the game and calculate number of reinforcement
+	 * armies and let the user place them in different
+	 * countries
+	 */
 	public static void reinforcementPhase() {
 		for(int i = 0; i < players.size(); ++i) {
 			Player player = players.get(i);
@@ -474,6 +477,11 @@ public class Main {
 		display();
 	}
 	
+	/**
+	 * This method contains the fortification phase of
+	 * the game and lets the user move armies from one
+	 * country to the another
+	 */
 	public static void fortificationPhase() {
 		for(int i = 0; i < players.size(); ++i) {
 			Player player = players.get(i);
@@ -481,6 +489,11 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * This method builds the map from the text lines
+	 * which are read from the file selected to load
+	 * the map.
+	 */
 	public static void buildMap() {
 		userEnteredContinentLines.removeAll(Arrays.asList("", null));
 		userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
@@ -519,6 +532,15 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * This method contains the startup phase of
+	 * the game which includes map selection,
+	 * building a map, if the map is valid then
+	 * assigning countries to players randomly and
+	 * letting the user place armies in the assigned countries
+	 * 
+	 * @param keyboard A scanner object for user input.
+	 */
 	public static void startupPhase(Scanner keyboard) {
 		mapSelection(keyboard);
 		buildMap();
@@ -541,9 +563,18 @@ public class Main {
 		}
 		else {
 			System.out.println("INVALID MAP!");
+			startupPhase(keyboard);
 		}
 	}
 	
+	/**
+	 * This method is a part of startup phase and assign
+	 * initial territories to players and gives them a set of
+	 * initial armies and lets them place those armies in the
+	 * assigned countries
+	 * 
+	 * @param keyboard A scanner object for user input.
+	 */
 	public static void assignTerritoriesAndArmies(Scanner keyboard) {
 		assignInitialTerritories();
 		assignInitialArmies();

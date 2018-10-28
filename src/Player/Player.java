@@ -28,7 +28,11 @@ public class Player {
 	private int id;
 	private static int idCounter = 0;
 	
-	
+	/**
+	* This method is the constructor of the Player class
+	* 
+	* @param name A String value of the player name
+	*/
 	public Player(String name) {
 		idCounter++;
 		this.name = name;
@@ -37,15 +41,37 @@ public class Player {
 		this.cards = new ArrayList<Card>();
 	}
 	
+	/**
+	* This is a getter method, which gives the name of the player
+	* 
+	* @return name of the player
+	* 
+	*/
 	public String getName() {
 		return this.name;
 	}
 	
+	/**
+	* This is a setter method, which sets the
+	* initial army count and the number of armies left
+	* for each player
+	* 
+	* @param armyCount int value of the number of armies
+	* 
+	*/
 	public void setInitialArmyCount(int armyCount) {
 		initialArmyCount = armyCount;
 		armiesLeft = armyCount;
 	}
 	
+	/**
+	* This is a helper method which gives the number of
+	* countries a player has with the number of armies in that
+	* country
+	* 
+	* @return String value with a specific format.
+	* 
+	*/
 	public String assignedTerritoryNamesWithArmies() {
 		String territoriesWithArmies = "";
 		for(Territory territory : assignedTerritories) {
@@ -85,6 +111,12 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * This method defines in a helper method to place
+	 * number of armies for each player automatically
+	 * instead of going in a round robin fashion
+	 * 
+	 */
 	public void placeArmiesAutomatically() {
 		Random rand = new Random();
 		if(initialArmyCount < assignedTerritories.size()) {
