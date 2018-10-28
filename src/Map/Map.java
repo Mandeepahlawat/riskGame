@@ -3,6 +3,8 @@ package Map;
 import java.util.ArrayList;
 import java.util.Stack;
 
+import Player.Player;
+
 /**
 * This class is used to create a full Map,
 * a map has a list of continents and territories.
@@ -171,14 +173,16 @@ public class Map {
 		public Map continent;
 		public ArrayList<Territory> neighbours;
 		public boolean visited = false;
-		public int playerId = 0;						//CHANGED 18-10
-		public int numberOfArmies = 0;				//CHANGED 18-10
+		public Player owner;				
+		public int numberOfArmies;
 		/**
 		* This method is the constructor of the Territory class
 		* 
 		* @param name A String value of the territory name
 		*/
 		public Territory(String name) {
+			this.owner = null;
+			this.numberOfArmies = 0;
 			this.name = name;
 			this.continent = null;
 			this.neighbours = new ArrayList<Territory>();

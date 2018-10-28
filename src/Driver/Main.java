@@ -9,15 +9,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
-
-import GamePlay.gameDriver;
-
+import java.util.Stack;
 import java.nio.file.Path;
 
 import Map.Map;
 import Map.Map.Territory;
-import javafx.util.Pair;
+import Player.Player;
 
 /**
 * This class is the main driver class which
@@ -33,8 +32,10 @@ public class Main {
 	public static Map activeMap;
 	public static ArrayList<String> userEnteredContinentLines;
 	public static ArrayList<String> userEnteredTerritoryLines;
-	public static ArrayList<Pair<String, Integer> > playerControllingTerritory;
-	public static ArrayList<Pair<String, Integer> > armiesAssignedToTerritory;
+	public static ArrayList<Player> players;
+	public static int totalInitialArmies;
+//	public static ArrayList<Pair<String, Integer> > playerControllingTerritory;
+//	public static ArrayList<Pair<String, Integer> > armiesAssignedToTerritory;
 	
 	/**
 	* This method is used to validate the new map line
@@ -381,19 +382,106 @@ public class Main {
 	}
 	
 	/**
-	* This is the main method which runs the program
-	* 
-	* @param args command line arguments
-	*/
-	public static void main(String[] args) {
-		userEnteredContinentLines = new ArrayList<String>();
-		userEnteredTerritoryLines = new ArrayList<String>();
+	 * This method Assigns the initial territories randomly
+	 * to the players in the game.
+	 */
+	public static void assignInitialTerritories() {
+		for (Territory territory : Main.activeMap.territories) {
+			if (territory.owner == null) {
+				Random rand = new Random();
+				Player player = Main.players.get(rand.nextInt(Main.players.size()));
+				territory.owner = player;
+				player.assignedTerritories.add(territory);
+			}
+		}
+	}
+	
+	/**
+	 * This method defines Assigning the initial number of armies
+	 *  to each player who gets in the game.
+	 */
+	public static void assignInitialArmies() {
+		int playersSize = players.size();
+		totalInitialArmies = 0;
+		if (playersSize == 2) {
+			totalInitialArmies = 80;
+		} else if (playersSize == 3) {
+			totalInitialArmies = 105;
+		} else if (playersSize == 4) {
+			totalInitialArmies = 120;
+		} else if (playersSize == 5) {
+			totalInitialArmies = 125;
+		} else if (playersSize == 6) {
+			totalInitialArmies = 120;
+		}
+		else {
+			System.out.println("Number of players should be less than 6");
+			System.exit(0);
+		}
 		
-		Scanner keyboard = new Scanner(System.in);
-		
-		// startup phase
-		mapSelection(keyboard);
-		
+		for (int i = 0; i < playersSize; i++) {
+			players.get(i).setInitialArmyCount(totalInitialArmies/playersSize);
+		}
+	}
+	
+	
+	/**
+	 * this function displays the current status of map
+	 * <ul>
+	 * <li>Which player owns what country</li>
+	 * <li>How many armies that player has in that country</li>
+	 * <li>Which are the neighbouring territories of this country</li>
+	 * </ul>
+	 */
+	public static void display() {
+		for (Territory terr : activeMap.territories) {
+			terr.visited = false;
+		}
+
+		Stack<Territory> stack = new Stack<>();
+		stack.push(activeMap.territories.get(0));
+		while (!stack.isEmpty()) {
+			Territory territoryBeingVisited = stack.pop();
+			if (territoryBeingVisited.visited == false) {
+				territoryBeingVisited.visited = true;
+
+				System.out.println("\n" + territoryBeingVisited.name
+						+ " is owned by Player " + territoryBeingVisited.owner.getName());
+				
+				System.out.println("Player " + territoryBeingVisited.owner.getName()
+				+ " has " + territoryBeingVisited.numberOfArmies
+				+ " armies in this territory");
+				
+				System.out.println("This territory is connected to the following territoris: ");
+				for (Territory neighbour : territoryBeingVisited.neighbours) {
+					if (!neighbour.visited) {
+						stack.push(neighbour);
+					}
+					System.out.print(" -> " + neighbour.name);
+				}
+				System.out.println();
+			}
+		}
+	}
+	
+	
+	public static void reinforcementPhase() {
+		for(int i = 0; i < players.size(); ++i) {
+			Player player = players.get(i);
+			display();
+			player.placeReinforcements(player.calculateReinforcementArmies());
+		}
+		display();
+	}
+	
+	public static void fortificationPhase() {
+		for(int i = 0; i < players.size(); ++i) {
+			Player player = players.get(i);
+			player.fortification();
+		}
+	}
+	
+	public static void buildMap() {
 		userEnteredContinentLines.removeAll(Arrays.asList("", null));
 		userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
 		
@@ -429,22 +517,91 @@ public class Main {
 			}
 			
 		}
-		
+	}
+	
+	public static void startupPhase(Scanner keyboard) {
+		mapSelection(keyboard);
+		buildMap();
 		if(activeMap.validateMap()) {
+			players = new ArrayList<Player>();
 			int playersCount;
+			
 			do {
 				System.out.println("\nEnter the number of players"
 						+ "\n(Note: the value should less than " + Map.listOfAllTerritories.size() + " i.e. the number of territories");
 				playersCount = Integer.parseInt(keyboard.nextLine());
+			} while(playersCount >= activeMap.territories.size());
+			
+			for(int i = 0; i < playersCount; ++i) {
+				Player player = new Player("Player" + i);
+				players.add(player);
 			}
-			while(playersCount >= Map.listOfAllTerritories.size());
-			gameDriver driver = new gameDriver(playersCount);
-			driver.play();
-			driver.display();
+			
+			assignTerritoriesAndArmies(keyboard);
 		}
 		else {
 			System.out.println("INVALID MAP!");
 		}
+	}
+	
+	public static void assignTerritoriesAndArmies(Scanner keyboard) {
+		assignInitialTerritories();
+		assignInitialArmies();
+		int playersCount = players.size();
+		
+		System.out.println("Write 'm' to place armies manually or 'a' to place armies automatically");
+		String userInput = keyboard.nextLine();
+		if (userInput.equalsIgnoreCase("m")) {
+			boolean armiesLeftToPlace = true;
+			while(armiesLeftToPlace) {
+				for(int i = 0; i < playersCount; ++i) {
+					players.get(i).placeArmies();
+				}
+				
+				int playersCountWithNoArmiesLeft = 0;
+				
+				for(int i = 0; i < playersCount; ++i) {
+					if(players.get(i).armiesLeft == 0) {
+						playersCountWithNoArmiesLeft++;
+					}
+				}
+				
+				if(playersCountWithNoArmiesLeft == playersCount) {
+					armiesLeftToPlace = false;
+				}
+			}
+		}
+		else {
+			for(int i = 0; i < playersCount; ++i) {
+				players.get(i).placeArmiesAutomatically();
+			}
+		}
+	}
+	
+	
+	/**
+	* This is the main method which runs the program
+	* 
+	* @param args command line arguments
+	*/
+	public static void main(String[] args) {
+		userEnteredContinentLines = new ArrayList<String>();
+		userEnteredTerritoryLines = new ArrayList<String>();
+		
+		Scanner keyboard = new Scanner(System.in);
+		
+		System.out.println("\n***********************STARTUP PHASE BEGINS*****************************\n");
+		startupPhase(keyboard);
+		System.out.println("\n***********************STARTUP PHASE ENDS*****************************\n");
+		
+		System.out.println("\n***********************REINFORCEMENT PHASE BEGINS*****************************\n");
+		reinforcementPhase();
+		System.out.println("\n***********************REINFORCEMENT PHASE ENDS*****************************\n");
+		
+		System.out.println("\n***********************FORTIFICATION PHASE BEGINS*****************************\n");
+		fortificationPhase();
+		display();
+		System.out.println("\n***********************FORTIFICATION PHASE ENDS*****************************\n");
 		
 		keyboard.close();
 	}
