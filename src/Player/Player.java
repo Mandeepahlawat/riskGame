@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import Driver.Main;
 import Card.Card;
+import Card.Card.CardType;
 import Map.Map;
 import Map.Map.Territory;
 
@@ -166,6 +167,22 @@ public class Player {
 				totalReinforcements = totalReinforcements + continent.score;
 			}
 		}
+		
+		if(canExchangeCards()) {
+			if(cards.size() == 5) {
+				totalReinforcements += Card.cardExchangeValue;
+				cardExchangeSelection();
+			}
+			else {
+				Scanner keyboard = new Scanner(System.in);
+				System.out.println("Do you want to exchange cards? Enter yes or no?");
+				if(keyboard.nextLine().equalsIgnoreCase("yes")) {
+					totalReinforcements += Card.cardExchangeValue;
+					cardExchangeSelection();
+				}
+			}
+		}
+		
 		System.out.println("Player " + name + " gets " + totalReinforcements + " reinforcement armies.");
 		return totalReinforcements;
 	}
@@ -324,5 +341,72 @@ public class Player {
 						+ "\nEnter a country you own that is having at least one neighbour that you own too!!");
 			}
 		}while(!doneFlag1);
+	}
+	
+	public void cardExchangeSelection() {
+		System.out.println("You currently have following cards with you.");
+		int i = 0;
+		for(Card card : cards) {
+			System.out.println(i + ". " + card);
+		}
+		System.out.println("Please select cards to exchange from the following cards"
+				+ "\n The card numbers should be comma seperated");
+		
+		Scanner keyboard = new Scanner(System.in);
+		String cardNumbers = keyboard.nextLine();
+		
+		String cardnums[] = cardNumbers.split(",");
+		
+		while(!validCardIndexesToExchange(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
+				Integer.parseInt(cardnums[3]))) {
+			System.out.println("You can only exchange cards of different types or all cards of same type");
+			cardExchangeSelection();
+		}
+		exchangeCards(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
+				Integer.parseInt(cardnums[3]));
+	}
+	
+	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
+		cards.remove(cardIndex1 - 1);
+		cards.remove(cardIndex2 - 1);
+		cards.remove(cardIndex3 - 1);
+		Card.cardExchangeValue += 5;
+	}
+	
+	public boolean validCardIndexesToExchange(int cardIndex1, int cardIndex2, int cardIndex3) {
+		CardType cardType1 = cards.get(cardIndex1 - 1).type;
+		CardType cardType2 = cards.get(cardIndex2 - 1).type;
+		CardType cardType3 = cards.get(cardIndex3 - 1).type;
+		
+		if(cardType1 != cardType2) {
+			if(cardType2 != cardType3 && cardType1 != cardType3) {
+				return true;
+			}
+		}
+		
+		if(cardType1 == cardType2 && cardType2 == cardType3) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean canExchangeCards() {
+		if(cards.size() == 5) {
+			return true;
+		}
+		
+		ArrayList<CardType> cardTypes = new ArrayList<CardType>();
+		for(Card card : cards) {
+			if(!cardTypes.contains(card.type)) {
+				cardTypes.add(card.type);
+			}
+		}
+		
+		if(cardTypes.size() == 3) {
+			return true;
+		}
+		
+		return false;
 	}
 }
