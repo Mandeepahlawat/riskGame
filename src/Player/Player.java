@@ -150,7 +150,7 @@ public class Player {
 	 */
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
-		totalReinforcements =  (assignedTerritories.size() / 3);
+		totalReinforcements =  (int)(assignedTerritories.size() / 3);
 		if(totalReinforcements < 3) {
 			totalReinforcements = 3;
 		}
