@@ -1,9 +1,11 @@
 package Player;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 import java.util.Scanner;
 
+import Views.CardExchangeView;
 import Driver.Main;
 import Card.Card;
 import Card.Card.CardType;
@@ -20,14 +22,27 @@ import Map.Map.Territory;
 * @version 1.0
 * @since   2018-10-27 
 */
-public class Player {
-	private ArrayList<Card> cards;
+public class Player extends Observable {
+	public enum GamePhase {
+		REINFORCEMENT, ATTACK, FORTIFICATION;	
+	}
+	
+	public ArrayList<Card> cards;
 	public ArrayList<Territory> assignedTerritories;
+	/**
+	 * Number of armies assigned to a player during startup phase.
+	 */
 	private int initialArmyCount;
 	public int armiesLeft;
+	/**
+	 * Total number of armies a player contains.
+	 */
+	public int totalArmiesCount;
 	private String name;
 	private int id;
 	private static int idCounter = 0;
+	public GamePhase currentGamePhase;
+	public boolean cardExchangeViewOpen;
 	
 	/**
 	* This method is the constructor of the Player class
@@ -40,6 +55,7 @@ public class Player {
 		this.id = idCounter;
 		this.assignedTerritories = new ArrayList<Territory>();
 		this.cards = new ArrayList<Card>();
+		this.cardExchangeViewOpen = false;
 	}
 	
 	/**
@@ -63,6 +79,7 @@ public class Player {
 	public void setInitialArmyCount(int armyCount) {
 		initialArmyCount = armyCount;
 		armiesLeft = armyCount;
+		totalArmiesCount = armyCount;
 	}
 	
 	/**
@@ -169,21 +186,32 @@ public class Player {
 		}
 		
 		if(canExchangeCards()) {
+			this.cardExchangeViewOpen = true;
+			CardExchangeView cardExchangeView = new CardExchangeView();
+			this.addObserver(cardExchangeView);
+			
 			if(cards.size() == 5) {
 				totalReinforcements += Card.cardExchangeValue;
-				cardExchangeSelection();
+				setChanged();
+				notifyObservers();
+//				cardExchangeSelection();
 			}
 			else {
 				Scanner keyboard = new Scanner(System.in);
 				System.out.println("Do you want to exchange cards? Enter yes or no?");
 				if(keyboard.nextLine().equalsIgnoreCase("yes")) {
 					totalReinforcements += Card.cardExchangeValue;
-					cardExchangeSelection();
+					setChanged();
+					notifyObservers();
 				}
 			}
+			
+			this.deleteObserver(cardExchangeView);
+			this.cardExchangeViewOpen = false;
 		}
 		
 		System.out.println("Player " + name + " gets " + totalReinforcements + " reinforcement armies.");
+		totalArmiesCount += totalReinforcements;
 		return totalReinforcements;
 	}
 	
@@ -216,6 +244,17 @@ public class Player {
 					}
 				}
 			}
+		setCurrentGamePhase(GamePhase.ATTACK);
+	}
+	
+	public void attack() {
+		setCurrentGamePhase(GamePhase.FORTIFICATION);
+	}
+	
+	public void setCurrentGamePhase(GamePhase currentGamePhase) {
+		this.currentGamePhase = currentGamePhase;
+		setChanged();
+		notifyObservers(this);
 	}
 	
 	/**
@@ -304,6 +343,10 @@ public class Player {
 						}
 					}
 					
+					if(armiesInFromCountry == 0) {
+						System.out.println("=================== bug ===============");
+					}
+					
 					if(validNeighborCountry(fromCountry, toCountry)) {
 						int armiesToMove = 0;
 						System.out.println("Enter the number of armies to move."
@@ -341,30 +384,31 @@ public class Player {
 						+ "\nEnter a country you own that is having at least one neighbour that you own too!!");
 			}
 		}while(!doneFlag1);
+//		setCurrentGamePhase(GamePhase.REINFORCEMENT);
 	}
 	
-	public void cardExchangeSelection() {
-		System.out.println("You currently have following cards with you.");
-		int i = 0;
-		for(Card card : cards) {
-			System.out.println(i + ". " + card);
-		}
-		System.out.println("Please select cards to exchange from the following cards"
-				+ "\n The card numbers should be comma seperated");
-		
-		Scanner keyboard = new Scanner(System.in);
-		String cardNumbers = keyboard.nextLine();
-		
-		String cardnums[] = cardNumbers.split(",");
-		
-		while(!validCardIndexesToExchange(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
-				Integer.parseInt(cardnums[3]))) {
-			System.out.println("You can only exchange cards of different types or all cards of same type");
-			cardExchangeSelection();
-		}
-		exchangeCards(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
-				Integer.parseInt(cardnums[3]));
-	}
+//	public void cardExchangeSelection() {
+//		System.out.println("You currently have following cards with you.");
+//		int i = 0;
+//		for(Card card : cards) {
+//			System.out.println(i + ". " + card);
+//		}
+//		System.out.println("Please select cards to exchange from the following cards"
+//				+ "\n The card numbers should be comma seperated");
+//		
+//		Scanner keyboard = new Scanner(System.in);
+//		String cardNumbers = keyboard.nextLine();
+//		
+//		String cardnums[] = cardNumbers.split(",");
+//		
+//		while(!validCardIndexesToExchange(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
+//				Integer.parseInt(cardnums[3]))) {
+//			System.out.println("You can only exchange cards of different types or all cards of same type");
+//			cardExchangeSelection();
+//		}
+//		exchangeCards(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
+//				Integer.parseInt(cardnums[3]));
+//	}
 	
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		cards.remove(cardIndex1 - 1);
