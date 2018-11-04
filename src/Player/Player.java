@@ -275,13 +275,25 @@ public class Player {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(fromCountry)) {
 				for(Territory neighbor : territory.neighbours) {
-					if(neighbor.name.equalsIgnoreCase(toCountry) && neighbor.owner == this)
-						return false;
+					if(neighbor.name.equalsIgnoreCase(toCountry) && neighbor.owner != this)
+						return true;
 				}
-				return true;
 			}
 		}
 		return false;
+	}
+	
+	/**FETCH OPPONENT PLAYER ID**/
+	private String opponentPlayer(String fromCountry, String toCountry) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(fromCountry)) {
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(toCountry))
+						return neighbor.owner.name;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
@@ -296,7 +308,7 @@ public class Player {
 	}
 	
 	/**IMPLEMENTING THE ATTACK PHASE**/
-	public void attack() {
+	public String attack() {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
 		String answer = keyboard.nextLine();
@@ -306,12 +318,13 @@ public class Player {
 			if(canAttackFromThisCountry(attackfrom)) {
 				System.out.println("Enter the country you want to attack");
 				String attackat = keyboard.nextLine();
+				keyboard.close();
 				if(validOpponentCountry(attackfrom, attackat)) {
-					
+					return opponentPlayer(attackfrom, attackat);
 				}
 			}	
 		}
-		keyboard.close();
+		return null;
 	}
 	
 	/**
