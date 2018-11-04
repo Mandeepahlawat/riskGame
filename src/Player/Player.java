@@ -194,7 +194,6 @@ public class Player extends Observable {
 				totalReinforcements += Card.cardExchangeValue;
 				setChanged();
 				notifyObservers();
-//				cardExchangeSelection();
 			}
 			else {
 				Scanner keyboard = new Scanner(System.in);
@@ -288,9 +287,9 @@ public class Player extends Observable {
 	 * @param toCountry  is a string value in which a player can mention 
 	 * to move a army from a country to another country
 	 * 
-	 * @return true if the given condition satifies.
+	 * @return true if the given condition satisfies.
 	 * 
-	 * @return false if the given condition doesn't satifies.
+	 * @return false if the given condition doesn't satisfies.
 	 */
 	private boolean validNeighborCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -433,32 +432,8 @@ public class Player extends Observable {
 						+ "\nEnter a country you own that is having at least one neighbour that you own too!!");
 			}
 		}while(!doneFlag1);
-//		setCurrentGamePhase(GamePhase.REINFORCEMENT);
 	}
-	
-//	public void cardExchangeSelection() {
-//		System.out.println("You currently have following cards with you.");
-//		int i = 0;
-//		for(Card card : cards) {
-//			System.out.println(i + ". " + card);
-//		}
-//		System.out.println("Please select cards to exchange from the following cards"
-//				+ "\n The card numbers should be comma seperated");
-//		
-//		Scanner keyboard = new Scanner(System.in);
-//		String cardNumbers = keyboard.nextLine();
-//		
-//		String cardnums[] = cardNumbers.split(",");
-//		
-//		while(!validCardIndexesToExchange(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
-//				Integer.parseInt(cardnums[3]))) {
-//			System.out.println("You can only exchange cards of different types or all cards of same type");
-//			cardExchangeSelection();
-//		}
-//		exchangeCards(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
-//				Integer.parseInt(cardnums[3]));
-//	}
-	
+
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		cards.remove(cardIndex1 - 1);
 		cards.remove(cardIndex2 - 1);
@@ -501,5 +476,34 @@ public class Player extends Observable {
 		}
 		
 		return false;
+	}
+	
+	public ArrayList<Map> ownedContinents() {
+		ArrayList<Map> ownedContinents = new ArrayList<Map>();
+		for(Map continent : Main.activeMap.continents) {
+			ArrayList<Player> territoryOwners = new ArrayList<Player>();
+			boolean ownContinent = true;
+			for(Territory territory : continent.territories) {
+				if(territory.owner == this) {
+					if(territoryOwners.isEmpty()) {
+						territoryOwners.add(territory.owner);
+					}
+					else {
+						if(!territoryOwners.contains(territory.owner)) {
+							ownContinent = false;
+							break;
+						}
+					}
+				}
+				else {
+					ownContinent = false;
+					break;
+				}
+			}
+			if(ownContinent) {
+				ownedContinents.add(continent);
+			}
+		}
+		return ownedContinents;
 	}
 }
