@@ -437,8 +437,37 @@ public class Player extends Observable {
 		}		
 	}
 	
+	private boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(attackerCounter)) {
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(defenderCountry))
+						if(neighbor.numberOfArmies == 0)
+							return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES**/
+	private void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(attackerCounter)) {
+				territory.numberOfArmies = territory.numberOfArmies - numberOfArmiesToMove;
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(defenderCountry)) {
+						neighbor.numberOfArmies = numberOfArmiesToMove;
+						assignedTerritories.add(neighbor);
+					}
+				}
+			}
+		}
+	}
+	
 	/**IMPLEMENTING THE ATTACK PHASE**/
 	public void attack() {
+		boolean attackerLost = false;
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
 		String answer = keyboard.nextLine();
@@ -450,20 +479,35 @@ public class Player extends Observable {
 				String attackat = keyboard.nextLine();
 				keyboard.close();
 				if(validOpponentCountry(attackfrom, attackat)) {
-					//String opponent = opponentPlayer(attackfrom, attackat);
-					Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackfrom, attackat));
-					Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackfrom, attackat));
-					while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
-						int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
-						int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
-						if(attackerDiceValue != defenderDiceValue) {
+					boolean finishedAttackingThatTerritory = false;
+					while(!finishedAttackingThatTerritory) {
+						//String opponent = opponentPlayer(attackfrom, attackat);
+						Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackfrom, attackat));
+						Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackfrom, attackat));
+						while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+							int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+							int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
 							if(attackerDiceValue > defenderDiceValue) {
 								reduceArmy("defender", attackfrom, attackat);
-								//check if region conquered
+								//check if the opponent lost
+								if(checkDefenderArmiesNumberZero(attackfrom, attackat)) {
+									System.out.println("Enter the number of armies you would like to place in your new territory:");
+									moveArmiesToNewTerritory(attackfrom, attackat, keyboard.nextInt());
+									finishedAttackingThatTerritory = true;
+								}
 							}
 							else {
 								reduceArmy("attacker", attackfrom, attackat);
-								//check if region conquered
+								//check if you lost
+								for(Territory territory : assignedTerritories) {
+									if(territory.name.equalsIgnoreCase(attackfrom)) {
+										if(territory.numberOfArmies == 0) {
+											territory.numberOfArmies = 1;
+											attackerLost = true;
+										}
+									}
+								}
+								
 							}
 						}
 					}
