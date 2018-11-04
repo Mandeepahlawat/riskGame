@@ -49,7 +49,7 @@ public class WorldDominationView implements Observer {
 			for(Territory territory : player.assignedTerritories) {
 				countryNameWithContinentAndArmy(territory, false);
 				System.out.println("");
-				System.out.println("Neighbouring countries");
+				System.out.println("Neighbouring countries:");
 				for(Territory neighbour : territory.neighbours) {
 					countryNameWithContinentAndArmy(neighbour, true);
 					System.out.println("");
