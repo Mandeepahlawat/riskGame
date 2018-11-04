@@ -1,6 +1,7 @@
 package Map;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Stack;
 
 import Player.Player;
@@ -15,7 +16,7 @@ import Player.Player;
 * @version 1.0
 * @since   2018-09-30 
 */
-public class Map {
+public class Map extends Observable {
 	public ArrayList<Map> continents; // this will be used for the main map
 	public ArrayList<Territory> territories; // this will be used for continents
 	public int score;
@@ -24,6 +25,7 @@ public class Map {
 	public static ArrayList<Territory> listOfAllTerritories;
 	public static ArrayList<Map> listOfAllContinents;
 	public boolean visited = false;
+	
 	/**
 	* This method is used to find a Territory.
 	* 
@@ -38,6 +40,23 @@ public class Map {
 			}
 		}
 		return null;
+	}
+	
+	public boolean allTerritoriesOwnBySinglePlayer() {
+		setChanged();
+		notifyObservers(this);
+		ArrayList<String> ownerNames = new ArrayList<String>();
+		for(Territory territory : territories) {
+			if(ownerNames.isEmpty()) {
+				ownerNames.add(territory.owner.getName());
+			}
+			else {
+				if(!ownerNames.contains(territory.owner.getName())) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	/**
