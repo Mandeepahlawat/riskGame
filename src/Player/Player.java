@@ -1,9 +1,11 @@
 package Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Observable;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Vector;
 
 import Views.CardExchangeView;
 import Driver.Main;
@@ -342,7 +344,7 @@ public class Player extends Observable {
 		return false;
 	}
 	
-	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
+	/**CALCULATE THE NUMBER OF DICE**/
 	private int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
 		Scanner keyboard = new Scanner(System.in);
 		int input = 0;
@@ -402,6 +404,39 @@ public class Player extends Observable {
 		return input;
 	}
 	
+	/**VALUE ON DICE AFTER ROLLING**/
+	private Vector<Integer> rollDice(int numberOfDice){
+		Vector<Integer> diceValues = new Vector(numberOfDice);
+		Random r = new Random();
+		while(numberOfDice != 0) {
+			diceValues.addElement(r.nextInt((6 - 1) + 1) + 1);
+			numberOfDice--;
+		}
+		Collections.sort(diceValues);
+		return diceValues;
+	}
+	
+	/**REDUCING ONE ARMY IN THE LOSING PLAYERS TERRITORY**/
+	private void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
+		if(losingPlayer.equalsIgnoreCase("attacker")) {
+			for(Territory territory : assignedTerritories) {
+				if(territory.name.equalsIgnoreCase(attackerCounter)) {
+					territory.numberOfArmies--;
+				}
+			}
+		}
+		else {
+			for(Territory territory : assignedTerritories) {
+				if(territory.name.equalsIgnoreCase(attackerCounter)) {
+					for(Territory neighbor : territory.neighbours) {
+						if(neighbor.name.equalsIgnoreCase(defenderCountry))
+							neighbor.numberOfArmies--;
+					}
+				}
+			}
+		}		
+	}
+	
 	/**IMPLEMENTING THE ATTACK PHASE**/
 	public void attack() {
 		Scanner keyboard = new Scanner(System.in);
@@ -415,9 +450,23 @@ public class Player extends Observable {
 				String attackat = keyboard.nextLine();
 				keyboard.close();
 				if(validOpponentCountry(attackfrom, attackat)) {
-					String opponent = opponentPlayer(attackfrom, attackat);
-					int attackerDice = calculateNumberOfDiceAllowed("attacker", attackfrom, attackat);
-					int defenderDice = calculateNumberOfDiceAllowed("defender", attackfrom, attackat);
+					//String opponent = opponentPlayer(attackfrom, attackat);
+					Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackfrom, attackat));
+					Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackfrom, attackat));
+					while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+						int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+						int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
+						if(attackerDiceValue != defenderDiceValue) {
+							if(attackerDiceValue > defenderDiceValue) {
+								reduceArmy("defender", attackfrom, attackat);
+								//check if region conquered
+							}
+							else {
+								reduceArmy("attacker", attackfrom, attackat);
+								//check if region conquered
+							}
+						}
+					}
 				}
 			}	
 		}
