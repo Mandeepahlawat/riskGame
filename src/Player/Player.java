@@ -247,10 +247,6 @@ public class Player extends Observable {
 		setCurrentGamePhase(GamePhase.ATTACK);
 	}
 	
-	public void attack() {
-		setCurrentGamePhase(GamePhase.FORTIFICATION);
-	}
-	
 	public void setCurrentGamePhase(GamePhase currentGamePhase) {
 		this.currentGamePhase = currentGamePhase;
 		setChanged();
@@ -347,7 +343,7 @@ public class Player extends Observable {
 	}
 	
 	/**IMPLEMENTING THE ATTACK PHASE**/
-	public String attack() {
+	public void attack() {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
 		String answer = keyboard.nextLine();
@@ -359,11 +355,11 @@ public class Player extends Observable {
 				String attackat = keyboard.nextLine();
 				keyboard.close();
 				if(validOpponentCountry(attackfrom, attackat)) {
-					return opponentPlayer(attackfrom, attackat);
+					opponentPlayer(attackfrom, attackat);
 				}
 			}	
 		}
-		return null;
+		setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 	
 	/**
