@@ -342,6 +342,66 @@ public class Player extends Observable {
 		return false;
 	}
 	
+	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
+	private int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
+		Scanner keyboard = new Scanner(System.in);
+		int input = 0;
+		if(status.equalsIgnoreCase("attacker")) {
+			int numberOfArmies = 0;
+			for(Territory territory : assignedTerritories) {
+				if(territory.name.equalsIgnoreCase(attackerCounter)){
+					numberOfArmies = territory.numberOfArmies;			
+				}
+			}
+			if(numberOfArmies == 2)
+				return 1;
+			else if(numberOfArmies == 3){
+				System.out.println("Choose if you would like to roll 1 or 2 Dice:");
+				while(input == 0) {
+					input = keyboard.nextInt();
+					if(input != 1 || input != 2) {
+						System.out.println("You can only choose between 1 or 2 Dice:");
+						input = 0;
+					}
+				}
+			}
+			else {
+				System.out.println("Choose if you would like to roll 1 or 2 or 3 Dice:");
+				while(input == 0) {
+					input = keyboard.nextInt();
+					if(input != 1 || input != 2 || input != 3) {
+						System.out.println("You can only choose between 1 or 2 or 3 Dice:");
+						input = 0;
+					}
+				}
+			}
+		}
+		else {
+			int numberOfArmies = 0;
+			for(Territory territory : assignedTerritories) {
+				if(territory.name.equalsIgnoreCase(attackerCounter)) {
+					for(Territory neighbor : territory.neighbours) {
+						if(neighbor.name.equalsIgnoreCase(defenderCountry))
+							numberOfArmies = neighbor.numberOfArmies;
+					}
+				}
+			}
+			if(numberOfArmies == 2)
+				return 1;
+			else {
+				System.out.println("Choose if you would like to roll 1 or 2 Dice:");
+				while(input == 0) {
+					input = keyboard.nextInt();
+					if(input != 1 || input != 2) {
+						System.out.println("You can only choose between 1 or 2 Dice:");
+						input = 0;
+					}
+				}
+			}
+		}
+		return input;
+	}
+	
 	/**IMPLEMENTING THE ATTACK PHASE**/
 	public void attack() {
 		Scanner keyboard = new Scanner(System.in);
@@ -355,7 +415,9 @@ public class Player extends Observable {
 				String attackat = keyboard.nextLine();
 				keyboard.close();
 				if(validOpponentCountry(attackfrom, attackat)) {
-					opponentPlayer(attackfrom, attackat);
+					String opponent = opponentPlayer(attackfrom, attackat);
+					int attackerDice = calculateNumberOfDiceAllowed("attacker", attackfrom, attackat);
+					int defenderDice = calculateNumberOfDiceAllowed("defender", attackfrom, attackat);
 				}
 			}	
 		}
