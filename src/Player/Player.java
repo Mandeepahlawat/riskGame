@@ -220,10 +220,6 @@ public class Player {
 	
 	/**
 	 * To check if the players owns the country and
-	 * the number of armies is greater than 1
-	 * 
-	 * @param currentPlayerId is a integer value which gives the present 
-	 * ID of the player
 	 * 
 	 * @param country is a string value in which 
 	 * the name of the country is mentioned 
@@ -273,6 +269,50 @@ public class Player {
 		return false;
 	}
 	
+	
+	/**VALID OPPONENET COUNTRY**/
+	private boolean validOpponentCountry(String fromCountry, String toCountry) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(fromCountry)) {
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(toCountry) && neighbor.owner == this)
+						return false;
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
+	private boolean canAttackFromThisCountry(String country) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(country)){
+				if(territory.numberOfArmies > 1)
+					return true;			
+			}
+		}
+		return false;
+	}
+	
+	/**IMPLEMENTING THE ATTACK PHASE**/
+	public void attack() {
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
+		String answer = keyboard.nextLine();
+		if(answer.equalsIgnoreCase("y")) {
+			System.out.println("Enter the country you want to attack from");
+			String attackfrom = keyboard.nextLine();
+			if(canAttackFromThisCountry(attackfrom)) {
+				System.out.println("Enter the country you want to attack");
+				String attackat = keyboard.nextLine();
+				if(validOpponentCountry(attackfrom, attackat)) {
+					
+				}
+			}	
+		}
+		keyboard.close();
+	}
 	
 	/**
 	 * fortification method to allow a player to move one of 
