@@ -343,6 +343,12 @@ public class Player {
 		}while(!doneFlag1);
 	}
 	
+	/**
+	 * the method cardExchangeSelection defines that a player can 
+	 * exchange the cards on some particular conditions which is
+	 * discribed in the method.
+	 * The method also print's out the player's current cards.
+	 */
 	public void cardExchangeSelection() {
 		System.out.println("You currently have following cards with you.");
 		int i = 0;
@@ -366,6 +372,14 @@ public class Player {
 				Integer.parseInt(cardnums[3]));
 	}
 	
+	/**
+	 * The method exchangeCards 
+	 * 
+	 * @param cardIndex1
+	 * @param cardIndex2
+	 * @param cardIndex3
+	 */
+	
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		cards.remove(cardIndex1 - 1);
 		cards.remove(cardIndex2 - 1);
@@ -373,6 +387,15 @@ public class Player {
 		Card.cardExchangeValue += 5;
 	}
 	
+	/**
+	 * 
+	 * @param cardIndex1
+	 * @param cardIndex2
+	 * @param cardIndex3
+	 * @return  true if the given condition satifies.
+	 * 
+	 * @return false if the given condition doesn't satifies.
+	 */
 	public boolean validCardIndexesToExchange(int cardIndex1, int cardIndex2, int cardIndex3) {
 		CardType cardType1 = cards.get(cardIndex1 - 1).type;
 		CardType cardType2 = cards.get(cardIndex2 - 1).type;
@@ -391,6 +414,12 @@ public class Player {
 		return false;
 	}
 	
+	/**
+	 * 
+	 * @return true if the given condition satifies.
+	 * 
+	 * @return false if the given condition doesn't satifies.
+	 */
 	public boolean canExchangeCards() {
 		if(cards.size() == 5) {
 			return true;
