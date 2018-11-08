@@ -253,7 +253,7 @@ public class Player extends Observable {
 	 * 
 	 * @return false if the country doesn't belongs to player
 	 */
-	private boolean validAssignedCountry(String country) {
+	public boolean validAssignedCountry(String country) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(country)) {
 				for (Territory neighbour : territory.neighbours) {
@@ -282,7 +282,7 @@ public class Player extends Observable {
 	 * 
 	 * @return false if the given condition doesn't satisfies.
 	 */
-	private boolean validNeighborCountry(String fromCountry, String toCountry) {
+	public boolean validNeighborCountry(String fromCountry, String toCountry) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(fromCountry)) {
 				for (Territory neighbor : territory.neighbours) {
@@ -295,7 +295,7 @@ public class Player extends Observable {
 	}
 
 	/** VALID OPPONENET COUNTRY **/
-	private boolean validOpponentCountry(String fromCountry, String toCountry) {
+	public boolean validOpponentCountry(String fromCountry, String toCountry) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(fromCountry)) {
 				for (Territory neighbor : territory.neighbours) {
@@ -308,7 +308,7 @@ public class Player extends Observable {
 	}
 
 	/** FETCH OPPONENT PLAYER ID **/
-	private String opponentPlayer(String fromCountry, String toCountry) {
+	public String opponentPlayer(String fromCountry, String toCountry) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(fromCountry)) {
 				for (Territory neighbor : territory.neighbours) {
@@ -321,7 +321,7 @@ public class Player extends Observable {
 	}
 
 	/** TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE **/
-	private boolean canAttackFromThisCountry(String country) {
+	public boolean canAttackFromThisCountry(String country) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(country)) {
 				if (territory.numberOfArmies > 1)
@@ -332,7 +332,7 @@ public class Player extends Observable {
 	}
 
 	/** CALCULATE THE NUMBER OF DICE **/
-	private int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
+	public int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
 		Scanner keyboard = new Scanner(System.in);
 		int input = 0;
 		if (status.equalsIgnoreCase("attacker")) {
@@ -397,7 +397,7 @@ public class Player extends Observable {
 	}
 
 	/** VALUE ON DICE AFTER ROLLING **/
-	private Vector<Integer> rollDice(int numberOfDice) {
+	public Vector<Integer> rollDice(int numberOfDice) {
 		Vector<Integer> diceValues = new Vector(numberOfDice);
 		Random r = new Random();
 		while (numberOfDice != 0) {
@@ -409,7 +409,7 @@ public class Player extends Observable {
 	}
 
 	/** REDUCING ONE ARMY IN THE LOSING PLAYERS TERRITORY **/
-	private void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
+	public void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
 		if (losingPlayer.equalsIgnoreCase("attacker")) {
 			for (Territory territory : assignedTerritories) {
 				if (territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -429,7 +429,7 @@ public class Player extends Observable {
 	}
 
 	/** CHECK IF THE NUMBER OF ARMIES OF THE DEFENDER IS ZERO **/
-	private boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
+	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(attackerCounter)) {
 				for (Territory neighbor : territory.neighbours) {
@@ -443,7 +443,7 @@ public class Player extends Observable {
 	}
 
 	/** MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES **/
-	private void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
+	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
 		for (Territory territory : assignedTerritories) {
 			if (territory.name.equalsIgnoreCase(attackerCounter)) {
 				// leave atleast one army behind
