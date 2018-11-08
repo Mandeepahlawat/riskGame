@@ -25,7 +25,7 @@ public class CardExchangeView implements Observer{
 		String cardnums[] = cardNumbers.split(",");
 		
 		while(!currentPlayer.validCardIndexesToExchange(Integer.parseInt(cardnums[0]),
-				Integer.parseInt(cardnums[1]), Integer.parseInt(cardnums[3]))) {
+				Integer.parseInt(cardnums[1]), Integer.parseInt(cardnums[2]))) {
 			System.out.println("You can only exchange cards of different types or all cards of same type");
 			cardExchangeSelection(currentPlayer);
 		}
