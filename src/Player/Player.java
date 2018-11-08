@@ -357,7 +357,7 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * The method will have valid opponent's country 
+	 * The private method will have valid opponent's country 
 	 * which will be used in attack phase
 	 * 
 	 * @param fromCountry will have player present
@@ -381,7 +381,21 @@ public class Player extends Observable {
 		return false;
 	}
 	
-	/**FETCH OPPONENT PLAYER ID**/
+	/**
+	 * The private method opponentPlayer will return name of 
+	 * the player who is present in neighbor country.  
+	 * 
+	 * @param fromCountry will have player present
+	 * country as a string value.
+	 * 
+	 * @param toCountry is a string value in which 
+	 * player mention's the name of the country to 
+	 * check neighbour.
+	 * 
+	 * @return name of the player in neighbour country 
+	 * only if it passes the conditions if not it will 
+	 * return null value.
+	 */
 	private String opponentPlayer(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(fromCountry)) {
@@ -394,7 +408,16 @@ public class Player extends Observable {
 		return null;
 	}
 	
-	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
+	/**
+	 * The private method to check if a player can attack
+	 * from this country which is present here.
+	 * 
+	 * @param country will have player's current country 
+	 * value in string type
+	 * 
+	 * @return true if the given conditions passes 
+	 * otherwise it will return false
+	 */
 	private boolean canAttackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(country)){
@@ -405,13 +428,27 @@ public class Player extends Observable {
 		return false;
 	}
 	
-	/**CALCULATE THE NUMBER OF DICE**/
+
+	/**
+	 * The private method will calculate the number 
+	 * of dice for attacker or defender depending on 
+	 * the number of armies that player has,will 
+	 * decide whether to roll 1,2 or 3 dice.
+	 * 
+	 * @param status string value will have attacker 
+	 * or defender in it.
+	 * 
+	 * @param attackerCounter
+	 * 
+	 * @param defenderCountry
+	 * 
+	 * @return
+	 */
 	private int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
 		Scanner keyboard = new Scanner(System.in);
 		int input = 0;
 		if(status.equalsIgnoreCase("attacker")) {
 			int numberOfArmies = 0;
-			//All-Out Mode
 			System.out.println("Do you want to go ALL-OUT? Enter y for yes and n for no:");
 			String isAllOut = keyboard.nextLine();
 			if(isAllOut.equalsIgnoreCase("n")) {
