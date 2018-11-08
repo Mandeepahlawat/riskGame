@@ -22,7 +22,7 @@ public class Map_Test {
 
 //	public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\returnMap.map";
 //	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
-	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\Canada.map";
 
 	private Territory actualTerritory;
 	private Map map;

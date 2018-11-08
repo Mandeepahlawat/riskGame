@@ -17,12 +17,16 @@ import java.util.ArrayList;
 
 import org.junit.*;
 
+import Map.Map.Territory;
+import Player.*;
+import Map.Map;
+import Map.Map.*;
 
 public class Main_Test {
 	
-public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\Files\\returnMap.map";
+//public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\Files\\returnMap.map";
 //	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
-//	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
 
 	/**
 	* This method is used to validate the new map line
@@ -92,24 +96,6 @@ public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\F
 		assertEquals(false, Main.validateMapLine(false, "1,548,116,Northern Islands"));
 	}
 
-	//user interactive
-/*	@Test
-	void testAddContinent() {
-		fail("Not yet implemented");
-	}
-
-	//user interactive
-	@Test
-	void testAddTerritory() {
-		fail("Not yet implemented");
-	}
-
-	//user interactive
-	@Test
-	void testCreateNewMap() {
-		fail("Not yet implemented");
-	}*/
-
 	/**
 	 * This is to validate and return true if new map created and the expected maps are same  
 	 * 
@@ -168,19 +154,106 @@ public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\F
 	}
 
 	
-/*	@Test
-	void testLoadMap() {
-		fail("Not yet implemented");
-	}
-
 	@Test
-	void testMapSelection() {
-		fail("Not yet implemented");
+	public void testAssignInitialTerritories() {
+		Player player = new Player("Player1");
+		Map.listOfAllTerritories=new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories=new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>();
+		Main.players.add(player);
+		Territory t1 = new Territory("Asia");
+		Main.activeMap.territories.add(t1);
+		Main.assignInitialTerritories();
+		System.out.println(t1.owner.getName());
+		assertTrue(t1.owner.getName().equals("Player1"));
 	}
-
+	
 	@Test
-	void testMain() {
-		fail("Not yet implemented");
-	}*/
-
+	public void testAssignInitialArmiesFor2Players() {
+		Main.players = new ArrayList<Player>();
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		player = new Player("Player2");
+		Main.players.add(player);
+		Main.assignInitialArmies(); 
+		assertTrue(Main.totalInitialArmies==80); 
+	}
+	
+	@Test
+	public void testAssignInitialArmiesFor3Players() {
+		Main.players = new ArrayList<Player>();
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		player = new Player("Player2");
+		Main.players.add(player);
+		player = new Player("Player3");
+		Main.players.add(player);
+		Main.assignInitialArmies(); 
+		assertTrue(Main.totalInitialArmies==105); 
+	}
+	
+	@Test
+	public void testAssignInitialArmiesFor4Players() {
+		Main.players = new ArrayList<Player>();
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		player = new Player("Player2");
+		Main.players.add(player);
+		player = new Player("Player3");
+		Main.players.add(player);
+		player = new Player("Player4");
+		Main.players.add(player);
+		Main.assignInitialArmies(); 
+		assertTrue(Main.totalInitialArmies==120); 
+	}
+	
+	@Test
+	public void testAssignInitialArmiesFor5Players() {
+		Main.players = new ArrayList<Player>();
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		player = new Player("Player2");
+		Main.players.add(player);
+		player = new Player("Player3");
+		Main.players.add(player);
+		player = new Player("Player4");
+		Main.players.add(player);
+		player = new Player("Player5");
+		Main.players.add(player);
+		Main.assignInitialArmies(); 
+		assertTrue(Main.totalInitialArmies==125); 
+	}
+	
+	@Test
+	public void testAssignInitialArmiesFor6Players() {
+		Main.players = new ArrayList<Player>();
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		player = new Player("Player2");
+		Main.players.add(player);
+		player = new Player("Player3");
+		Main.players.add(player);
+		player = new Player("Player4");
+		Main.players.add(player);
+		player = new Player("Player5");
+		Main.players.add(player);
+		player = new Player("Player6");
+		Main.players.add(player);
+		Main.assignInitialArmies(); 
+		assertTrue(Main.totalInitialArmies==120); 
+	}
+	
+	@Test
+	public void testbuildMap() throws IOException{
+		 
+		Main.activeMap=new Map();
+		Main.userEnteredContinentLines = new ArrayList<String>(Arrays.asList("North America=5","Mexico=2","Africa=3","Asia=7",""));
+		Main.userEnteredTerritoryLines = new ArrayList<String>(Arrays.asList("Japan,322,104,North America,Kamchatka,Mongolia","Ural,241,68,Asia,Siberia,China,Afghanistan,Ukraine","Arab,241,68,Asia,Siberia,China,Afghanistan,Ukraine"));
+		Main.buildMap();
+		System.out.println(Main.userEnteredContinentLines);
+		//System.out.println(Main.activeMap.te);
+		
+	}
+ 
 }

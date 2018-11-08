@@ -315,7 +315,7 @@ public class Player extends Observable {
 	 * 
 	 * @return false if the country doesn't belongs to player
 	 */
-	private boolean validAssignedCountry(String country) {
+	public boolean validAssignedCountry(String country) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(country)){
 				for(Territory neighbour : territory.neighbours) {
@@ -344,7 +344,7 @@ public class Player extends Observable {
 	 * 
 	 * @return false if the given condition doesn't satisfies.
 	 */
-	private boolean validNeighborCountry(String fromCountry, String toCountry) {
+	public boolean validNeighborCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(fromCountry)) {
 				for(Territory neighbor : territory.neighbours) {
@@ -369,7 +369,7 @@ public class Player extends Observable {
 	 * @return true if the given conditions pass 
 	 * otherwise it will return false
 	 */
-	private boolean validOpponentCountry(String fromCountry, String toCountry) {
+	public boolean validOpponentCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(fromCountry)) {
 				for(Territory neighbor : territory.neighbours) {
@@ -396,7 +396,7 @@ public class Player extends Observable {
 	 * only if it passes the conditions if not it will 
 	 * return null value.
 	 */
-	private String opponentPlayer(String fromCountry, String toCountry) {
+	public String opponentPlayer(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(fromCountry)) {
 				for(Territory neighbor : territory.neighbours) {
@@ -418,7 +418,7 @@ public class Player extends Observable {
 	 * @return true if the given conditions passes 
 	 * otherwise it will return false
 	 */
-	private boolean canAttackFromThisCountry(String country) {
+	public boolean canAttackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(country)){
 				if(territory.numberOfArmies > 1)
@@ -444,7 +444,7 @@ public class Player extends Observable {
 	 * 
 	 * @return
 	 */
-	private int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
+	public int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
 		Scanner keyboard = new Scanner(System.in);
 		int input = 0;
 		if(status.equalsIgnoreCase("attacker")) {
@@ -511,7 +511,7 @@ public class Player extends Observable {
 	}
 	
 	/**VALUE ON DICE AFTER ROLLING**/
-	private Vector<Integer> rollDice(int numberOfDice){
+	public Vector<Integer> rollDice(int numberOfDice){
 		Vector<Integer> diceValues = new Vector(numberOfDice);
 		Random r = new Random();
 		while(numberOfDice != 0) {
@@ -523,7 +523,7 @@ public class Player extends Observable {
 	}
 	
 	/**REDUCING ONE ARMY IN THE LOSING PLAYERS TERRITORY**/
-	private void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
+	public void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
 		if(losingPlayer.equalsIgnoreCase("attacker")) {
 			for(Territory territory : assignedTerritories) {
 				if(territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -544,7 +544,7 @@ public class Player extends Observable {
 	}
 	
 	/**CHECK IF THE NUMBER OF ARMIES OF THE DEFENDER IS ZERO**/
-	private boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
+	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
 				for(Territory neighbor : territory.neighbours) {
@@ -558,7 +558,7 @@ public class Player extends Observable {
 	}
 	
 	/**MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES**/
-	private void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
+	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
 				//leave atleast one army behind
@@ -667,9 +667,8 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * fortification method to allow a player to move one of 
-	 * his armies from one country he owns to another that 
-	 * is adjacent to it
+	 * fortification method to allow a player to move one of his armies from one
+	 * country he owns to another that is adjacent to it
 	 * 
 	 */
 	public void fortification() {
@@ -679,64 +678,77 @@ public class Player extends Observable {
 		boolean doneFlag1 = false;
 		boolean doneFlag2 = false;
 		Scanner keyboard = new Scanner(System.in);
-		
-		do {
-			System.out.println("Enter the country you would like to move an army from:");
-			fromCountry = keyboard.nextLine();
-			if(validAssignedCountry(fromCountry)) {	
-				do {
-					System.out.println("Enter the neighbouring country you would like to move the army to:");
-					toCountry = keyboard.nextLine();
-					
-					int armiesInFromCountry = 0;
-					
-					for(Territory territory : assignedTerritories) {
-						if(territory.name.equals(fromCountry)) {
-							armiesInFromCountry = territory.numberOfArmies;
-						}
-					}
-					
-					if(armiesInFromCountry == 0) {
-						System.out.println("=================== bug ===============");
-					}
-					
-					if(validNeighborCountry(fromCountry, toCountry)) {
-						int armiesToMove = 0;
-						System.out.println("Enter the number of armies to move."
-								+ "\nNote the number of armies to move must be less than"
-								+ " number of armies in the from country as every country must have"
-								+ " at least 1 army");
-						armiesToMove = Integer.parseInt(keyboard.nextLine());
-						while(armiesToMove <= 0 || armiesToMove >= armiesInFromCountry) {
-							System.out.println("Wrong number of Armies!"
-									+ "\nNumber of armies should be less than: " + armiesInFromCountry);
-							armiesToMove = Integer.parseInt(keyboard.nextLine());
-						}
-						for(Territory territory : assignedTerritories) {
-							if(territory.name.equals(fromCountry)) {
-								territory.numberOfArmies -= armiesToMove;
-								for(Territory neighbour : territory.neighbours) {
-									if(neighbour.name.equalsIgnoreCase(toCountry)) {
-										neighbour.numberOfArmies += armiesToMove;
-										break;
+
+		System.out.println("Do you want to skip fortification? Enter yes or no.");
+		String userInput = keyboard.nextLine();
+		if (!userInput.equalsIgnoreCase("yes")) {
+			do {
+				System.out.println(
+						"Enter the country you would like to move an army from: (enter 'exit' to skip fortification)");
+				fromCountry = keyboard.nextLine();
+				if (!fromCountry.equalsIgnoreCase("exit")) {
+					if (validAssignedCountry(fromCountry)) {
+						do {
+							System.out.println(
+									"Enter the neighbouring country you would like to move the army to: (enter 'exit' to skip fortification)");
+							toCountry = keyboard.nextLine();
+							if (!toCountry.equalsIgnoreCase("exit")) {
+								int armiesInFromCountry = 0;
+
+								for (Territory territory : assignedTerritories) {
+									if (territory.name.equals(fromCountry)) {
+										armiesInFromCountry = territory.numberOfArmies;
 									}
 								}
-								break;
+
+								if (armiesInFromCountry == 0) {
+									System.out.println("=================== bug ===============");
+								}
+
+								if (validNeighborCountry(fromCountry, toCountry)) {
+									int armiesToMove = 0;
+									System.out.println("Enter the number of armies to move."
+											+ "\nNote the number of armies to move must be less than"
+											+ " number of armies in the from country as every country must have"
+											+ " at least 1 army");
+									armiesToMove = Integer.parseInt(keyboard.nextLine());
+									while (armiesToMove <= 0 || armiesToMove >= armiesInFromCountry) {
+										System.out.println("Wrong number of Armies!"
+												+ "\nNumber of armies should be less than: " + armiesInFromCountry);
+										armiesToMove = Integer.parseInt(keyboard.nextLine());
+									}
+									for (Territory territory : assignedTerritories) {
+										if (territory.name.equals(fromCountry)) {
+											territory.numberOfArmies -= armiesToMove;
+											for (Territory neighbour : territory.neighbours) {
+												if (neighbour.name.equalsIgnoreCase(toCountry)) {
+													neighbour.numberOfArmies += armiesToMove;
+													break;
+												}
+											}
+											break;
+										}
+									}
+									doneFlag2 = true;
+								} else {
+									System.out.println("Enter a valid Neighbour that you own.");
+								}
+							} else {
+								doneFlag1 = true;
+								doneFlag2 = true;
 							}
-						}
-						doneFlag2 = true;
+						} while (!doneFlag2);
+						doneFlag1 = true;
+					} else {
+						System.out.println("Wrong Country!!"
+								+ "\nEnter a country you own that is having at least one neighbour that you own too!!");
 					}
-					else {
-						System.out.println("Enter a valid Neighbour that you own.");
-					}
-				}while(!doneFlag2);
-				doneFlag1 = true;
-			}
-			else {
-				System.out.println("Wrong Country!!"
-						+ "\nEnter a country you own that is having at least one neighbour that you own too!!");
-			}
-		}while(!doneFlag1);
+				} else {
+					doneFlag1 = true;
+					doneFlag2 = true;
+				}
+			} while (!doneFlag1);
+		}
 	}
 	
 	/**
