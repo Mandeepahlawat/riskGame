@@ -92,7 +92,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 
-		assertTrue(player.publicValidNeighborCountryForJUnitTest("Africa","Jon"));
+		assertTrue(player.validNeighborCountry("Africa","Jon"));
 	}
 	
 	@Test
@@ -112,7 +112,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 
-		assertFalse(player.publicValidNeighborCountryForJUnitTest("Africa","tan"));
+		assertFalse(player.validNeighborCountry("Africa","tan"));
 	}
 	
 	@Test
@@ -132,7 +132,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 
-		assertTrue(player.publicValidAssignedCountryForJUnitTest("Africa"));
+		assertTrue(player.validAssignedCountry("Africa"));
 	}
 	
 	@Test
@@ -152,7 +152,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 
-		assertFalse(player.publicValidAssignedCountryForJUnitTest("Asia"));
+		assertFalse(player.validAssignedCountry("Asia"));
 	}
 	
 	@Test
@@ -172,7 +172,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 //valid opponent if owner != player and neighbour
-		assertTrue(player.publicValidOpponentCountryForJUnitTest("Africa","tan"));
+		assertTrue(player.validOpponentCountry("Africa","tan"));
 	}
 	
 	@Test
@@ -192,7 +192,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 //valid opponent if owner != player and neighbour
-		assertFalse(player.publicValidOpponentCountryForJUnitTest("Africa","Jon"));
+		assertFalse(player.validOpponentCountry("Africa","Jon"));
 	}
 	
 	
@@ -215,7 +215,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 //valid opponent if owner != player and neighbour
-		assertTrue(player.publicOpponentPlayerForJUnitTest("Africa","tan").equals("Player2"));
+		assertTrue(player.opponentPlayer("Africa","tan").equals("Player2"));
 	}
 	 
 	@Test
@@ -237,7 +237,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 //valid opponent if owner != player and neighbour
-		assertTrue(player.publicCanAttackFromThisCountryForJUnitTest("Africa"));
+		assertTrue(player.canAttackFromThisCountry("Africa"));
 	}
 	
 	@Test
@@ -259,7 +259,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		 //valid opponent if owner != player and neighbour
-		assertFalse(player.publicCanAttackFromThisCountryForJUnitTest("Africa"));
+		assertFalse(player.canAttackFromThisCountry("Africa"));
 	}
 	
 	/*@Test user interacted
@@ -272,6 +272,36 @@ public class Player_Test {
 		fail("Not yet implemented");
 	}*/
 
+	@Test
+	public void testExchangeCards() {//check this after the change is pushed
+		Map.listOfAllTerritories=new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories=new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>();
+		//removed this becas its assigned in randim so giving only ione player and seeing
+		player = new Player("Player1"); 
+		Main.players.add(player);
+		Territory t1 = new Territory("Africa");
+		t1.addNeighbours("Jon,tan");//add neighbour and add player to owner of neighbour and finally create assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner=player;
+		Player player2 = new Player("Player2");//assigning owner to neighbour
+		t1.neighbours.get(1).owner=player2; 
+		t1.numberOfArmies=1;
+		Main.activeMap.territories.add(t1);
+		Main.assignInitialTerritories();
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1); 
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3); 
+		System.out.println("before: "+player.cards.size());
+		player.exchangeCards(1,2,3);
+		//System.out.println("After: "+player.cards.size());
+		 //valid opponent if owner != player and neighbour
+		//assertFalse(player.publicCanAttackFromThisCountryForJUnitTest("Africa"));
+	}
+	
 	@Test
 	public void testCanExchangeCardsFalse() {
 		Map.listOfAllTerritories=new ArrayList<Territory>();
