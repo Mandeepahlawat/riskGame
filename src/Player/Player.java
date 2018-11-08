@@ -1,9 +1,11 @@
 package Player;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 import java.util.Scanner;
 
+import Views.CardExchangeView;
 import Driver.Main;
 import Card.Card;
 import Card.Card.CardType;
@@ -20,14 +22,27 @@ import Map.Map.Territory;
 * @version 1.0
 * @since   2018-10-27 
 */
-public class Player {
-	private ArrayList<Card> cards;
+public class Player extends Observable {
+	public enum GamePhase {
+		REINFORCEMENT, ATTACK, FORTIFICATION;	
+	}
+	
+	public ArrayList<Card> cards;
 	public ArrayList<Territory> assignedTerritories;
+	/**
+	 * Number of armies assigned to a player during startup phase.
+	 */
 	private int initialArmyCount;
 	public int armiesLeft;
+	/**
+	 * Total number of armies a player contains.
+	 */
+	public int totalArmiesCount;
 	private String name;
 	private int id;
 	private static int idCounter = 0;
+	public GamePhase currentGamePhase;
+	public boolean cardExchangeViewOpen;
 	
 	/**
 	* This method is the constructor of the Player class
@@ -40,6 +55,7 @@ public class Player {
 		this.id = idCounter;
 		this.assignedTerritories = new ArrayList<Territory>();
 		this.cards = new ArrayList<Card>();
+		this.cardExchangeViewOpen = false;
 	}
 	
 	/**
@@ -63,6 +79,7 @@ public class Player {
 	public void setInitialArmyCount(int armyCount) {
 		initialArmyCount = armyCount;
 		armiesLeft = armyCount;
+		totalArmiesCount = armyCount;
 	}
 	
 	/**
@@ -150,7 +167,7 @@ public class Player {
 	 */
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
-		totalReinforcements =  (assignedTerritories.size() / 3);
+		totalReinforcements =  (int)(assignedTerritories.size() / 3);
 		if(totalReinforcements < 3) {
 			totalReinforcements = 3;
 		}
@@ -169,21 +186,31 @@ public class Player {
 		}
 		
 		if(canExchangeCards()) {
+			this.cardExchangeViewOpen = true;
+			CardExchangeView cardExchangeView = new CardExchangeView();
+			this.addObserver(cardExchangeView);
+			
 			if(cards.size() == 5) {
 				totalReinforcements += Card.cardExchangeValue;
-				cardExchangeSelection();
+				setChanged();
+				notifyObservers();
 			}
 			else {
 				Scanner keyboard = new Scanner(System.in);
 				System.out.println("Do you want to exchange cards? Enter yes or no?");
 				if(keyboard.nextLine().equalsIgnoreCase("yes")) {
 					totalReinforcements += Card.cardExchangeValue;
-					cardExchangeSelection();
+					setChanged();
+					notifyObservers();
 				}
 			}
+			
+			this.deleteObserver(cardExchangeView);
+			this.cardExchangeViewOpen = false;
 		}
 		
 		System.out.println("Player " + name + " gets " + totalReinforcements + " reinforcement armies.");
+		totalArmiesCount += totalReinforcements;
 		return totalReinforcements;
 	}
 	
@@ -216,14 +243,17 @@ public class Player {
 					}
 				}
 			}
+		setCurrentGamePhase(GamePhase.ATTACK);
+	}
+	
+	public void setCurrentGamePhase(GamePhase currentGamePhase) {
+		this.currentGamePhase = currentGamePhase;
+		setChanged();
+		notifyObservers(this);
 	}
 	
 	/**
 	 * To check if the players owns the country and
-	 * the number of armies is greater than 1
-	 * 
-	 * @param currentPlayerId is a integer value which gives the present 
-	 * ID of the player
 	 * 
 	 * @param country is a string value in which 
 	 * the name of the country is mentioned 
@@ -257,9 +287,9 @@ public class Player {
 	 * @param toCountry  is a string value in which a player can mention 
 	 * to move a army from a country to another country
 	 * 
-	 * @return true if the given condition satifies.
+	 * @return true if the given condition satisfies.
 	 * 
-	 * @return false if the given condition doesn't satifies.
+	 * @return false if the given condition doesn't satisfies.
 	 */
 	private boolean validNeighborCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -273,6 +303,63 @@ public class Player {
 		return false;
 	}
 	
+	
+	/**VALID OPPONENET COUNTRY**/
+	private boolean validOpponentCountry(String fromCountry, String toCountry) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(fromCountry)) {
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(toCountry) && neighbor.owner != this)
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**FETCH OPPONENT PLAYER ID**/
+	private String opponentPlayer(String fromCountry, String toCountry) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(fromCountry)) {
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(toCountry))
+						return neighbor.owner.name;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
+	private boolean canAttackFromThisCountry(String country) {
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(country)){
+				if(territory.numberOfArmies > 1)
+					return true;			
+			}
+		}
+		return false;
+	}
+	
+	/**IMPLEMENTING THE ATTACK PHASE**/
+	public void attack() {
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
+		String answer = keyboard.nextLine();
+		if(answer.equalsIgnoreCase("y")) {
+			System.out.println("Enter the country you want to attack from");
+			String attackfrom = keyboard.nextLine();
+			if(canAttackFromThisCountry(attackfrom)) {
+				System.out.println("Enter the country you want to attack");
+				String attackat = keyboard.nextLine();
+				keyboard.close();
+				if(validOpponentCountry(attackfrom, attackat)) {
+					opponentPlayer(attackfrom, attackat);
+				}
+			}	
+		}
+		setCurrentGamePhase(GamePhase.FORTIFICATION);
+	}
 	
 	/**
 	 * fortification method to allow a player to move one of 
@@ -302,6 +389,10 @@ public class Player {
 						if(territory.name.equals(fromCountry)) {
 							armiesInFromCountry = territory.numberOfArmies;
 						}
+					}
+					
+					if(armiesInFromCountry == 0) {
+						System.out.println("=================== bug ===============");
 					}
 					
 					if(validNeighborCountry(fromCountry, toCountry)) {
@@ -342,6 +433,7 @@ public class Player {
 			}
 		}while(!doneFlag1);
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * the method cardExchangeSelection defines that a player can 
@@ -380,6 +472,9 @@ public class Player {
 	 * @param cardIndex3
 	 */
 	
+=======
+
+>>>>>>> 5cb4e49aa16a5c3091d3d00295e6609585153964
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		cards.remove(cardIndex1 - 1);
 		cards.remove(cardIndex2 - 1);
@@ -437,5 +532,34 @@ public class Player {
 		}
 		
 		return false;
+	}
+	
+	public ArrayList<Map> ownedContinents() {
+		ArrayList<Map> ownedContinents = new ArrayList<Map>();
+		for(Map continent : Main.activeMap.continents) {
+			ArrayList<Player> territoryOwners = new ArrayList<Player>();
+			boolean ownContinent = true;
+			for(Territory territory : continent.territories) {
+				if(territory.owner == this) {
+					if(territoryOwners.isEmpty()) {
+						territoryOwners.add(territory.owner);
+					}
+					else {
+						if(!territoryOwners.contains(territory.owner)) {
+							ownContinent = false;
+							break;
+						}
+					}
+				}
+				else {
+					ownContinent = false;
+					break;
+				}
+			}
+			if(ownContinent) {
+				ownedContinents.add(continent);
+			}
+		}
+		return ownedContinents;
 	}
 }

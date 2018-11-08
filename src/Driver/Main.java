@@ -10,13 +10,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Stack;
 import java.nio.file.Path;
 
 import Map.Map;
 import Map.Map.Territory;
 import Player.Player;
+import Player.Player.GamePhase;
+import Views.MainView;
+import Views.PhaseView;
+import Views.WorldDominationView;
 
 /**
 * This class is the main driver class which
@@ -34,6 +37,7 @@ public class Main {
 	public static ArrayList<String> userEnteredTerritoryLines;
 	public static ArrayList<Player> players;
 	public static int totalInitialArmies;
+	public static MainView mainView;
 	
 	/**
 	* This method is used to validate the new map line
@@ -75,74 +79,12 @@ public class Main {
 	}
 	
 	/**
-	* This method is used to add new Continents to the Map
-	* 
-	* @param keyboard A Scanner class object which is used
-	* to take user input for building the map
-	* @return A string output containing lines of new Continents
-	*/
-	public static String addContinent(Scanner keyboard) {
-		System.out.println("Enter a list of continents (Enter 'exit' to stop adding continents)");
-	    System.out.println("Format of the line to add continents should be:\n"
-	    			+ "Continent Name=Continent Score");
-	    
-	    String inputFileText = "";
-    	String inputLine;
-	    
-	    while(keyboard.hasNextLine()) {
-	    	inputLine = keyboard.nextLine();
-	    	if(inputLine.equals("exit")) {
-	    		break;
-	    	}
-	    	while(!validateMapLine(true, inputLine)) {
-	    		System.out.println("Enter a correct format for adding a Continent");
-	    		inputLine = keyboard.nextLine();
-	    	}
-	    	userEnteredContinentLines.add(inputLine);
-	    	inputFileText += inputLine + "\n";
-	    }
-	    return inputFileText;
-	}
-	
-	/**
-	* This method is used to add new Territory to the Map
-	* 
-	* @param keyboard A Scanner class object which is used
-	* to take user input for building the map
-	* @return A string output containing lines of new Territories
-	*/
-	public static String addTerritory(Scanner keyboard) {		
-		System.out.println("Enter a list of Territories (Enter 'exit' to stop adding territories)");
-		System.out.println("Format of the line to add a Territory should be:\n"
-    			+ "Territory Name, X-cord, Y-cord, Continent Name, Adjacent Territories");;
-
-    	String inputFileText = "";
-    	String inputLine;
-    	
-	    while(keyboard.hasNextLine()) {
-	    	inputLine = keyboard.nextLine();
-	    	if(inputLine.equals("exit")) {
-	    		break;
-	    	}
-	    	while(!validateMapLine(false, inputLine)) {
-	    		System.out.println("Enter a correct format for adding a Territory");
-	    		inputLine = keyboard.nextLine();
-	    	}
-	    	userEnteredTerritoryLines.add(inputLine);
-	    	inputFileText += inputLine + "\n"; 
-	    }
-	    return inputFileText;
-	}
-	
-	/**
 	* This method lets user to build
 	* a new map and then displays the full map to the user
 	* on the screen
 	* 
-	* @param keyboard A Scanner class object which is used
-	* to take user input for building the map
 	*/
-	public static void createNewMap(Scanner keyboard) {
+	public static void createNewMap() {
 		String newMapText = "";
 		newMapText += "[Map]\n"
 				+ "image=world.bmp\n"
@@ -150,13 +92,13 @@ public class Main {
 				+ "scroll=horizontal\n"
 				+ "author=Your Name\n"
 				+ "warn=yes";
-		newMapText += "\n\n[Continents]\n" + addContinent(keyboard);
-		newMapText += "\n\n[Territories]\n" + addTerritory(keyboard);
+		newMapText += "\n\n[Continents]\n" + mainView.addContinentView();
+		newMapText += "\n\n[Territories]\n" + mainView.addTerritoryView();
 		
-		System.out.println("Enter the file name");
+		String fileName = mainView.fileNameToSaveView();
 		
 		try {  
-            Writer w = new FileWriter(keyboard.nextLine());  
+            Writer w = new FileWriter(fileName);  
             w.write(newMapText);  
             w.close();  
         } catch (IOException e) {  
@@ -184,15 +126,12 @@ public class Main {
 	* This method lets user to edit an existing map based on the
 	* line number selected and then displays the new map
 	* 
-	* @param keyboard A Scanner class object which is used
-	* to take user input
 	* @param filePath The path of the file to be edited, if the path is null
 	* then user will be asked to input the file path.
 	*/
-	public static void editMap(Scanner keyboard, String filePath) {
+	public static void editMap(String filePath) {
 		if(filePath == null) {
-			System.out.println("Enter absolute path of the Map file to edit.");
-			filePath = keyboard.nextLine();
+			filePath = mainView.fileNameToEditOrLoadView();
 		}
 		
 		try {
@@ -211,14 +150,12 @@ public class Main {
 				}
 				lineNumber++;
 			}
-		    
-			System.out.println("Do you want to edit a continent? Yes or No?");			
-			boolean editContinent = keyboard.nextLine().equalsIgnoreCase("Yes");
+		    			
+			boolean editContinent = mainView.wantToEditContinentView();
 			
 		    int lineNumberToEdit;
 		    while(true) {
-		    	System.out.println("Enter the correct line number to edit");
-			    lineNumberToEdit = Integer.parseInt(keyboard.nextLine());
+			    lineNumberToEdit = mainView.lineNumberToEditView();
 			    if(lineNumberToEdit < 1 || lineNumberToEdit >= lineNumber) {
 			    	System.out.println("INVALID line number entered");
 			    	continue;
@@ -236,30 +173,13 @@ public class Main {
 			    }
 		    }
 		    
-		    System.out.println("Enter the line you want to replace it with");
-		    
-		    if(editContinent) {
-		    	System.out.println("Format of the line to edit a continent should be:\n"
-		    			+ "Continent_Name=Continent_Score");
-		    }
-		    else {
-		    	System.out.println("Format of the line to edit a Territory should be:\n"
-		    			+ "Territory_Name, X-cord, Y-cord, Continent_Name, Adjacent Territories");
-		    }
-		    
-		    String newLineText = keyboard.nextLine();
-		    
-		    while(!validateMapLine(editContinent, newLineText)) {
-		    	System.out.println("Please enter a valid format as described earlier to edit the line");
-		    	newLineText = keyboard.nextLine();
-		    }
+		    String newLineText = mainView.newLineToReplaceWithView(editContinent);
 		    
 		    setLineText(lineNumberToEdit, newLineText, filePath);
 		    allLines.set(lineNumberToEdit - 1, newLineText);
 		    
-		    System.out.println("Want to edit more lines? \nEnter Yes to edit more lines");
-		    while(keyboard.nextLine().equalsIgnoreCase("Yes")) {
-		    	editMap(keyboard, filePath);
+		    while(mainView.wantToEditMorelinesView()) {
+		    	editMap(filePath);
 		    }
 	    	populateUserEnteredContinentLines(allLines);
 	    	populateUserEnteredTerritoryLines(allLines);
@@ -320,12 +240,9 @@ public class Main {
 	/**
 	* This method loads the Map and displays its content.
 	* 
-	* @param keyboard A Scanner class object which is used
-	* to take user input
 	*/
-	public static void loadMap(Scanner keyboard){
-		System.out.println("Enter absolute path of the Map file to load.");
-		String filePath = keyboard.nextLine();
+	public static void loadMap(){
+		String filePath = mainView.fileNameToEditOrLoadView();
 		try {
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
 			for (String line : allLines) {
@@ -344,36 +261,28 @@ public class Main {
 	* choice entered user can create a new map, edit an existing map
 	* or load an existing map
 	* 
-	* @param keyboard A Scanner class object which is used
-	* to take user input
 	*/
-	public static void mapSelection(Scanner keyboard) {
-		System.out.println("Select one of the following options: \n"
-				+ "1. Create a new Map. \n"
-				+ "2. Edit a Map. \n"
-				+ "3. Load a previous Map.");
-		
-		int selectedOption = Integer.parseInt(keyboard.nextLine().trim());
+	public static void mapSelection() {
+		int selectedOption = mainView.mapSelectionView();
 		
 		switch(selectedOption) {
 			case 1:
-				createNewMap(keyboard);
+				createNewMap();
 				break;
 			case 2:
-				editMap(keyboard, null);
+				editMap(null);
 				break;
 			case 3:
-				loadMap(keyboard);
-				System.out.println("\nDo you want to edit this map? Answer in Yes or No.");
-				if(keyboard.nextLine().equalsIgnoreCase("Yes")) {
+				loadMap();
+				if(mainView.wantToEditMapView()) {
 					userEnteredContinentLines.clear();
 					userEnteredTerritoryLines.clear();
-					editMap(keyboard, null);
+					editMap(null);
 				}
 				break;
 			default:
 				System.out.println("Invalid Option.");
-				mapSelection(keyboard);
+				mapSelection();
 				break;
 		}
 		
@@ -422,73 +331,7 @@ public class Main {
 		}
 	}
 	
-	
-	/**
-	 * this method displays the current status of map
-	 * <ul>
-	 * <li>Which player owns what country</li>
-	 * <li>How many armies that player has in that country</li>
-	 * <li>Which are the neighbouring territories of this country</li>
-	 * </ul>
-	 */
-	public static void display() {
-		for (Territory terr : activeMap.territories) {
-			terr.visited = false;
-		}
-
-		Stack<Territory> stack = new Stack<>();
-		stack.push(activeMap.territories.get(0));
-		while (!stack.isEmpty()) {
-			Territory territoryBeingVisited = stack.pop();
-			if (territoryBeingVisited.visited == false) {
-				territoryBeingVisited.visited = true;
-
-				System.out.println("\n" + territoryBeingVisited.name
-						+ " is owned by Player " + territoryBeingVisited.owner.getName());
-				
-				System.out.println("Player " + territoryBeingVisited.owner.getName()
-				+ " has " + territoryBeingVisited.numberOfArmies
-				+ " armies in this territory");
-				
-				System.out.println("This territory is connected to the following territoris: ");
-				for (Territory neighbour : territoryBeingVisited.neighbours) {
-					if (!neighbour.visited) {
-						stack.push(neighbour);
-					}
-					System.out.print(" -> " + neighbour.name);
-				}
-				System.out.println();
-			}
-		}
-	}
-	
-	/**
-	 * This method contains the reinforcement phase of
-	 * the game and calculate number of reinforcement
-	 * armies and let the user place them in different
-	 * countries
-	 */
-	public static void reinforcementPhase() {
-		for(int i = 0; i < players.size(); ++i) {
-			Player player = players.get(i);
-			display();
-			player.placeReinforcements(player.calculateReinforcementArmies());
-		}
-		display();
-	}
-	
-	/**
-	 * This method contains the fortification phase of
-	 * the game and lets the user move armies from one
-	 * country to the another
-	 */
-	public static void fortificationPhase() {
-		for(int i = 0; i < players.size(); ++i) {
-			Player player = players.get(i);
-			player.fortification();
-		}
-	}
-	
+		
 	/**
 	 * This method builds the map from the text lines
 	 * which are read from the file selected to load
@@ -498,7 +341,6 @@ public class Main {
 		userEnteredContinentLines.removeAll(Arrays.asList("", null));
 		userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
 		
-		activeMap = new Map();
 		for(String continentLines : userEnteredContinentLines) {
 			String continentName = continentLines.split("=")[0].trim();
 			int continentScore = Integer.parseInt(continentLines.split("=")[1].trim());
@@ -533,56 +375,17 @@ public class Main {
 	}
 	
 	/**
-	 * This method contains the startup phase of
-	 * the game which includes map selection,
-	 * building a map, if the map is valid then
-	 * assigning countries to players randomly and
-	 * letting the user place armies in the assigned countries
-	 * 
-	 * @param keyboard A scanner object for user input.
-	 */
-	public static void startupPhase(Scanner keyboard) {
-		mapSelection(keyboard);
-		buildMap();
-		if(activeMap.validateMap()) {
-			players = new ArrayList<Player>();
-			int playersCount;
-			
-			do {
-				System.out.println("\nEnter the number of players"
-						+ "\n(Note: the value should less than " + Map.listOfAllTerritories.size() + " i.e. the number of territories");
-				playersCount = Integer.parseInt(keyboard.nextLine());
-			} while(playersCount >= activeMap.territories.size());
-			
-			for(int i = 0; i < playersCount; ++i) {
-				Player player = new Player("Player" + i);
-				players.add(player);
-			}
-			
-			assignTerritoriesAndArmies(keyboard);
-		}
-		else {
-			System.out.println("INVALID MAP!");
-			startupPhase(keyboard);
-		}
-	}
-	
-	/**
 	 * This method is a part of startup phase and assign
 	 * initial territories to players and gives them a set of
 	 * initial armies and lets them place those armies in the
 	 * assigned countries
-	 * 
-	 * @param keyboard A scanner object for user input.
 	 */
-	public static void assignTerritoriesAndArmies(Scanner keyboard) {
+	public static void assignTerritoriesAndArmies() {
 		assignInitialTerritories();
 		assignInitialArmies();
 		int playersCount = players.size();
 		
-		System.out.println("Write 'm' to place armies manually or 'a' to place armies automatically");
-		String userInput = keyboard.nextLine();
-		if (userInput.equalsIgnoreCase("m")) {
+		if (mainView.wantToPlaceArmiesManually()) {
 			boolean armiesLeftToPlace = true;
 			while(armiesLeftToPlace) {
 				for(int i = 0; i < playersCount; ++i) {
@@ -609,6 +412,27 @@ public class Main {
 		}
 	}
 	
+	public static void startUp() {
+		mapSelection();
+		buildMap();
+		if(activeMap.validateMap()) {
+			Main.players = new ArrayList<Player>();
+			int playersCount = mainView.playerCountView();		
+			
+			for(int i = 0; i < playersCount; ++i) {
+				Player player = new Player("Player" + i);
+				PhaseView view = new PhaseView();
+				player.addObserver(view);
+				players.add(player);
+			}
+			
+			assignTerritoriesAndArmies();
+		}
+		else {
+			System.out.println("INVALID MAP!");
+			startUp();
+		}
+	}
 	
 	/**
 	* This is the main method which runs the program
@@ -619,21 +443,18 @@ public class Main {
 		userEnteredContinentLines = new ArrayList<String>();
 		userEnteredTerritoryLines = new ArrayList<String>();
 		
-		Scanner keyboard = new Scanner(System.in);
+		activeMap = new Map();
+		WorldDominationView worldDominationView = new WorldDominationView();
+		activeMap.addObserver(worldDominationView);
 		
-		System.out.println("\n***********************STARTUP PHASE BEGINS*****************************\n");
-		startupPhase(keyboard);
-		System.out.println("\n***********************STARTUP PHASE ENDS*****************************\n");
+		mainView = new MainView();
+		mainView.startupPhaseView();
 		
-		System.out.println("\n***********************REINFORCEMENT PHASE BEGINS*****************************\n");
-		reinforcementPhase();
-		System.out.println("\n***********************REINFORCEMENT PHASE ENDS*****************************\n");
+		while(!activeMap.allTerritoriesOwnBySinglePlayer()) {
+			for(Player player : players) {
+				player.setCurrentGamePhase(GamePhase.REINFORCEMENT);	
+			}
+		}
 		
-		System.out.println("\n***********************FORTIFICATION PHASE BEGINS*****************************\n");
-		fortificationPhase();
-		display();
-		System.out.println("\n***********************FORTIFICATION PHASE ENDS*****************************\n");
-		
-		keyboard.close();
 	}
 }
