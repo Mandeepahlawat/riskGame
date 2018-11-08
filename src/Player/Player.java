@@ -433,36 +433,6 @@ public class Player extends Observable {
 			}
 		}while(!doneFlag1);
 	}
-<<<<<<< HEAD
-	
-	/**
-	 * the method cardExchangeSelection defines that a player can 
-	 * exchange the cards on some particular conditions which is
-	 * discribed in the method.
-	 * The method also print's out the player's current cards.
-	 */
-	public void cardExchangeSelection() {
-		System.out.println("You currently have following cards with you.");
-		int i = 0;
-		for(Card card : cards) {
-			System.out.println(i + ". " + card);
-		}
-		System.out.println("Please select cards to exchange from the following cards"
-				+ "\n The card numbers should be comma seperated");
-		
-		Scanner keyboard = new Scanner(System.in);
-		String cardNumbers = keyboard.nextLine();
-		
-		String cardnums[] = cardNumbers.split(",");
-		
-		while(!validCardIndexesToExchange(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
-				Integer.parseInt(cardnums[3]))) {
-			System.out.println("You can only exchange cards of different types or all cards of same type");
-			cardExchangeSelection();
-		}
-		exchangeCards(Integer.parseInt(cardnums[0]), Integer.parseInt(cardnums[1]),
-				Integer.parseInt(cardnums[3]));
-	}
 	
 	/**
 	 * The method exchangeCards 
@@ -471,10 +441,6 @@ public class Player extends Observable {
 	 * @param cardIndex2
 	 * @param cardIndex3
 	 */
-	
-=======
-
->>>>>>> 5cb4e49aa16a5c3091d3d00295e6609585153964
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		cards.remove(cardIndex1 - 1);
 		cards.remove(cardIndex2 - 1);
