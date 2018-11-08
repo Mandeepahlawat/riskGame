@@ -276,6 +276,20 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 * To check if the players owns the country through a JUnitTest Environment and
+	 * 
+	 * @param country is a string value in which 
+	 * the name of the country is mentioned 
+	 * 
+	 * @return true if the country belongs to the player 
+	 * 
+	 * @return false if the country doesn't belongs to player
+	 */
+	public boolean publicValidAssignedCountryForJUnitTest(String country) {
+		return validAssignedCountry(country);
+	}
+	
+	/**
 	 * To check if the neighbor is owned by the current player
 	 * 
 	 * @param currentPlayerId is a integer value which gives the present 
@@ -303,7 +317,39 @@ public class Player extends Observable {
 		return false;
 	}
 	
+	/**
+	 * To check if the neighbor is owned by the current player through a JUnitTest Environment
+	 * 
+	 * @param currentPlayerId is a integer value which gives the present 
+	 * ID of the player
+	 * 
+	 * @param fromCountry is a string value in which a player can mention 
+	 * to move a army from a country
+	 *  
+	 * @param toCountry  is a string value in which a player can mention 
+	 * to move a army from a country to another country
+	 * 
+	 * @return true if the given condition satisfies.
+	 * 
+	 * @return false if the given condition doesn't satisfies.
+	 */
+	public boolean publicValidNeighborCountryForJUnitTest(String fromCountry, String toCountry) {
+		return validNeighborCountry(fromCountry,toCountry);
+	}
 	
+	/**
+	 * To check if the neighbour is a valid opponent for the current player 
+	 *
+	 * @param fromCountry is a string value of the country name of  
+	 * current player
+	 *  
+	 * @param toCountry is a string value of the opponent country name of  
+	 * current player
+	 * 
+	 * @return true if the given condition satisfies.
+	 * 
+	 * @return false if the given condition doesn't satisfies.
+	 */
 	/**VALID OPPONENET COUNTRY**/
 	private boolean validOpponentCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -317,6 +363,34 @@ public class Player extends Observable {
 		return false;
 	}
 	
+	/**
+	 * To check if the neighbour is a valid opponent for the current player through a JUnitTest Environment
+	 *
+	 * @param fromCountry is a string value of the country name of  
+	 * current player
+	 *  
+	 * @param toCountry is a string value of the opponent country name of  
+	 * current player
+	 * 
+	 * @return true if the given condition satisfies.
+	 * 
+	 * @return false if the given condition doesn't satisfies.
+	 */
+	public boolean publicValidOpponentCountryForJUnitTest(String fromCountry, String toCountry) {
+		return validOpponentCountry(fromCountry,toCountry);
+	}
+	
+	/**
+	 * To get the valid opponent player name for the current player 
+	 *
+	 * @param fromCountry is a string value of the country name of  
+	 * current player
+	 *  
+	 * @param toCountry is a string value of the opponent country name of  
+	 * current player
+	 * 
+	 *  @return name as String if the given condition satisfies.
+	 */
 	/**FETCH OPPONENT PLAYER ID**/
 	private String opponentPlayer(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -330,6 +404,34 @@ public class Player extends Observable {
 		return null;
 	}
 	
+	/**
+	 * To get the valid opponent player name for the current player through a JUnitTest Environment
+	 *
+	 * @param fromCountry is a string value of the country name of  
+	 * current player
+	 *  
+	 * @param toCountry is a string value of the opponent country name of  
+	 * current player
+	 * 
+	 * @return name as String if the given condition satisfies.
+	 *  
+	 */
+	
+	public String publicOpponentPlayerForJUnitTest(String fromCountry, String toCountry) {
+		return opponentPlayer(fromCountry,toCountry);
+	}
+	
+	/**
+	 * To check if the country has armies enouh to fight for the current player
+	 *
+	 * @param fromCountry is a string value of the country name of  
+	 * current player
+	 *
+	 * @return true if the given condition satisfies.
+	 * 
+	 * @return false if the given condition doesn't satisfies.
+	 */
+	
 	/**TO CHECK IF WE CAN ATTACK FROM THIS COUNTRY HERE**/
 	private boolean canAttackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
@@ -340,6 +442,21 @@ public class Player extends Observable {
 		}
 		return false;
 	}
+	
+	/**
+	 * To check if the country has armies enouh to fight for the current player through JUnit test cases
+	 *
+	 * @param fromCountry is a string value of the country name of  
+	 * current player
+	 *
+	 * @return true if the given condition satisfies.
+	 * 
+	 * @return false if the given condition doesn't satisfies.
+	 */ 
+	public boolean publicCanAttackFromThisCountryForJUnitTest(String fromCountry) {
+		return canAttackFromThisCountry(fromCountry);
+	}
+	
 	
 	/**IMPLEMENTING THE ATTACK PHASE**/
 	public void attack() {
