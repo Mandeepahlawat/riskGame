@@ -25,25 +25,67 @@ import Map.Map.Territory;
 * @since   2018-10-27 
 */
 public class Player extends Observable {
+	/**
+	 * The game Phase that can be used by a player in the game
+	 * @author shreyas
+	 *
+	 */
 	public enum GamePhase {
-		REINFORCEMENT, ATTACK, FORTIFICATION;	
+		/**
+		 * This is a REINFORCEMENT phase in the game.
+		 */
+		REINFORCEMENT,
+		/**
+		 * This is a ATTACK phase in the game.
+		 */
+		ATTACK,
+		/**
+		 * This is a FORTIFICATION phase in the game.
+		 */
+		FORTIFICATION;	
 	}
-	
+	/**
+	 * public ArrayList<Card> cards list of cards
+	 */
 	public ArrayList<Card> cards;
+	/**
+	 * public ArrayList<Territory> assignedTerritories list of territories
+	 */
 	public ArrayList<Territory> assignedTerritories;
 	/**
 	 * Number of armies assigned to a player during startup phase.
 	 */
 	private int initialArmyCount;
+	/**
+	 * Number of armies left for a player in integer value.
+	 */
 	public int armiesLeft;
 	/**
 	 * Total number of armies a player contains.
 	 */
 	public int totalArmiesCount;
+	/**
+	 * private Name of the player in string type
+	 */
 	private String name;
+	/**
+	 * private Players's id in a integer type
+	 */
 	private int id;
+	/**
+	 * id counter which is intialized to zero
+	 */
 	private static int idCounter = 0;
+	/**
+	 * public GamePhase currentGamePhase will take one 
+	 * of the phases mentioned in GamePhase
+	 */
 	public GamePhase currentGamePhase;
+	/**
+	 * public boolean cardExchangeViewOpen will take true
+	 * or false value for the variable if the player wants
+	 * to open card exchange view.
+	 */
 	public boolean cardExchangeViewOpen;
 	
 	/**
@@ -90,7 +132,6 @@ public class Player extends Observable {
 	* country
 	* 
 	* @return String value with a specific format.
-	* 
 	*/
 	public String assignedTerritoryNamesWithArmies() {
 		String territoriesWithArmies = "";
@@ -217,7 +258,8 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * This method defines Place Reinforcements in territories
+	 * This method defines Place Reinforcements in territories which 
+	 * also print's out player name,armies left in it.
 	 * 
 	 * @param reinforcements number of reinforcement armies the player in the second parameter gets
 	 * 
@@ -248,6 +290,15 @@ public class Player extends Observable {
 		setCurrentGamePhase(GamePhase.ATTACK);
 	}
 	
+	/**
+	 * The method setCurrentGamePhase will set current 
+	 * game phase according to the given phase value
+	 * in main function 
+	 * 
+	 * @param currentGamePhase will have one phase out 
+	 * of three phases mentioned in GamePhase as a input
+	 * from the main function
+	 */
 	public void setCurrentGamePhase(GamePhase currentGamePhase) {
 		this.currentGamePhase = currentGamePhase;
 		setChanged();
@@ -305,8 +356,19 @@ public class Player extends Observable {
 		return false;
 	}
 	
-	
-	/**VALID OPPONENET COUNTRY**/
+	/**
+	 * The method will have valid opponent's country 
+	 * which will be used in attack phase
+	 * 
+	 * @param fromCountry will have player present
+	 * country as a string value
+	 * 
+	 * @param toCountry is a string value in which 
+	 * player mention's the name of the country to move
+	 * 
+	 * @return true if the given conditions pass 
+	 * otherwise it will return false
+	 */
 	private boolean validOpponentCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(fromCountry)) {
