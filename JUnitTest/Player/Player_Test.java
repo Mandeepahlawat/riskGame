@@ -296,7 +296,7 @@ public class Player_Test {
 		player.cards.add(c2);
 		player.cards.add(c3); 
 		System.out.println("before: "+player.cards.size());
-		player.exchangeCards(1,2,3);
+		//player.exchangeCards(1,2,3);
 		//System.out.println("After: "+player.cards.size());
 		 //valid opponent if owner != player and neighbour
 		//assertFalse(player.publicCanAttackFromThisCountryForJUnitTest("Africa"));
@@ -425,8 +425,64 @@ public class Player_Test {
 	
 	@Test
 	public void testValidCardIndexesToExchange() {
-		fail("Not yet implemented");
+		Map.listOfAllTerritories=new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories=new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>();
+		//removed this becas its assigned in randim so giving only ione player and seeing
+		player = new Player("Player1"); 
+		Main.players.add(player);
+		Territory t1 = new Territory("Africa");
+		t1.addNeighbours("Jon,tan");//add neighbour and add player to owner of neighbour and finally create assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner=player;
+		Player player2 = new Player("Player2");//assigning owner to neighbour
+		t1.neighbours.get(1).owner=player2; 
+		t1.numberOfArmies=1;
+		Main.activeMap.territories.add(t1);
+		Main.assignInitialTerritories();
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1); 
+		c1.type=CardType.ARTILLERY;
+		c2.type=CardType.CAVALRY;
+		c3.type=CardType.INFANTRY;
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3); 
+		//System.out.println("before: "+player.cards.size());
+		assertTrue(player.validCardIndexesToExchange(1,2,3));
 	}
+	
+	@Test
+	public void testInValidCardIndexesToExchange() {
+		Map.listOfAllTerritories=new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories=new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>();
+		//removed this becas its assigned in randim so giving only ione player and seeing
+		player = new Player("Player1"); 
+		Main.players.add(player);
+		Territory t1 = new Territory("Africa");
+		t1.addNeighbours("Jon,tan");//add neighbour and add player to owner of neighbour and finally create assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner=player;
+		Player player2 = new Player("Player2");//assigning owner to neighbour
+		t1.neighbours.get(1).owner=player2; 
+		t1.numberOfArmies=1;
+		Main.activeMap.territories.add(t1);
+		Main.assignInitialTerritories();
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1); 
+		c1.type=CardType.ARTILLERY;//invalid if two card of same type is exchanging
+		c2.type=CardType.ARTILLERY;
+		c3.type=CardType.INFANTRY;
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3); 
+		//System.out.println("before: "+player.cards.size());
+		assertFalse(player.validCardIndexesToExchange(1,2,3));
+	}
+	
 
 	@Test
 	public void testCanExchangeCards() {
