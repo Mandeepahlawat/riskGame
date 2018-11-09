@@ -18,7 +18,7 @@ import Map.Map.Territory;
 * This class is used to create players,
 * and has all the functionality related to
 * a player like reinforcement, attacking and
-* fortification
+* fortification.
 * 
 * @author Mandeep Ahlawat
 * @version 1.0
@@ -45,11 +45,11 @@ public class Player extends Observable {
 		FORTIFICATION;	
 	}
 	/**
-	 * public ArrayList<Card> cards list of cards
+	 * public ArrayList<Card> cards list of cards.
 	 */
 	public ArrayList<Card> cards;
 	/**
-	 * public ArrayList<Territory> assignedTerritories list of territories
+	 * public ArrayList<Territory> assignedTerritories list of territories.
 	 */
 	public ArrayList<Territory> assignedTerritories;
 	/**
@@ -65,20 +65,20 @@ public class Player extends Observable {
 	 */
 	public int totalArmiesCount;
 	/**
-	 * private Name of the player in string type
+	 * private Name of the player in string type.
 	 */
 	private String name;
 	/**
-	 * private Players's id in a integer type
+	 * private Players's id in a integer type.
 	 */
 	private int id;
 	/**
-	 * id counter which is intialized to zero
+	 * id counter which is intialized to zero.
 	 */
 	private static int idCounter = 0;
 	/**
 	 * public GamePhase currentGamePhase will take one 
-	 * of the phases mentioned in GamePhase
+	 * of the phases mentioned in GamePhase.
 	 */
 	public GamePhase currentGamePhase;
 	/**
@@ -89,9 +89,9 @@ public class Player extends Observable {
 	public boolean cardExchangeViewOpen;
 	
 	/**
-	* This method is the constructor of the Player class
+	* This method is the constructor of the Player class.
 	* 
-	* @param name A String value of the player name
+	* @param name A String value of the player name.
 	*/
 	public Player(String name) {
 		idCounter++;
@@ -103,9 +103,9 @@ public class Player extends Observable {
 	}
 	
 	/**
-	* This is a getter method, which gives the name of the player
+	* This is a getter method, which gives the name of the player.
 	* 
-	* @return name of the player
+	* @return name of the player.
 	* 
 	*/
 	public String getName() {
@@ -115,9 +115,9 @@ public class Player extends Observable {
 	/**
 	* This is a setter method, which sets the
 	* initial army count and the number of armies left
-	* for each player
+	* for each player.
 	* 
-	* @param armyCount int value of the number of armies
+	* @param armyCount integer value of the number of armies.
 	* 
 	*/
 	public void setInitialArmyCount(int armyCount) {
@@ -129,7 +129,7 @@ public class Player extends Observable {
 	/**
 	* This is a helper method which gives the number of
 	* countries a player has with the number of armies in that
-	* country
+	* country.
 	* 
 	* @return String value with a specific format.
 	*/
@@ -144,7 +144,7 @@ public class Player extends Observable {
 	/**
 	 * This method defines Initial placement of the armies
 	 * and also prints the player and the name of the country 
-	 * where they want to place a army 
+	 * where they want to place a army.
 	 * 
 	 */
 	public void placeArmies() {
@@ -175,7 +175,7 @@ public class Player extends Observable {
 	/**
 	 * This method defines in a helper method to place
 	 * number of armies for each player automatically
-	 * instead of going in a round robin fashion
+	 * instead of going in a round robin fashion.
 	 * 
 	 */
 	public void placeArmiesAutomatically() {
@@ -206,7 +206,7 @@ public class Player extends Observable {
 	 *This method Calculate's the number of reinforcements 
 	 *that the player gets in each turn of the game.
 	 *
-	 *@return int the number of reinforcement armies
+	 *@return int the number of reinforcement armies.
 	 */
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
@@ -261,7 +261,8 @@ public class Player extends Observable {
 	 * This method defines Place Reinforcements in territories which 
 	 * also print's out player name,armies left in it.
 	 * 
-	 * @param reinforcements number of reinforcement armies the player in the second parameter gets
+	 * @param reinforcements number of reinforcement armies the 
+	 * player in the second parameter gets.
 	 * 
 	 */
 	public void placeReinforcements(int reinforcements) {
@@ -293,11 +294,11 @@ public class Player extends Observable {
 	/**
 	 * The method setCurrentGamePhase will set current 
 	 * game phase according to the given phase value
-	 * in main function 
+	 * in main function. 
 	 * 
 	 * @param currentGamePhase will have one phase out 
 	 * of three phases mentioned in GamePhase as a input
-	 * from the main function
+	 * from the main function.
 	 */
 	public void setCurrentGamePhase(GamePhase currentGamePhase) {
 		this.currentGamePhase = currentGamePhase;
@@ -306,14 +307,16 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * To check if the players owns the country and
+	 * To check if the players owns the country 
+	 * and check's the conditions and it will 
+	 * return true or false.
 	 * 
 	 * @param country is a string value in which 
-	 * the name of the country is mentioned 
+	 * the name of the country is mentioned. 
 	 * 
-	 * @return true if the country belongs to the player 
+	 * @return true if the country belongs to the player. 
 	 * 
-	 * @return false if the country doesn't belongs to player
+	 * @return false if the country doesn't belongs to player.
 	 */
 	public boolean validAssignedCountry(String country) {
 		for(Territory territory : assignedTerritories) {
@@ -329,16 +332,18 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * To check if the neighbor is owned by the current player
+	 * To check if the neighbour country is owned
+	 *  by the current player or not.
 	 * 
-	 * @param currentPlayerId is a integer value which gives the present 
-	 * ID of the player
+	 * @param currentPlayerId is a integer value 
+	 * which gives the present  ID of the player.
 	 * 
-	 * @param fromCountry is a string value in which a player can mention 
-	 * to move a army from a country
+	 * @param fromCountry is a string value in which
+	 * a player can mention to move a army from a country.
 	 *  
-	 * @param toCountry  is a string value in which a player can mention 
-	 * to move a army from a country to another country
+	 * @param toCountry  is a string value in which a 
+	 * player can mention to move a army from a country 
+	 * to another country.
 	 * 
 	 * @return true if the given condition satisfies.
 	 * 
@@ -357,17 +362,17 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * The private method will have valid opponent's country 
-	 * which will be used in attack phase
+	 * The public method will have valid opponent's country 
+	 * which will be used in attack phase.
 	 * 
 	 * @param fromCountry will have player present
-	 * country as a string value
+	 * country as a string value.
 	 * 
 	 * @param toCountry is a string value in which 
-	 * player mention's the name of the country to move
+	 * player mention's the name of the country to move.
 	 * 
 	 * @return true if the given conditions pass 
-	 * otherwise it will return false
+	 * otherwise it will return false.
 	 */
 	public boolean validOpponentCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -382,8 +387,8 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * The private method opponentPlayer will return name of 
-	 * the player who is present in neighbor country.  
+	 * The public method opponentPlayer will return name of 
+	 * the player who is present in neighbour country.  
 	 * 
 	 * @param fromCountry will have player present
 	 * country as a string value.
@@ -409,14 +414,14 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * The private method to check if a player can attack
+	 * The public method to check if a player can attack
 	 * from this country which is present here.
 	 * 
 	 * @param country will have player's current country 
-	 * value in string type
+	 * value in string type.
 	 * 
 	 * @return true if the given conditions passes 
-	 * otherwise it will return false
+	 * otherwise it will return false.
 	 */
 	public boolean canAttackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
@@ -430,7 +435,7 @@ public class Player extends Observable {
 	
 
 	/**
-	 * The private method will calculate the number 
+	 * The public method will calculate the number 
 	 * of dice for attacker or defender depending on 
 	 * the number of armies that player has,will 
 	 * decide whether to roll 1,2 or 3 dice.
@@ -438,11 +443,11 @@ public class Player extends Observable {
 	 * @param status string value will have attacker 
 	 * or defender in it.
 	 * 
-	 * @param attackerCounter
+	 * @param attackerCounter string value of the attacker counter. 
 	 * 
-	 * @param defenderCountry
+	 * @param defenderCountry string value of the defender country.
 	 * 
-	 * @return
+	 * @return input provided in the method which is initialized to zero.
 	 */
 	public int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
 		Scanner keyboard = new Scanner(System.in);
@@ -510,7 +515,15 @@ public class Player extends Observable {
 		return input;
 	}
 	
-	/**VALUE ON DICE AFTER ROLLING**/
+	/**
+	 * Public method will give the player's value
+	 * of dice after rolling in the game.
+	 * 
+	 * @param numberOfDice a integer value will
+	 * give the dice number.
+	 * 
+	 * @return values of the dice a object defined in a method.
+	 */
 	public Vector<Integer> rollDice(int numberOfDice){
 		Vector<Integer> diceValues = new Vector(numberOfDice);
 		Random r = new Random();
@@ -522,7 +535,16 @@ public class Player extends Observable {
 		return diceValues;
 	}
 	
-	/**REDUCING ONE ARMY IN THE LOSING PLAYERS TERRITORY**/
+	/**
+	 * Public method which reduces one army in the 
+	 * losing players territory.
+	 * 
+	 * @param losingPlayer will have string value type in it.
+	 * 
+	 * @param attackerCounter will have string value type in it.
+	 * 
+	 * @param defenderCountry will have string value type in it.
+	 */
 	public void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
 		if(losingPlayer.equalsIgnoreCase("attacker")) {
 			for(Territory territory : assignedTerritories) {
@@ -543,7 +565,17 @@ public class Player extends Observable {
 		}		
 	}
 	
-	/**CHECK IF THE NUMBER OF ARMIES OF THE DEFENDER IS ZERO**/
+	/**
+	 * The method will check the number of armies in 
+	 * the defender whether zero or not.
+	 * 
+	 * @param attackerCounter which is a string value.
+	 * 
+	 * @param defenderCountry which is a string value.
+	 * 
+	 * @return true if all the conditions passes otherwise
+	 * return's false.
+	 */
 	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -557,11 +589,19 @@ public class Player extends Observable {
 		return false;
 	}
 	
-	/**MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES**/
+	/**
+	 * The method will move armies to new territory 
+	 * conquered only if defender looses it.
+	 * 
+	 * @param attackerCounter will have string value type in it.
+	 * 
+	 * @param defenderCountry will have string value type in it.
+	 * 
+	 * @param numberOfArmiesToMove a integer value will have number of armies to move value in it.
+	 */
 	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
-				//leave atleast one army behind
 				while(numberOfArmiesToMove >= territory.numberOfArmies) {
 					Scanner input = new Scanner(System.in);
 					System.out.println("Enter a valid number of troops:");
@@ -578,15 +618,21 @@ public class Player extends Observable {
 		}
 	}
 	
-	/**IMPLEMENTING THE ATTACK PHASE**/
+	
+	/**
+	 * The method will implement the attack phase.
+	 * attackDone  if all territories are conquered or attack lost.
+	 * gameCompleted  if all territories are conquered.
+	 * 
+	 */
 	public void attack() {
-		boolean attackDone = false;		//if all territories are conquered or attack lost	
-		boolean gameCompleted = false;		//if all territories are conquered
+		
+		boolean attackDone = false;	
+		boolean gameCompleted = false;	
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
 		String answer = keyboard.nextLine();
 		if(answer.equalsIgnoreCase("y")) {
-			//boolean doneFlag1 = false;
 			do {
 				System.out.println("Enter the country you want to attack from");
 				String attackfrom = keyboard.nextLine();
@@ -595,7 +641,7 @@ public class Player extends Observable {
 					String attackat = keyboard.nextLine();
 					keyboard.close();
 					if(validOpponentCountry(attackfrom, attackat)) {
-						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
+						boolean finishedAttackingThatTerritory = false;		
 						 do {
 							String opponent = opponentPlayer(attackfrom, attackat);
 							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackfrom, attackat));
@@ -605,13 +651,10 @@ public class Player extends Observable {
 								int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
 								if(attackerDiceValue > defenderDiceValue) {
 									reduceArmy("defender", attackfrom, attackat);
-									//check if the opponent lost
 									if(checkDefenderArmiesNumberZero(attackfrom, attackat)) {
 										System.out.println("Enter the number of armies you would like to place in your new territory:");
 										moveArmiesToNewTerritory(attackfrom, attackat, keyboard.nextInt());
-										//remove this territory from the players list
 										for(Player player : Main.players) {
-											//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
 											if(player.name.equalsIgnoreCase(opponent)) {
 												for(Territory territory : Main.activeMap.territories) {
 													player.assignedTerritories.remove(territory);
@@ -619,7 +662,6 @@ public class Player extends Observable {
 											}
 										}
 										finishedAttackingThatTerritory = true;
-										//if all territories are owned by a single user
 										if(Main.activeMap.allTerritoriesOwnBySinglePlayer()) {
 											gameCompleted = true;
 											attackDone = true;
@@ -629,7 +671,6 @@ public class Player extends Observable {
 								}
 								else {
 									reduceArmy("attacker", attackfrom, attackat);
-									//check if you lost
 									for(Territory territory : assignedTerritories) {
 										if(territory.name.equalsIgnoreCase(attackfrom)) {
 											if(territory.numberOfArmies == 0) {
@@ -640,7 +681,7 @@ public class Player extends Observable {
 											}
 										}
 									}
-									if(attackDone)	//to get out of while loop
+									if(attackDone)	
 										break;
 								}
 							}
@@ -667,8 +708,10 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * fortification method to allow a player to move one of his armies from one
-	 * country he owns to another that is adjacent to it
+	 * 
+	 * fortification method to allow a player to move 
+	 * one of his armies from one country he owns to 
+	 * another that is adjacent to it.
 	 * 
 	 */
 	public void fortification() {
@@ -752,11 +795,13 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * The method exchangeCards 
+	 * The method will exchange Cards between the players.
 	 * 
-	 * @param cardIndex1
-	 * @param cardIndex2
-	 * @param cardIndex3
+	 * @param cardIndex1 a integer value.
+	 * 
+	 * @param cardIndex2 a integer value.
+	 * 
+	 * @param cardIndex3 a integer value.
 	 */
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		cards.remove(cardIndex1 - 1);
@@ -766,10 +811,15 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 * The method will check or valid the particular 
+	 * card which can be exchanged or not.
 	 * 
-	 * @param cardIndex1
-	 * @param cardIndex2
-	 * @param cardIndex3
+	 * @param cardIndex1 a integer value.
+	 * 
+	 * @param cardIndex2 a integer value.
+	 * 
+	 * @param cardIndex3 a integer value.
+	 * 
 	 * @return  true if the given condition satifies.
 	 * 
 	 * @return false if the given condition doesn't satifies.
@@ -793,6 +843,9 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 * The boolean method canExchangeCards will 
+	 * gives clear clarity whether a player can 
+	 * exchange the card or not.
 	 * 
 	 * @return true if the given condition satifies.
 	 * 
@@ -817,6 +870,12 @@ public class Player extends Observable {
 		return false;
 	}
 	
+	/**
+	 * the method will have list of owned 
+	 * continents of player in a game.
+	 * 
+	 * @return object of array list of owned continents.
+	 */
 	public ArrayList<Map> ownedContinents() {
 		ArrayList<Map> ownedContinents = new ArrayList<Map>();
 		for(Map continent : Main.activeMap.continents) {
