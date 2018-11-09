@@ -418,7 +418,7 @@ public class Player extends Observable {
 	 * @return true if the given conditions passes 
 	 * otherwise it will return false
 	 */
-	public boolean canAttackFromThisCountry(String country) {
+	public boolean canattackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(country)){
 				if(territory.numberOfArmies > 1)
@@ -583,32 +583,31 @@ public class Player extends Observable {
 		boolean attackDone = false;		//if all territories are conquered or attack lost	
 		boolean gameCompleted = false;		//if all territories are conquered
 		Scanner keyboard = new Scanner(System.in);
-		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
+		System.out.println("Do you want to go ahead with the attack? Enter yes or no:");
 		String answer = keyboard.nextLine();
-		if(answer.equalsIgnoreCase("y")) {
+		if(answer.equalsIgnoreCase("yes")) {
 			//boolean doneFlag1 = false;
 			do {
 				System.out.println("Enter the country you want to attack from");
-				String attackfrom = keyboard.nextLine();
-				if(canAttackFromThisCountry(attackfrom)) {
+				String attackFrom = keyboard.nextLine();
+				if(canattackFromThisCountry(attackFrom)) {
 					System.out.println("Enter the country you want to attack");
-					String attackat = keyboard.nextLine();
-					keyboard.close();
-					if(validOpponentCountry(attackfrom, attackat)) {
+					String attackAt = keyboard.nextLine();
+					if(validOpponentCountry(attackFrom, attackAt)) {
 						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
 						 do {
-							String opponent = opponentPlayer(attackfrom, attackat);
-							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackfrom, attackat));
-							Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackfrom, attackat));
+							String opponent = opponentPlayer(attackFrom, attackAt);
+							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt));
+							Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt));
 							while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
 								int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
 								int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
 								if(attackerDiceValue > defenderDiceValue) {
-									reduceArmy("defender", attackfrom, attackat);
+									reduceArmy("defender", attackFrom, attackAt);
 									//check if the opponent lost
-									if(checkDefenderArmiesNumberZero(attackfrom, attackat)) {
+									if(checkDefenderArmiesNumberZero(attackFrom, attackAt)) {
 										System.out.println("Enter the number of armies you would like to place in your new territory:");
-										moveArmiesToNewTerritory(attackfrom, attackat, keyboard.nextInt());
+										moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
 										//remove this territory from the players list
 										for(Player player : Main.players) {
 											//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
@@ -628,10 +627,10 @@ public class Player extends Observable {
 									}
 								}
 								else {
-									reduceArmy("attacker", attackfrom, attackat);
+									reduceArmy("attacker", attackFrom, attackAt);
 									//check if you lost
 									for(Territory territory : assignedTerritories) {
-										if(territory.name.equalsIgnoreCase(attackfrom)) {
+										if(territory.name.equalsIgnoreCase(attackFrom)) {
 											if(territory.numberOfArmies == 0) {
 												territory.numberOfArmies = 1;
 												attackDone = true;
@@ -654,9 +653,9 @@ public class Player extends Observable {
 					System.out.println("Enter a valid country you would like to attack from");
 				}
 				if(!gameCompleted) {
-					System.out.println("Do you want to continue with the attack? Enter y if yes or n if no");
+					System.out.println("Do you want to continue with the attack? Enter yes or no");
 					String input = keyboard.nextLine();
-					if(input.equalsIgnoreCase("n"))
+					if(input.equalsIgnoreCase("no"))
 						attackDone = true;
 				}
 			}while(!attackDone);
@@ -759,9 +758,13 @@ public class Player extends Observable {
 	 * @param cardIndex3
 	 */
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
-		cards.remove(cardIndex1 - 1);
-		cards.remove(cardIndex2 - 1);
-		cards.remove(cardIndex3 - 1);
+		Card card1 = cards.get(cardIndex1 - 1);
+		Card card2 = cards.get(cardIndex2 - 1);
+		Card card3 = cards.get(cardIndex3 - 1);
+		
+		cards.remove(card1);
+		cards.remove(card2);
+		cards.remove(card3);
 		Card.cardExchangeValue += 5;
 	}
 	
