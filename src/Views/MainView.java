@@ -6,11 +6,13 @@ import Driver.Main;
 import Map.Map;
 
 /**
- * 
- *@author shreyas
- *@version 1.0
+ *
  *This class is used to get user input 
  *for different method used in it. 
+ *
+ *@author shreyas
+ *@version 1.0
+ *
  *
  */
 public class MainView {
