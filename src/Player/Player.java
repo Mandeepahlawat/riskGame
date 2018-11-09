@@ -449,21 +449,22 @@ public class Player extends Observable {
 		int input = 0;
 		if(status.equalsIgnoreCase("attacker")) {
 			int numberOfArmies = 0;
-			System.out.println("Do you want to go ALL-OUT? Enter y for yes and n for no:");
+			System.out.println("Do you want to go ALL-OUT? Enter yes or no:");
 			String isAllOut = keyboard.nextLine();
-			if(isAllOut.equalsIgnoreCase("n")) {
+			if(isAllOut.equalsIgnoreCase("no")) {
 				for(Territory territory : assignedTerritories) {
 					if(territory.name.equalsIgnoreCase(attackerCounter)){
 						numberOfArmies = territory.numberOfArmies;			
 					}
 				}
-				if(numberOfArmies == 2)
+				if(numberOfArmies == 2) {
 					return 1;
+				}
 				else if(numberOfArmies == 3){
 					System.out.println("Choose if you would like to roll 1 or 2 Dice:");
 					while(input == 0) {
-						input = keyboard.nextInt();
-						if(input != 1 || input != 2) {
+						input = Integer.parseInt(keyboard.nextLine().trim());
+						if(!(input == 1 || input == 2)) {
 							System.out.println("You can only choose between 1 or 2 Dice:");
 							input = 0;
 						}
@@ -472,8 +473,8 @@ public class Player extends Observable {
 				else {
 					System.out.println("Choose if you would like to roll 1 or 2 or 3 Dice:");
 					while(input == 0) {
-						input = keyboard.nextInt();
-						if(input != 1 || input != 2 || input != 3) {
+						input = Integer.parseInt(keyboard.nextLine().trim());
+						if(!(input == 1 || input == 2 || input == 3)) {
 							System.out.println("You can only choose between 1 or 2 or 3 Dice:");
 							input = 0;
 						}
@@ -494,13 +495,14 @@ public class Player extends Observable {
 					}
 				}
 			}
-			if(numberOfArmies == 2)
+			if(numberOfArmies == 2) {
 				return 1;
+			}
 			else {
 				System.out.println("Choose if you would like to roll 1 or 2 Dice:");
 				while(input == 0) {
-					input = keyboard.nextInt();
-					if(input != 1 || input != 2) {
+					input = Integer.parseInt(keyboard.nextLine().trim());
+					if(!(input == 1 || input == 2)) {
 						System.out.println("You can only choose between 1 or 2 Dice:");
 						input = 0;
 					}
@@ -512,7 +514,7 @@ public class Player extends Observable {
 	
 	/**VALUE ON DICE AFTER ROLLING**/
 	public Vector<Integer> rollDice(int numberOfDice){
-		Vector<Integer> diceValues = new Vector(numberOfDice);
+		Vector<Integer> diceValues = new Vector<Integer>(numberOfDice);
 		Random r = new Random();
 		while(numberOfDice != 0) {
 			diceValues.addElement(r.nextInt((6 - 1) + 1) + 1);
@@ -588,16 +590,26 @@ public class Player extends Observable {
 		if(answer.equalsIgnoreCase("yes")) {
 			//boolean doneFlag1 = false;
 			do {
-				System.out.println("Enter the country you want to attack from");
+				System.out.println("Enter the country you want to attack from (Enter 'exit' to skip attack phase)");
 				String attackFrom = keyboard.nextLine();
+				if(attackFrom.equalsIgnoreCase("exit")) {
+					attackDone = true;
+					break;
+				}
 				if(canattackFromThisCountry(attackFrom)) {
-					System.out.println("Enter the country you want to attack");
+					System.out.println("Enter the country you want to attack (Enter 'exit' to skip attack phase)");
 					String attackAt = keyboard.nextLine();
+					if(attackAt.equalsIgnoreCase("exit")) {
+						attackDone = true;
+						break;
+					}
 					if(validOpponentCountry(attackFrom, attackAt)) {
 						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
 						 do {
 							String opponent = opponentPlayer(attackFrom, attackAt);
+							System.out.println("Choose Attacker's number of dice");
 							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt));
+							System.out.println("Choose Defender's number of dice");
 							Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt));
 							while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
 								int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
@@ -652,11 +664,13 @@ public class Player extends Observable {
 				else {
 					System.out.println("Enter a valid country you would like to attack from");
 				}
-				if(!gameCompleted) {
+				if(!gameCompleted && attackDone) {
 					System.out.println("Do you want to continue with the attack? Enter yes or no");
 					String input = keyboard.nextLine();
 					if(input.equalsIgnoreCase("no"))
 						attackDone = true;
+					if(input.equalsIgnoreCase("yes"))
+						attackDone = false;
 				}
 			}while(!attackDone);
 		}
