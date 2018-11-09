@@ -45,11 +45,11 @@ public class Player extends Observable {
 		FORTIFICATION;	
 	}
 	/**
-	 * public ArrayList<Card> cards list of cards.
+	 * list of cards.
 	 */
 	public ArrayList<Card> cards;
 	/**
-	 * public ArrayList<Territory> assignedTerritories list of territories.
+	 * list of territories.
 	 */
 	public ArrayList<Territory> assignedTerritories;
 	/**
@@ -335,8 +335,6 @@ public class Player extends Observable {
 	 * To check if the neighbour country is owned
 	 *  by the current player or not.
 	 * 
-	 * @param currentPlayerId is a integer value 
-	 * which gives the present  ID of the player.
 	 * 
 	 * @param fromCountry is a string value in which
 	 * a player can mention to move a army from a country.
