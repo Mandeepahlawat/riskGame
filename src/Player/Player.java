@@ -759,9 +759,13 @@ public class Player extends Observable {
 	 * @param cardIndex3
 	 */
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
-		cards.remove(cardIndex1 - 1);
-		cards.remove(cardIndex2 - 1);
-		cards.remove(cardIndex3 - 1);
+		Card card1 = cards.get(cardIndex1 - 1);
+		Card card2 = cards.get(cardIndex2 - 1);
+		Card card3 = cards.get(cardIndex3 - 1);
+		
+		cards.remove(card1);
+		cards.remove(card2);
+		cards.remove(card3);
 		Card.cardExchangeValue += 5;
 	}
 	
