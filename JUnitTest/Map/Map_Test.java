@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import Driver.Main;
 import Map.Map.*;
+import Player.Player;
 
  
 public class Map_Test {
@@ -60,6 +61,75 @@ public class Map_Test {
 		actualTerritory=Map.findTerritory("India");
 		assertNull(actualTerritory);
 	}
+	
+	@Test
+	public void testAllTerritoriesOwnBySinglePlayer() { 
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>();
+		// removed this becas its assigned in randim so giving only ione player and
+		// seeing
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		Territory t1 = new Territory("Africa");
+		t1.addNeighbours("India,Pakistan");// add neighbour and add player to owner of neighbour and finally create
+		// assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner = player;
+		//Player player2 = new Player("Player2");// assigning owner to neighbour
+		t1.neighbours.get(1).owner = player;
+		t1.numberOfArmies = 1;
+		t1.owner=player;
+		Main.activeMap.territories.add(t1);
+		
+		t1 = new Territory("Asia");
+		t1.addNeighbours("Nepal,Bangal");// add neighbour and add player to owner of neighbour and finally create
+		// assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner = player;
+		//Player player2 = new Player("Player2");// assigning owner to neighbour
+		t1.neighbours.get(1).owner = player;
+		t1.numberOfArmies = 1;
+		t1.owner=player;
+		Main.activeMap.territories.add(t1);
+		
+		System.out.println("All for one "+Main.activeMap.allTerritoriesOwnBySinglePlayer());
+		assertTrue(Main.activeMap.allTerritoriesOwnBySinglePlayer());
+	}
+	
+	@Test
+	public void testAllTerritoriesNotOwnBySinglePlayer() { 
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>();
+		// removed this becas its assigned in randim so giving only ione player and
+		// seeing
+		Player player = new Player("Player1");
+		Main.players.add(player);
+		Territory t1 = new Territory("Africa");
+		t1.addNeighbours("India,Pakistan");// add neighbour and add player to owner of neighbour and finally create
+		// assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner = player;
+		//Player player2 = new Player("Player2");// assigning owner to neighbour
+		t1.neighbours.get(1).owner = player;
+		t1.numberOfArmies = 1;
+		t1.owner=player;
+		Main.activeMap.territories.add(t1);
+		
+		t1 = new Territory("Asia");
+		t1.addNeighbours("Nepal,Bangal");// add neighbour and add player to owner of neighbour and finally create
+		// assignedterritories list since player is assighes
+		t1.neighbours.get(0).owner = player;
+		Player player2 = new Player("Player2");// assigning owner to neighbour
+		t1.neighbours.get(1).owner = player;
+		t1.numberOfArmies = 1;
+		t1.owner=player2;
+		Main.activeMap.territories.add(t1);
+		
+		System.out.println("All for one "+Main.activeMap.allTerritoriesOwnBySinglePlayer());
+		assertFalse(Main.activeMap.allTerritoriesOwnBySinglePlayer());
+	}
+	
 	/**
 	* This method is used to test the Map.findContinent operation
 	*
@@ -79,11 +149,7 @@ public class Map_Test {
 	public void testFindContinentAsNull() {   
 		assertNull(Map.findContinent("Asia"));
 	}
-	
-	/*@Test
-	public void testMap() {
-		fail("Not yet implemented");
-	}*/
+	 
 	/**
 	* This is a Map constructor that accept the parm Continent name and the score and list it in the continent Arraylist to be connected
 	* it tests if the returned Continent name equated the expected value
