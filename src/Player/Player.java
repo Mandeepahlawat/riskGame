@@ -495,7 +495,7 @@ public class Player extends Observable {
 					}
 				}
 			}
-			if(numberOfArmies == 2) {
+			if(numberOfArmies == 1) {
 				return 1;
 			}
 			else {
@@ -545,6 +545,8 @@ public class Player extends Observable {
 		}		
 	}
 	
+	
+	
 	/**CHECK IF THE NUMBER OF ARMIES OF THE DEFENDER IS ZERO**/
 	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -557,6 +559,21 @@ public class Player extends Observable {
 			}
 		}
 		return false;
+	}
+	
+	/**CHECK THE NUMBER OF ARMIES LEFT WITH THE COUNTRY WHILE THE ATTACK IS IN PROGRESS**/
+	public Vector<Integer> returnArmiesLeft(String attackerCounter, String defenderCountry) {
+		Vector<Integer> armies = new Vector<>();
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(attackerCounter)) {
+				armies.add(0, territory.numberOfArmies);
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(defenderCountry))
+						armies.add(1, neighbor.numberOfArmies);
+				}
+			}
+		}
+		return armies;
 	}
 	
 	/**MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES**/
@@ -574,8 +591,10 @@ public class Player extends Observable {
 					if(neighbor.name.equalsIgnoreCase(defenderCountry)) {
 						neighbor.numberOfArmies = numberOfArmiesToMove;
 						assignedTerritories.add(neighbor);
+						break;
 					}
 				}
+				break;
 			}
 		}
 	}
@@ -606,6 +625,8 @@ public class Player extends Observable {
 					if(validOpponentCountry(attackFrom, attackAt)) {
 						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
 						 do {
+							Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
+							System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
 							String opponent = opponentPlayer(attackFrom, attackAt);
 							System.out.println("Choose Attacker's number of dice");
 							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt));
