@@ -253,7 +253,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		// valid opponent if owner != player and neighbour
-		assertTrue(player.canAttackFromThisCountry("Africa"));
+		assertTrue(player.canattackFromThisCountry("Africa"));
 	}
 
 	@Test
@@ -277,7 +277,7 @@ public class Player_Test {
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories();
 		// valid opponent if owner != player and neighbour
-		assertFalse(player.canAttackFromThisCountry("Africa"));
+		assertFalse(player.canattackFromThisCountry("Africa"));
 	}
 
 	/*
@@ -314,9 +314,11 @@ public class Player_Test {
 		player.cards.add(c1);
 		player.cards.add(c2);
 		player.cards.add(c3);
-		System.out.println("before: " + player.cards.size());
-		// player.exchangeCards(1,2,3);
-		// System.out.println("After: "+player.cards.size());
+		int beforeSize = player.cards.size();
+		player.exchangeCards(1,2,3);
+		int afterSize = player.cards.size();
+		System.out.println("After: "+player.cards.size());
+		assertTrue(beforeSize==3&&afterSize==0);
 		// valid opponent if owner != player and neighbour
 		// assertFalse(player.publicCanAttackFromThisCountryForJUnitTest("Africa"));
 	}
