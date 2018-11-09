@@ -25,12 +25,13 @@ import Map.Map.*;
  * This is the JUnit Test cases for Main class. this implements all
  * the test related to the units within this class
  *
+ * @author 	Arun
+ * @version 1.0
+ * @since   2018-10-01
  */
 public class Main_Test {
 	
-//public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\Files\\returnMap.map";
-//	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
-	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+	public static final String FILE_NAME = "Files\\returnMap.map";
 
 	/**
 	* This method is used to validate the new map line
@@ -116,8 +117,6 @@ public class Main_Test {
 		List<String> linesAfterRunningMethod=Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		linesBeforeRunningMethod.set(6, "Asia=7");
 		assertTrue(linesBeforeRunningMethod.equals(linesAfterRunningMethod)); 
-		
-		
 	}
 
 	/**
