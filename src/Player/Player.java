@@ -734,7 +734,9 @@ public class Player extends Observable {
 												//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
 												if(player.name.equalsIgnoreCase(opponent)) {
 													for(Territory territory : Main.activeMap.territories) {
-														player.assignedTerritories.remove(territory);
+														if(territory.name.equalsIgnoreCase(attackAt)) {
+															player.assignedTerritories.remove(territory);
+														}
 													}
 												}
 											}
@@ -787,7 +789,9 @@ public class Player extends Observable {
 												//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
 												if(player.name.equalsIgnoreCase(opponent)) {
 													for(Territory territory : Main.activeMap.territories) {
-														player.assignedTerritories.remove(territory);
+														if(territory.name.equalsIgnoreCase(attackAt)) {
+															player.assignedTerritories.remove(territory);
+														}
 													}
 												}
 											}
