@@ -37,7 +37,7 @@ public class Player_Test {
 	/**
 	* This method is used to test function that return name of player
 	* 
-	* @return name of the player 
+	* return name of the player 
 	*/
 	@Test
 	public void testGetName() {
@@ -99,9 +99,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* owned neighbour countries
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testValidNeighborCountryOwned() {
@@ -124,9 +124,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* Neighbor countries that is not owned
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testValidNeighborCountryNotOwned() {
@@ -149,9 +149,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* country assigned
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testValidAssignedCountryOwned() {
@@ -174,9 +174,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* country not assigned
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid 
+	* return False if result is invalid 
 	*/
 	@Test
 	public void testValidAssignedCountryNotOwned() {
@@ -203,9 +203,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* opponent countries
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid 
+	* return False if result is invalid 
 	*/
 	@Test
 	public void testValidOpponentCountry() {
@@ -227,9 +227,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* countries that are not opponent
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testInValidOpponentCountry() {
@@ -250,7 +250,7 @@ public class Player_Test {
 	/**
 	* This method is used to test function that returns the opponent player
 	* 
-	* @return String name of the player 
+	* return String name of the player 
 	*/
 	@Test
 	public void testOpponentPlayer() {
@@ -274,9 +274,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* if the attack can be initiated from a country passed as parm
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testCanAttackFromThisCountry() {
@@ -300,9 +300,9 @@ public class Player_Test {
 	* This method is used to test function that validates the 
 	* if the attack can be initiated from a country passed as parm
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testCannotAttackFromThisCountry() {
@@ -359,9 +359,9 @@ public class Player_Test {
 	* This method is used to test function that checks if 
 	* card could be exchanged
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testCanExchangeCardsFalse() {
@@ -389,9 +389,9 @@ public class Player_Test {
 	* This method is used to test function that checks if 
 	* card could be exchanged when number of card is 5
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testCanExchangeCardsWithCardSize5() {
@@ -427,9 +427,9 @@ public class Player_Test {
 	* This method is used to test function that checks if 
 	* card could be exchanged when number of different card type is 3
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testCanExchangeCardsWithCardType3() {
@@ -464,9 +464,9 @@ public class Player_Test {
 	* This method is used to test function that checks if 
 	* card could be exchanged when number of same card type is 3
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testCanExchangeCardsWithSameCardType3() {
@@ -501,9 +501,9 @@ public class Player_Test {
 	* This method is used to test function that checks if 
 	* card indexes are valid
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testValidCardIndexesToExchange() {
@@ -537,9 +537,9 @@ public class Player_Test {
 	* This method is used to test function that checks if 
 	* card indexes are invalid
 	* 
-	* @return True if result is valid
+	* return True if result is valid
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testInValidCardIndexesToExchange() {
@@ -571,9 +571,9 @@ public class Player_Test {
 	/**
 	* This method is used to test function that returns the list of continents owned
 	* 
-	* @return Arraylist<Map> list of continents
+	* return Arraylist of type Map list of continents
 	* 
-	* @return False if result is invalid
+	* return False if result is invalid
 	*/
 	@Test
 	public void testOwnedContinents() {
@@ -592,7 +592,67 @@ public class Player_Test {
 		System.out.println(player.ownedContinents());
 		assertTrue(maplist.get(0).name.equals("Mexico"));//is it a random assignment of owner?
 	}
-
-	 
-
+	/**
+	* This method is used to test function that returns the list of continents owned
+	* 
+	* return True if result is invalid
+	*/
+	@Test
+	public void testcheckDefenderArmiesNumberZero() {
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>(); 
+		
+		player = new Player("Player2");
+		Main.players.add(player);
+		Territory t1 = new Territory("Asia");
+		t1.addNeighbours("India,Pakistan"); 
+		t1.neighbours.get(0).numberOfArmies = 0; 
+		t1.numberOfArmies = 5;
+		Main.activeMap.territories.add(t1);
+		
+		Main.assignInitialTerritories();
+		assertTrue(player.checkDefenderArmiesNumberZero("Asia", "India"));
+	}
+	/**
+	* This method is used to test function that returns the list of continents owned
+	* 
+	* return True if result is invalid
+	*/
+	@Test
+	public void testcheckDefenderArmiesNumberNotZero() {
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>(); 
+		
+		player = new Player("Player2");
+		Main.players.add(player);
+		Territory t1 = new Territory("Asia");
+		t1.addNeighbours("India,Pakistan");  
+		t1.neighbours.get(0).numberOfArmies=4;
+		t1.numberOfArmies = 5;
+		Main.activeMap.territories.add(t1);
+		
+		Main.assignInitialTerritories();
+		assertFalse(player.checkDefenderArmiesNumberZero("Asia", "India"));
+	}
+	/**
+	* This method is used to test function that returns dice values
+	* 
+	*/
+	@Test
+	public void testRollDice() {
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>(); 
+		
+		player = new Player("Player2");
+		Main.players.add(player);
+		Territory t1 = new Territory("Asia");
+		System.out.println("roll"+player.rollDice(2));
+		assertNotNull(player.rollDice(2));
+	}
 }

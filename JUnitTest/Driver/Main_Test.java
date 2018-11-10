@@ -37,14 +37,14 @@ public class Main_Test {
 	* This method is used to validate the new map line
 	* entered by the user.
 	* 
-	* @param isContinent A boolean value to denote if we
+	* parameter isContinent A boolean value to denote if we
 	* are editing a continent, if false then it means we are
 	* editing a territory
 	* 
-	* @param newLine A String entered by the user to replace the old
+	* parameter newLine A String entered by the user to replace the old
 	* line in map
 	* 
-	* @return True if new line is valid otherwise False
+	* return True if new line is valid otherwise False
 	*/
 	@Test
 	public void testValidateMapLineForInteger() {
@@ -55,7 +55,7 @@ public class Main_Test {
 	/**
 	 * This is to validate and return false if new map line entered by user has fractional score value
 	 * 
-	 * @return false if entered with fractional Continent score
+	 * return false if entered with fractional Continent score
 	 */
 	@Test
 	public void testValidateMapLineForFraction() {
@@ -64,7 +64,7 @@ public class Main_Test {
 	/**
 	 * This is to validate and return false if new map line entered by user has no score value
 	 * 
-	 * @return false if entered with no Continent score
+	 * return false if entered with no Continent score
 	 */
 	@Test
 	public void testValidateMapLineForZero() { 				
@@ -74,7 +74,7 @@ public class Main_Test {
 	 * This is to validate and return false if new map line entered by user for Territory 
 	 * has more than one adjacent countries
 	 * 
-	 * @return true as its valid entry
+	 * return true as its valid entry
 	 */
 	@Test
 	public void testValidateMapLineForTerritoryAndTwoAdjecentCountry() {
@@ -84,7 +84,7 @@ public class Main_Test {
 	 * This is to validate and return false if new map line entered by user for Territory 
 	 * has only one adjacent countries
 	 * 
-	 * @return true as its valid entry
+	 * return true as its valid entry
 	 */
 	@Test
 	public void testValidateMapLineForTerritoryAndOneAdjecentCountry() { 
@@ -94,7 +94,7 @@ public class Main_Test {
 	 * This is to validate and return false if new map line entered by user for Territory 
 	 * has no adjacent countries
 	 * 
-	 * @return false as its invalid entry
+	 * return false as its invalid entry
 	 */
 	@Test
 	public void testValidateMapLineForTerritoryAndNoAdjecentCountry() {
@@ -104,7 +104,7 @@ public class Main_Test {
 	/**
 	 * This is to validate and return true if new map created and the expected maps are same  
 	 * 
-	 * @return true if the entries of two files are compared to be same
+	 * return true if the entries of two files are compared to be same
 	 */ 
 	@Test
 	public void testSetLineText() throws IOException {
@@ -122,7 +122,7 @@ public class Main_Test {
 	/**
 	 * This is to validate and return true if the continents entered are as expected  
 	 * 
-	 * @return true if the entries continents are as expected
+	 * return true if the entries continents are as expected
 	 */ 
 	@Test
 	public void testPopulateUserEnteredContinentLines() throws IOException {
@@ -138,7 +138,7 @@ public class Main_Test {
 	/**
 	 * This is to validate and return true if the Territory entered are as expected  
 	 * 
-	 * @return true if the entries of territories are as expected
+	 * return true if the entries of territories are as expected
 	 */
 	@Test
 	public void testPopulateUserEnteredTerritoryLines() throws IOException {
