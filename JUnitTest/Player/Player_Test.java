@@ -24,7 +24,10 @@ import Card.Card.CardType;
 public class Player_Test {
 
 	private Player player;
-
+	/**
+	* This method runs before each test case functions
+	* 
+	*/
 	@Before
 	public void testBefore() {
 		player = new Player("Player1");
@@ -159,7 +162,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player; 
 		t1.numberOfArmies = 5;
 		Main.activeMap.territories.add(t1);
@@ -186,7 +189,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan");// add neighbour and add player to owner of neighbour and finally create
+		t1.addNeighbours("India,Pakistan");// add neighbour and add player to owner of neighbour and finally create
 		// assignedterritories list since player is assighes
 		t1.neighbours.get(0).owner = player;
 		// t1.owner=player;
@@ -213,12 +216,12 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player; 
 		t1.numberOfArmies = 5;
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories(); 
-		assertTrue(player.validOpponentCountry("Africa", "tan"));
+		assertTrue(player.validOpponentCountry("Africa", "Pakistan"));
 	}
 	/**
 	* This method is used to test function that validates the 
@@ -237,12 +240,12 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player; 
 		t1.numberOfArmies = 5;
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories(); 
-		assertFalse(player.validOpponentCountry("Africa", "Jon"));
+		assertFalse(player.validOpponentCountry("Africa", "India"));
 	}
 	/**
 	* This method is used to test function that returns the opponent player
@@ -258,14 +261,14 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");
 		t1.neighbours.get(1).owner = player2; 
 		t1.numberOfArmies = 5;
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories(); 
-		assertTrue(player.opponentPlayer("Africa", "tan").equals("Player2"));
+		assertTrue(player.opponentPlayer("Africa", "Pakistan").equals("Player2"));
 	}
 	/**
 	* This method is used to test function that validates the 
@@ -284,7 +287,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2; 
@@ -310,7 +313,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2; 
@@ -369,7 +372,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2;
@@ -399,7 +402,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2;
@@ -437,7 +440,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2;
@@ -474,7 +477,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan");// add neighbour and add player to owner of neighbour and finally create
+		t1.addNeighbours("India,Pakistan");// add neighbour and add player to owner of neighbour and finally create
 		// assignedterritories list since player is assighes
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
@@ -511,7 +514,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2;
@@ -547,7 +550,7 @@ public class Player_Test {
 		player = new Player("Player1");
 		Main.players.add(player);
 		Territory t1 = new Territory("Africa");
-		t1.addNeighbours("Jon,tan"); 
+		t1.addNeighbours("India,Pakistan"); 
 		t1.neighbours.get(0).owner = player;
 		Player player2 = new Player("Player2");// assigning owner to neighbour
 		t1.neighbours.get(1).owner = player2;
