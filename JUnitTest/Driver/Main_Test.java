@@ -21,12 +21,17 @@ import Map.Map.Territory;
 import Player.*;
 import Map.Map;
 import Map.Map.*;
-
+/**
+ * This is the JUnit Test cases for Main class. this implements all
+ * the test related to the units within this class
+ *
+ * @author 	Arun
+ * @version 1.0
+ * @since   2018-10-01
+ */
 public class Main_Test {
 	
-//public static final String FILE_NAME = "C:\\Users\\mehak\\Documents\\riskGame\\Files\\returnMap.map";
-//	public static final String FILE_NAME = "/Users/mandeepahlawat/projects/java/riskGame/Files/returnMap.map";
-	public static final String FILE_NAME = "C:\\Users\\ARUN\\Documents\\riskGame\\Files\\returnMap.map";
+	public static final String FILE_NAME = "Files\\returnMap.map";
 
 	/**
 	* This method is used to validate the new map line
@@ -112,14 +117,8 @@ public class Main_Test {
 		List<String> linesAfterRunningMethod=Files.readAllLines(expPath, StandardCharsets.UTF_8);
 		linesBeforeRunningMethod.set(6, "Asia=7");
 		assertTrue(linesBeforeRunningMethod.equals(linesAfterRunningMethod)); 
-		
-		
 	}
 
-/*	@Test
-	void testEditMap() {
-		fail("Not yet implemented");
-	}*/
 	/**
 	 * This is to validate and return true if the continents entered are as expected  
 	 * 
@@ -153,7 +152,12 @@ public class Main_Test {
 		assertTrue(userEnteredTerritoryLines.equals(Main.userEnteredTerritoryLines));
 	}
 
-	
+	/**
+	* This method is used to test the assignment of initial terrirories. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method assignInitialTerritories()
+	*/	
 	@Test
 	public void testAssignInitialTerritories() {
 		Player player = new Player("Player1");
@@ -164,11 +168,15 @@ public class Main_Test {
 		Main.players.add(player);
 		Territory t1 = new Territory("Asia");
 		Main.activeMap.territories.add(t1);
-		Main.assignInitialTerritories();
-		System.out.println(t1.owner.getName());
+		Main.assignInitialTerritories(); 
 		assertTrue(t1.owner.getName().equals("Player1"));
 	}
-	
+	/**
+	* This method is used to test the assignment of initial armies for two players. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method assignInitialArmies()
+	*/	
 	@Test
 	public void testAssignInitialArmiesFor2Players() {
 		Main.players = new ArrayList<Player>();
@@ -179,7 +187,12 @@ public class Main_Test {
 		Main.assignInitialArmies(); 
 		assertTrue(Main.totalInitialArmies==80); 
 	}
-	
+	/**
+	* This method is used to test the assignment of initial armies for three players. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method assignInitialArmies()
+	*/	
 	@Test
 	public void testAssignInitialArmiesFor3Players() {
 		Main.players = new ArrayList<Player>();
@@ -192,7 +205,12 @@ public class Main_Test {
 		Main.assignInitialArmies(); 
 		assertTrue(Main.totalInitialArmies==105); 
 	}
-	
+	/**
+	* This method is used to test the assignment of initial armies for for players. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method assignInitialArmies()
+	*/	
 	@Test
 	public void testAssignInitialArmiesFor4Players() {
 		Main.players = new ArrayList<Player>();
@@ -207,7 +225,12 @@ public class Main_Test {
 		Main.assignInitialArmies(); 
 		assertTrue(Main.totalInitialArmies==120); 
 	}
-	
+	/**
+	* This method is used to test the assignment of initial armies for five players. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method assignInitialArmies()
+	*/	
 	@Test
 	public void testAssignInitialArmiesFor5Players() {
 		Main.players = new ArrayList<Player>();
@@ -224,7 +247,12 @@ public class Main_Test {
 		Main.assignInitialArmies(); 
 		assertTrue(Main.totalInitialArmies==125); 
 	}
-	
+	/**
+	* This method is used to test the assignment of initial armies for six players. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method assignInitialArmies()
+	*/	
 	@Test
 	public void testAssignInitialArmiesFor6Players() {
 		Main.players = new ArrayList<Player>();
@@ -243,9 +271,14 @@ public class Main_Test {
 		Main.assignInitialArmies(); 
 		assertTrue(Main.totalInitialArmies==120); 
 	}
-	
+	/**
+	* This method is used to test the building of a map. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method buildMap()
+	*/	
 	@Test
-	public void testbuildMap() throws IOException{
+	public void testbuildMapForContinents() throws IOException{
 		 
 		Main.activeMap=new Map();
 		Main.userEnteredContinentLines = new ArrayList<String>(Arrays.asList("North America=5","Mexico=2","Africa=3","Asia=7",""));
@@ -253,6 +286,25 @@ public class Main_Test {
 		Main.buildMap();
 		System.out.println(Main.userEnteredContinentLines);
 		//System.out.println(Main.activeMap.te);
+		assertTrue(Main.activeMap.continents.get(0).name.equals("North America"));
+		
+	}
+	/**
+	* This method is used to test the building of a map. 
+	* 
+	* this is a void return method and hence the value of the 
+	* variable is validated after testing the method buildMap()
+	*/	
+	@Test
+	public void testbuildMapForTerritories() throws IOException{
+		 
+		Main.activeMap=new Map();
+		Main.userEnteredContinentLines = new ArrayList<String>(Arrays.asList("North America=5","Mexico=2","Africa=3","Asia=7",""));
+		Main.userEnteredTerritoryLines = new ArrayList<String>(Arrays.asList("Japan,322,104,North America,Kamchatka,Mongolia","Ural,241,68,Asia,Siberia,China,Afghanistan,Ukraine","Arab,241,68,Asia,Siberia,China,Afghanistan,Ukraine"));
+		Main.buildMap();
+		System.out.println(Main.userEnteredContinentLines);
+		//System.out.println(Main.activeMap.te);
+		assertTrue(Main.activeMap.continents.get(0).territories.get(0).name.equals("Japan"));
 		
 	}
  
