@@ -592,7 +592,55 @@ public class Player_Test {
 		System.out.println(player.ownedContinents());
 		assertTrue(maplist.get(0).name.equals("Mexico"));//is it a random assignment of owner?
 	}
-
-	 
+	/**
+	* This method is used to test function that returns the list of continents owned
+	* 
+	* @return True if result is invalid
+	* 
+	* @return False if result is invalid
+	*/
+	@Test
+	public void testcheckDefenderArmiesNumberZero() {
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>(); 
+		
+		player = new Player("Player2");
+		Main.players.add(player);
+		Territory t1 = new Territory("Asia");
+		t1.addNeighbours("India,Pakistan"); 
+		t1.neighbours.get(0).numberOfArmies = 0; 
+		t1.numberOfArmies = 5;
+		Main.activeMap.territories.add(t1);
+		
+		Main.assignInitialTerritories();
+		assertTrue(player.checkDefenderArmiesNumberZero("Asia", "India"));
+	}
+	/**
+	* This method is used to test function that returns the list of continents owned
+	* 
+	* @return True if result is invalid
+	* 
+	* @return False if result is invalid
+	*/
+	@Test
+	public void testcheckDefenderArmiesNumberNotZero() {
+		Map.listOfAllTerritories = new ArrayList<Territory>();
+		Main.activeMap = new Map();
+		Main.activeMap.territories = new ArrayList<Territory>();
+		Main.players = new ArrayList<Player>(); 
+		
+		player = new Player("Player2");
+		Main.players.add(player);
+		Territory t1 = new Territory("Asia");
+		t1.addNeighbours("India,Pakistan");  
+		t1.neighbours.get(0).numberOfArmies=4;
+		t1.numberOfArmies = 5;
+		Main.activeMap.territories.add(t1);
+		
+		Main.assignInitialTerritories();
+		assertFalse(player.checkDefenderArmiesNumberZero("Asia", "India"));
+	}
 
 }
