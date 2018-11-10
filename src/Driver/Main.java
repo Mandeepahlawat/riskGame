@@ -31,12 +31,29 @@ import Views.WorldDominationView;
 * @since   2018-09-27 
 */
 public class Main {
-	
+	/**
+	 * object of map is created which is activeMap.
+	 */
 	public static Map activeMap;
+	/**
+	 * string of Arraylist userEnteredContinentLines.
+	 */
 	public static ArrayList<String> userEnteredContinentLines;
+	/**
+	 * string of Arraylist userEnteredTerritoryLines.
+	 */
 	public static ArrayList<String> userEnteredTerritoryLines;
+	/**
+	 * list of players in the game.
+	 */
 	public static ArrayList<Player> players;
+	/**
+	 * Integer value type which as total number of armies intialy assigned
+	 */
 	public static int totalInitialArmies;
+	/**
+	 * object of Mainview created.
+	 */
 	public static MainView mainView;
 	
 	/**
@@ -45,12 +62,12 @@ public class Main {
 	* 
 	* @param isContinent A boolean value to denote if we
 	* are editing a continent, if false then it means we are
-	* editing a territory
+	* editing a territory.
 	* 
 	* @param newLine A String entered by the user to replace the old
-	* line in map
+	* line in map.
 	* 
-	* @return True if new line is valid otherwise False
+	* @return True if new line is valid otherwise False.
 	*/
 	public static boolean validateMapLine(boolean isContinent, String newLine) {
 		if(isContinent) {
@@ -81,7 +98,7 @@ public class Main {
 	/**
 	* This method lets user to build
 	* a new map and then displays the full map to the user
-	* on the screen
+	* on the screen.
 	* 
 	*/
 	public static void createNewMap() {
@@ -108,12 +125,15 @@ public class Main {
 	
 	/**
 	* This method replaces the content of a line number in a
-	* file with the new content
+	* file with the new content.
 	* 
-	* @param lineNumber The line number where we want to place the new content
-	* @param newData The new content which we want to replace the old data with
+	* @param lineNumber The line number where we want to place the new content.
+	* 
+	* @param newData The new content which we want to replace the old data.
+	* 
 	* @param filePath The path of the file to be edited.
-	* @throws java.io.IOException in some circumstance 
+	* 
+	* @throws java.io.IOException in some circumstance.
 	*/
 	public static void setLineText(int lineNumber, String newData, String filePath) throws IOException {
 	    Path path = Paths.get(filePath);
@@ -191,10 +211,10 @@ public class Main {
 	
 	/**
 	* This method is used for populating the data
-	* of userEnteredContinentLines array list
+	* of userEnteredContinentLines array list.
 	* 
 	* @param allLines A list of strings which contains
-	* all the lines inside map file
+	* all the lines inside map file.
 	*/
 	public static void populateUserEnteredContinentLines(List<String> allLines) {
 		Integer continentLineStartIndex = null;
@@ -217,10 +237,10 @@ public class Main {
 	
 	/**
 	* This method is used for populating the data
-	* of userEnteredTerritoryLines array list
+	* of userEnteredTerritoryLines array list.
 	* 
 	* @param allLines A list of strings which contains
-	* all the lines inside map file
+	* all the lines inside map file.
 	*/
 	public static void populateUserEnteredTerritoryLines(List<String> allLines) {
 		Integer territoryLineStartIndex = null;
@@ -259,7 +279,7 @@ public class Main {
 	/**
 	* This method asks user about map selections. Depending on the
 	* choice entered user can create a new map, edit an existing map
-	* or load an existing map
+	* or load an existing map.
 	* 
 	*/
 	public static void mapSelection() {
@@ -412,6 +432,14 @@ public class Main {
 		}
 	}
 	
+	/**
+	 * 
+	 * Public method startUp will assign territories and 
+	 * armies to the player's in the game  if it satisfies
+	 * the condition only otherwise it will display invalid
+	 * map and call's this method again.
+	 * 
+	 */
 	public static void startUp() {
 		mapSelection();
 		buildMap();

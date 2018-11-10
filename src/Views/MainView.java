@@ -5,30 +5,71 @@ import java.util.Scanner;
 import Driver.Main;
 import Map.Map;
 
+/**
+ *
+ *This class is used to get user input 
+ *for different method used in it. 
+ *
+ *@author shreyas
+ *@version 1.0
+ *
+ *
+ */
 public class MainView {
 	
 public Scanner keyboard;
-	
+	/**
+	 * This method will have a string value
+	 * which is a file name.
+	 * 
+	 * @return expecting to enter file name.
+	 */
 	public String fileNameToSaveView() {
 		System.out.println("Enter the file name");
 		return keyboard.nextLine();
 	}
 	
+	/**
+	 * This method will display the map whether
+	 * to edit or load file.
+	 * 
+	 * @return expecting a input from the player.
+	 */
 	public String fileNameToEditOrLoadView() {
 		System.out.println("Enter absolute path of the Map file to edit or load.");
 		return keyboard.nextLine();
 	}
 	
+	/**
+	 * This method will ask whether player wants 
+	 * to edit a continent or not
+	 * 
+	 * @return edit the continent.
+	 */
 	public boolean wantToEditContinentView() {
 		System.out.println("Do you want to edit a continent? Yes or No?");
 		return keyboard.nextLine().equalsIgnoreCase("Yes");
 	}
 	
+	/**
+	 * This method will ask the player to enter line 
+	 * number to edit in game.
+	 * 
+	 * @return waits for the input.
+	 */
 	public int lineNumberToEditView() {
 		System.out.println("Enter the correct line number to edit");
 		return Integer.parseInt(keyboard.nextLine());
 	}
 	
+	/**
+	 * This method will display the line to be 
+	 * replaced
+	 * 
+	 * @param editContinent a boolean value.
+	 * 
+	 * @return wait's for the input value.
+	 */
 	public String newLineToReplaceWithView(boolean editContinent) {
 		System.out.println("Enter the line you want to replace it with");
 	    
@@ -51,11 +92,23 @@ public Scanner keyboard;
 	    return newLineText;
 	}
 	
+	/**
+	 * This method will provide a option to
+	 * edit more lines yes or no in it.
+	 * 
+	 * @return the edit more lines.
+	 */
 	public boolean wantToEditMorelinesView() {
 		System.out.println("Want to edit more lines? \nEnter Yes to edit more lines");
 		return keyboard.nextLine().equalsIgnoreCase("Yes");
 	}
 	
+	/**
+	 * This method will ask whether to edit 
+	 * current map yes or no in it.
+	 * 
+	 * @return the edit the map.
+	 */
 	public boolean wantToEditMapView() {
 		System.out.println("\nDo you want to edit this map? Answer in Yes or No.");
 		return keyboard.nextLine().equalsIgnoreCase("Yes");
@@ -116,16 +169,30 @@ public Scanner keyboard;
 	    }
 	    return inputFileText;
 	}
-	
+	/**
+	 * This method will provide two option to place
+	 * armies manually or automatically
+	 * 
+	 * @return manual assigning of armies.
+	 */
 	public boolean wantToPlaceArmiesManually() {
 		System.out.println("Write 'm' to place armies manually or 'a' to place armies automatically");
 		return keyboard.nextLine().equalsIgnoreCase("m");
 	}
-	
+	/**
+	 * This is the default constructor of MainView
+	 * which takes input value.
+	 */
 	public MainView() {
 		this.keyboard = new Scanner(System.in);
 	}
 	
+	/**
+	 * This method will display three options to select
+	 * 1.create a new map,2.to edit a map,3.load a previous map.
+	 * 
+	 * @return waits for the input.
+	 */
 	public int mapSelectionView() {
 		System.out.println("Select one of the following options: \n"
 				+ "1. Create a new Map. \n"
@@ -148,6 +215,12 @@ public Scanner keyboard;
 		System.out.println("\n***********************STARTUP PHASE ENDS*****************************\n");
 	}
 	
+	/**
+	 * this method will display total number of player's
+	 * and also size of the territories
+	 * 
+	 * @return the number of count of players.
+	 */
 	public int playerCountView() {
 		int playersCount;
 		do {

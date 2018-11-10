@@ -10,8 +10,28 @@ import Map.Map;
 import Map.Map.Territory;
 import Player.Player;
 
+/**
+ * This class will implement from observer
+ * and it display's the territory of 
+ * neighbour armies, and also all countries
+ * and territory in world map.
+ *  
+ * @author Mandeep Ahlawat
+ * @version 1.0
+ * @since 04/11/2018
+ * 
+ */
 public class WorldDominationView implements Observer {
 	
+	/**
+	 * This method will display the namee of the country 
+	 * along with the continent and there armies.
+	 * 
+	 * @param territory object of territory.
+	 * 
+	 * @param neighbour used to check for the presence
+	 * of the opponent or enemy player.
+	 */
 	public void countryNameWithContinentAndArmy(Territory territory, boolean neighbour) {
 		if(neighbour) {
 			System.out.print("\t"
@@ -27,12 +47,13 @@ public class WorldDominationView implements Observer {
 	}
 	
 	/**
-	 * this method displays the current status of map
-	 * <ul>
-	 * <li>Which player owns what country</li>
-	 * <li>How many armies that player has in that country</li>
-	 * <li>Which are the neighbouring territories of this country</li>
-	 * </ul>
+	 * this method will display the current status of map.
+	 * Which player owns what country.
+	 * How many armies that player has in that country.
+	 * Which are the neighbouring territories of this country.
+	 * 
+	 * @param activeMap object of map is created.
+	 * 
 	 */
 	public void display(Map activeMap) {
 		for(Player player : Main.players) {
@@ -73,6 +94,13 @@ public class WorldDominationView implements Observer {
 		}
 	}
 	
+	/**
+	 *  {@inheritDoc}
+	 * This method print's out start and end 
+	 * of world domination map and display's
+	 * the current map after update method 
+	 * is called.
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		Map currentMap = (Map) o;
