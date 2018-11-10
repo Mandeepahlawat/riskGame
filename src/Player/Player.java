@@ -740,7 +740,7 @@ public class Player extends Observable {
 											}
 											finishedAttackingThatTerritory = true;
 											//if all territories are owned by a single user
-											if(Main.activeMap.allTerritoriesOwnBySinglePlayer()) {
+											if(Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
 												gameCompleted = true;
 												attackDone = true;
 											}
