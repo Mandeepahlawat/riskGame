@@ -50,7 +50,7 @@ public class Map_Test {
 	/**
 	* This method is used to test the Map.findTerritory operation
 	*
-	* @return the instance of the territory found 
+	* return the instance of the territory found 
 	*/
 	@Test
 	public void testFindTerritory() { 
@@ -60,7 +60,7 @@ public class Map_Test {
 	/**
 	* This method is used to test the Map.findTerritory operation
 	*
-	* @return the null as its instance is not found 
+	* return the null as its instance is not found 
 	*/
 	@Test
 	public void testFindTerritoryNull() { 
@@ -71,9 +71,9 @@ public class Map_Test {
 	* This method is used to test if all territories are owner by a single user
 	* that signals end of the game. 
 	* 
-	* @return True if all the territories are owned by a user
+	* return True if all the territories are owned by a user
 	* 
-	* @return False if not all the territories are owned by the user
+	* return False if not all the territories are owned by the user
 	*/
 	@Test
 	public void testAllTerritoriesOwnBySinglePlayer() { 
@@ -98,16 +98,16 @@ public class Map_Test {
 		t1.owner=player;
 		Main.activeMap.territories.add(t1);
 		
-		System.out.println("All for one "+Main.activeMap.allTerritoriesOwnBySinglePlayer());
-		assertTrue(Main.activeMap.allTerritoriesOwnBySinglePlayer());
+		System.out.println("All for one "+Main.activeMap.allTerritoriesOwnBySinglePlayer(false));
+		assertTrue(Main.activeMap.allTerritoriesOwnBySinglePlayer(false));
 	}
 	/**
 	* This method is used to test if all territories are owner by a single user
 	* that signals end of the game. 
 	* 
-	* @return True if all the territories are owned by a user
+	* return True if all the territories are owned by a user
 	* 
-	* @return False if not all the territories are owned by the user
+	* return False if not all the territories are owned by the user
 	*/
 	@Test
 	public void testAllTerritoriesNotOwnBySinglePlayer() { 
@@ -139,14 +139,14 @@ public class Map_Test {
 		t1.owner=player2;
 		Main.activeMap.territories.add(t1);
 		
-		System.out.println("All for one "+Main.activeMap.allTerritoriesOwnBySinglePlayer());
-		assertFalse(Main.activeMap.allTerritoriesOwnBySinglePlayer());
+		System.out.println("All for one "+Main.activeMap.allTerritoriesOwnBySinglePlayer(false));
+		assertFalse(Main.activeMap.allTerritoriesOwnBySinglePlayer(false));
 	}
 	
 	/**
 	* This method is used to test the Map.findContinent operation
 	*
-	* @return the instance of the Continent found 
+	* return the instance of the Continent found 
 	*/
 	@Test
 	public void testFindContinent() { 
@@ -156,7 +156,7 @@ public class Map_Test {
 	/**
 	* This method is used to test the Map.findContinent operation
 	*
-	* @return null if instance of the Continent not found 
+	* return null if instance of the Continent not found 
 	*/
 	@Test
 	public void testFindContinentAsNull() {   
@@ -167,7 +167,7 @@ public class Map_Test {
 	* This is a Map constructor that accept the parm Continent name and the score and list it in the continent Arraylist to be connected
 	* it tests if the returned Continent name equated the expected value
 	* 
-	* @return the instance of newly created continent and score 
+	* return the instance of newly created continent and score 
 	*/
 	@Test
 	public void testMapStringIntNewContinentName() {
@@ -178,7 +178,7 @@ public class Map_Test {
 	* This is a Map constructor that accept the parm Continent name and the score and list it in the continent Arraylist to be connected
 	* it tests if the returned Continent score equated the expected value
 	* 
-	* @return the instance of newly created continent and score 
+	* return the instance of newly created continent and score 
 	*/
 	@Test
 	public void testMapStringIntNewContinentScore() {
@@ -188,7 +188,7 @@ public class Map_Test {
 	* This is to add the continent with its score. since we have set this value in the @before its not re initiated here again
 	* it tests if the returned Continent name equated the expected value
 	* 
-	* @return the instance of newly created continent and score 
+	* return the instance of newly created continent and score 
 	*/
 	@Test
 	public void testAddContinentName() {
@@ -198,7 +198,7 @@ public class Map_Test {
 	* This is to add the continent with its score. since we have set this value in the @before its not re initiated here again
 	* it tests if the returned Continent score equated the expected value
 	* 
-	* @return the instance of newly created continent and score 
+	* return the instance of newly created continent and score 
 	*/
 	@Test
 	public void testAddContinentScore() {
@@ -209,9 +209,9 @@ public class Map_Test {
 	/**
 	* This method is used to test if Map is a valid one. 
 	* 
-	* @return True if all the territories are owned by a user
+	* return True if all the territories are owned by a user
 	* 
-	* @return False if not all the territories are owned by the user
+	* return False if not all the territories are owned by the user
 	*/
 	@Test
 	public void testValidateMapForValidMap() throws IOException {
@@ -266,9 +266,9 @@ public class Map_Test {
 	/**
 	* This method is used to test if Map is a valid one. 
 	* 
-	* @return True if all the territories are owned by a user
+	* return True if all the territories are owned by a user
 	* 
-	* @return False if not all the territories are owned by the user
+	* return False if not all the territories are owned by the user
 	*/
 	@Test
 	public void testValidateMapForInValidMap() throws IOException {
