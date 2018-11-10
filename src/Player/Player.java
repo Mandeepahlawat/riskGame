@@ -421,7 +421,7 @@ public class Player extends Observable {
 	 * @return true if the given conditions passes 
 	 * otherwise it will return false.
 	 */
-	public boolean canAttackFromThisCountry(String country) {
+	public boolean canattackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(country)){
 				if(territory.numberOfArmies > 1)
@@ -452,21 +452,22 @@ public class Player extends Observable {
 		int input = 0;
 		if(status.equalsIgnoreCase("attacker")) {
 			int numberOfArmies = 0;
-			System.out.println("Do you want to go ALL-OUT? Enter y for yes and n for no:");
+			System.out.println("Do you want to go ALL-OUT? Enter yes or no:");
 			String isAllOut = keyboard.nextLine();
-			if(isAllOut.equalsIgnoreCase("n")) {
+			if(isAllOut.equalsIgnoreCase("no")) {
 				for(Territory territory : assignedTerritories) {
 					if(territory.name.equalsIgnoreCase(attackerCounter)){
 						numberOfArmies = territory.numberOfArmies;			
 					}
 				}
-				if(numberOfArmies == 2)
+				if(numberOfArmies == 2) {
 					return 1;
+				}
 				else if(numberOfArmies == 3){
 					System.out.println("Choose if you would like to roll 1 or 2 Dice:");
 					while(input == 0) {
-						input = keyboard.nextInt();
-						if(input != 1 || input != 2) {
+						input = Integer.parseInt(keyboard.nextLine().trim());
+						if(!(input == 1 || input == 2)) {
 							System.out.println("You can only choose between 1 or 2 Dice:");
 							input = 0;
 						}
@@ -475,8 +476,8 @@ public class Player extends Observable {
 				else {
 					System.out.println("Choose if you would like to roll 1 or 2 or 3 Dice:");
 					while(input == 0) {
-						input = keyboard.nextInt();
-						if(input != 1 || input != 2 || input != 3) {
+						input = Integer.parseInt(keyboard.nextLine().trim());
+						if(!(input == 1 || input == 2 || input == 3)) {
 							System.out.println("You can only choose between 1 or 2 or 3 Dice:");
 							input = 0;
 						}
@@ -497,13 +498,14 @@ public class Player extends Observable {
 					}
 				}
 			}
-			if(numberOfArmies == 2)
+			if(numberOfArmies == 1) {
 				return 1;
+			}
 			else {
 				System.out.println("Choose if you would like to roll 1 or 2 Dice:");
 				while(input == 0) {
-					input = keyboard.nextInt();
-					if(input != 1 || input != 2) {
+					input = Integer.parseInt(keyboard.nextLine().trim());
+					if(!(input == 1 || input == 2)) {
 						System.out.println("You can only choose between 1 or 2 Dice:");
 						input = 0;
 					}
@@ -523,7 +525,7 @@ public class Player extends Observable {
 	 * @return values of the dice a object defined in a method.
 	 */
 	public Vector<Integer> rollDice(int numberOfDice){
-		Vector<Integer> diceValues = new Vector(numberOfDice);
+		Vector<Integer> diceValues = new Vector<Integer>(numberOfDice);
 		Random r = new Random();
 		while(numberOfDice != 0) {
 			diceValues.addElement(r.nextInt((6 - 1) + 1) + 1);
@@ -563,6 +565,7 @@ public class Player extends Observable {
 		}		
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * The method will check the number of armies in 
 	 * the defender whether zero or not.
@@ -574,6 +577,11 @@ public class Player extends Observable {
 	 * @return true if all the conditions passes otherwise
 	 * return's false.
 	 */
+=======
+	
+	
+	/**CHECK IF THE NUMBER OF ARMIES OF THE DEFENDER IS ZERO**/
+>>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -587,6 +595,7 @@ public class Player extends Observable {
 		return false;
 	}
 	
+<<<<<<< HEAD
 	/**
 	 * The method will move armies to new territory 
 	 * conquered only if defender looses it.
@@ -597,6 +606,24 @@ public class Player extends Observable {
 	 * 
 	 * @param numberOfArmiesToMove a integer value will have number of armies to move value in it.
 	 */
+=======
+	/**CHECK THE NUMBER OF ARMIES LEFT WITH THE COUNTRY WHILE THE ATTACK IS IN PROGRESS**/
+	public Vector<Integer> returnArmiesLeft(String attackerCounter, String defenderCountry) {
+		Vector<Integer> armies = new Vector<>();
+		for(Territory territory : assignedTerritories) {
+			if(territory.name.equalsIgnoreCase(attackerCounter)) {
+				armies.add(0, territory.numberOfArmies);
+				for(Territory neighbor : territory.neighbours) {
+					if(neighbor.name.equalsIgnoreCase(defenderCountry))
+						armies.add(1, neighbor.numberOfArmies);
+				}
+			}
+		}
+		return armies;
+	}
+	
+	/**MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES**/
+>>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -610,8 +637,10 @@ public class Player extends Observable {
 					if(neighbor.name.equalsIgnoreCase(defenderCountry)) {
 						neighbor.numberOfArmies = numberOfArmiesToMove;
 						assignedTerritories.add(neighbor);
+						break;
 					}
 				}
+				break;
 			}
 		}
 	}
@@ -628,8 +657,9 @@ public class Player extends Observable {
 		boolean attackDone = false;	
 		boolean gameCompleted = false;	
 		Scanner keyboard = new Scanner(System.in);
-		System.out.println("Do you want to go ahead with the attack? Enter y for yes and n for no:");
+		System.out.println("Do you want to go ahead with the attack? Enter yes or no:");
 		String answer = keyboard.nextLine();
+<<<<<<< HEAD
 		if(answer.equalsIgnoreCase("y")) {
 			do {
 				System.out.println("Enter the country you want to attack from");
@@ -640,18 +670,51 @@ public class Player extends Observable {
 					keyboard.close();
 					if(validOpponentCountry(attackfrom, attackat)) {
 						boolean finishedAttackingThatTerritory = false;		
+=======
+		if(answer.equalsIgnoreCase("yes")) {
+			//boolean doneFlag1 = false;
+			do {
+				System.out.println("Enter the country you want to attack from (Enter 'exit' to skip attack phase)");
+				String attackFrom = keyboard.nextLine();
+				if(attackFrom.equalsIgnoreCase("exit")) {
+					attackDone = true;
+					break;
+				}
+				if(canattackFromThisCountry(attackFrom)) {
+					System.out.println("Enter the country you want to attack (Enter 'exit' to skip attack phase)");
+					String attackAt = keyboard.nextLine();
+					if(attackAt.equalsIgnoreCase("exit")) {
+						attackDone = true;
+						break;
+					}
+					if(validOpponentCountry(attackFrom, attackAt)) {
+						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
+>>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 						 do {
-							String opponent = opponentPlayer(attackfrom, attackat);
-							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackfrom, attackat));
-							Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackfrom, attackat));
+							Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
+							System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
+							String opponent = opponentPlayer(attackFrom, attackAt);
+							System.out.println("Choose Attacker's number of dice");
+							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt));
+							System.out.println("Choose Defender's number of dice");
+							Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt));
 							while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
 								int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
 								int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
 								if(attackerDiceValue > defenderDiceValue) {
+<<<<<<< HEAD
 									reduceArmy("defender", attackfrom, attackat);
 									if(checkDefenderArmiesNumberZero(attackfrom, attackat)) {
 										System.out.println("Enter the number of armies you would like to place in your new territory:");
 										moveArmiesToNewTerritory(attackfrom, attackat, keyboard.nextInt());
+=======
+									reduceArmy("defender", attackFrom, attackAt);
+									//check if the opponent lost
+									if(checkDefenderArmiesNumberZero(attackFrom, attackAt)) {
+										System.out.println("Enter the number of armies you would like to place in your new territory:");
+										moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
+										//remove this territory from the players list
+>>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 										for(Player player : Main.players) {
 											if(player.name.equalsIgnoreCase(opponent)) {
 												for(Territory territory : Main.activeMap.territories) {
@@ -668,9 +731,14 @@ public class Player extends Observable {
 									}
 								}
 								else {
+<<<<<<< HEAD
 									reduceArmy("attacker", attackfrom, attackat);
+=======
+									reduceArmy("attacker", attackFrom, attackAt);
+									//check if you lost
+>>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 									for(Territory territory : assignedTerritories) {
-										if(territory.name.equalsIgnoreCase(attackfrom)) {
+										if(territory.name.equalsIgnoreCase(attackFrom)) {
 											if(territory.numberOfArmies == 0) {
 												territory.numberOfArmies = 1;
 												attackDone = true;
@@ -692,11 +760,13 @@ public class Player extends Observable {
 				else {
 					System.out.println("Enter a valid country you would like to attack from");
 				}
-				if(!gameCompleted) {
-					System.out.println("Do you want to continue with the attack? Enter y if yes or n if no");
+				if(!gameCompleted && attackDone) {
+					System.out.println("Do you want to continue with the attack? Enter yes or no");
 					String input = keyboard.nextLine();
-					if(input.equalsIgnoreCase("n"))
+					if(input.equalsIgnoreCase("no"))
 						attackDone = true;
+					if(input.equalsIgnoreCase("yes"))
+						attackDone = false;
 				}
 			}while(!attackDone);
 		}
@@ -802,9 +872,13 @@ public class Player extends Observable {
 	 * @param cardIndex3 a integer value.
 	 */
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
-		cards.remove(cardIndex1 - 1);
-		cards.remove(cardIndex2 - 1);
-		cards.remove(cardIndex3 - 1);
+		Card card1 = cards.get(cardIndex1 - 1);
+		Card card2 = cards.get(cardIndex2 - 1);
+		Card card3 = cards.get(cardIndex3 - 1);
+		
+		cards.remove(card1);
+		cards.remove(card2);
+		cards.remove(card3);
 		Card.cardExchangeValue += 5;
 	}
 	
