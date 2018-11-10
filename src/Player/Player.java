@@ -565,7 +565,7 @@ public class Player extends Observable {
 		}		
 	}
 	
-<<<<<<< HEAD
+
 	/**
 	 * The method will check the number of armies in 
 	 * the defender whether zero or not.
@@ -577,11 +577,6 @@ public class Player extends Observable {
 	 * @return true if all the conditions passes otherwise
 	 * return's false.
 	 */
-=======
-	
-	
-	/**CHECK IF THE NUMBER OF ARMIES OF THE DEFENDER IS ZERO**/
->>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -595,7 +590,6 @@ public class Player extends Observable {
 		return false;
 	}
 	
-<<<<<<< HEAD
 	/**
 	 * The method will move armies to new territory 
 	 * conquered only if defender looses it.
@@ -604,10 +598,8 @@ public class Player extends Observable {
 	 * 
 	 * @param defenderCountry will have string value type in it.
 	 * 
-	 * @param numberOfArmiesToMove a integer value will have number of armies to move value in it.
+	 * @return returns a vector of number of armies left
 	 */
-=======
-	/**CHECK THE NUMBER OF ARMIES LEFT WITH THE COUNTRY WHILE THE ATTACK IS IN PROGRESS**/
 	public Vector<Integer> returnArmiesLeft(String attackerCounter, String defenderCountry) {
 		Vector<Integer> armies = new Vector<>();
 		for(Territory territory : assignedTerritories) {
@@ -622,8 +614,16 @@ public class Player extends Observable {
 		return armies;
 	}
 	
-	/**MOVE ARMIES TO NEW TERRITORY CONQUERED IF DEFENDER LOOSES**/
->>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
+	/**
+	 * The method will move armies to new territory 
+	 * conquered only if defender looses it.
+	 * 
+	 * @param attackerCounter will have string value type in it.
+	 * 
+	 * @param defenderCountry will have string value type in it.
+	 * 
+	 * @param numberOfArmiesToMove a integer value will have number of armies to move value in it.
+	 */
 	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
 		for(Territory territory : assignedTerritories) {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
@@ -653,24 +653,11 @@ public class Player extends Observable {
 	 * 
 	 */
 	public void attack() {
-		
-		boolean attackDone = false;	
-		boolean gameCompleted = false;	
+		boolean attackDone = false;		//if all territories are conquered or attack lost	
+		boolean gameCompleted = false;		//if all territories are conquered
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Do you want to go ahead with the attack? Enter yes or no:");
 		String answer = keyboard.nextLine();
-<<<<<<< HEAD
-		if(answer.equalsIgnoreCase("y")) {
-			do {
-				System.out.println("Enter the country you want to attack from");
-				String attackfrom = keyboard.nextLine();
-				if(canAttackFromThisCountry(attackfrom)) {
-					System.out.println("Enter the country you want to attack");
-					String attackat = keyboard.nextLine();
-					keyboard.close();
-					if(validOpponentCountry(attackfrom, attackat)) {
-						boolean finishedAttackingThatTerritory = false;		
-=======
 		if(answer.equalsIgnoreCase("yes")) {
 			//boolean doneFlag1 = false;
 			do {
@@ -689,7 +676,6 @@ public class Player extends Observable {
 					}
 					if(validOpponentCountry(attackFrom, attackAt)) {
 						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
->>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 						 do {
 							Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
 							System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
@@ -702,20 +688,14 @@ public class Player extends Observable {
 								int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
 								int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
 								if(attackerDiceValue > defenderDiceValue) {
-<<<<<<< HEAD
-									reduceArmy("defender", attackfrom, attackat);
-									if(checkDefenderArmiesNumberZero(attackfrom, attackat)) {
-										System.out.println("Enter the number of armies you would like to place in your new territory:");
-										moveArmiesToNewTerritory(attackfrom, attackat, keyboard.nextInt());
-=======
 									reduceArmy("defender", attackFrom, attackAt);
 									//check if the opponent lost
 									if(checkDefenderArmiesNumberZero(attackFrom, attackAt)) {
 										System.out.println("Enter the number of armies you would like to place in your new territory:");
 										moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
 										//remove this territory from the players list
->>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 										for(Player player : Main.players) {
+											//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
 											if(player.name.equalsIgnoreCase(opponent)) {
 												for(Territory territory : Main.activeMap.territories) {
 													player.assignedTerritories.remove(territory);
@@ -723,6 +703,7 @@ public class Player extends Observable {
 											}
 										}
 										finishedAttackingThatTerritory = true;
+										//if all territories are owned by a single user
 										if(Main.activeMap.allTerritoriesOwnBySinglePlayer()) {
 											gameCompleted = true;
 											attackDone = true;
@@ -731,12 +712,8 @@ public class Player extends Observable {
 									}
 								}
 								else {
-<<<<<<< HEAD
-									reduceArmy("attacker", attackfrom, attackat);
-=======
 									reduceArmy("attacker", attackFrom, attackAt);
 									//check if you lost
->>>>>>> 47c8543a4d92d5b0ea6d75e3a35a20ebe1d708fc
 									for(Territory territory : assignedTerritories) {
 										if(territory.name.equalsIgnoreCase(attackFrom)) {
 											if(territory.numberOfArmies == 0) {
@@ -747,7 +724,7 @@ public class Player extends Observable {
 											}
 										}
 									}
-									if(attackDone)	
+									if(attackDone)	//to get out of while loop
 										break;
 								}
 							}
