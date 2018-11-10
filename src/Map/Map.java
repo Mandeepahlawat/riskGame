@@ -69,13 +69,18 @@ public class Map extends Observable {
 	 * The method will display all territories owned
 	 * by a single player in the game.
 	 * 
+	 * @param notifyObserver a boolean value if you want
+	 * to notify the observers or not
+	 * 
 	 * @return true if it satisfies all the conditions 
 	 * otherwise it will return false. 
 	 *  
 	 */
-	public boolean allTerritoriesOwnBySinglePlayer() {
-		setChanged();
-		notifyObservers(this);
+	public boolean allTerritoriesOwnBySinglePlayer(boolean notifyObserver) {
+		if(notifyObserver) {
+			setChanged();
+			notifyObservers(this);
+		}
 		ArrayList<String> ownerNames = new ArrayList<String>();
 		for (Territory territory : territories) {
 			if (ownerNames.isEmpty()) {

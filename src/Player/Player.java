@@ -447,20 +447,21 @@ public class Player extends Observable {
 	 * 
 	 * @return input provided in the method which is initialized to zero.
 	 */
-	public int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry) {
+	public int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry, String isAllOut) {
 		Scanner keyboard = new Scanner(System.in);
 		int input = 0;
 		if(status.equalsIgnoreCase("attacker")) {
 			int numberOfArmies = 0;
-			System.out.println("Do you want to go ALL-OUT? Enter yes or no:");
-			String isAllOut = keyboard.nextLine();
+			//System.out.println("Do you want to go ALL-OUT? Enter yes or no:");
+			//String isAllOut = keyboard.nextLine();
 			if(isAllOut.equalsIgnoreCase("no")) {
 				for(Territory territory : assignedTerritories) {
 					if(territory.name.equalsIgnoreCase(attackerCounter)){
 						numberOfArmies = territory.numberOfArmies;			
 					}
 				}
-				if(numberOfArmies == 2) {
+				if(numberOfArmies == 2 || numberOfArmies == 1) {
+					System.out.println("1 Dice chosen by default");
 					return 1;
 				}
 				else if(numberOfArmies == 3){
@@ -485,30 +486,62 @@ public class Player extends Observable {
 				}
 			}
 			else {
-				return 3;
+				for(Territory territory : assignedTerritories) {
+					if(territory.name.equalsIgnoreCase(attackerCounter)){
+						numberOfArmies = territory.numberOfArmies;			
+					}
+				}
+				if(numberOfArmies == 2 || numberOfArmies == 1) {
+					return 1;
+				}
+				else if(numberOfArmies == 3){
+					return 2;
+				}
+				else {
+					return 3;
+				}
 			}
 		}
 		else {
 			int numberOfArmies = 0;
-			for(Territory territory : assignedTerritories) {
-				if(territory.name.equalsIgnoreCase(attackerCounter)) {
-					for(Territory neighbor : territory.neighbours) {
-						if(neighbor.name.equalsIgnoreCase(defenderCountry))
-							numberOfArmies = neighbor.numberOfArmies;
+			if(isAllOut.equalsIgnoreCase("no")) {
+				for(Territory territory : assignedTerritories) {
+					if(territory.name.equalsIgnoreCase(attackerCounter)) {
+						for(Territory neighbor : territory.neighbours) {
+							if(neighbor.name.equalsIgnoreCase(defenderCountry))
+								numberOfArmies = neighbor.numberOfArmies;
+						}
+					}
+				}
+				if(numberOfArmies == 1) {
+					System.out.println("1 Dice chosen by default");
+					return 1;
+				}
+				else {
+					System.out.println("Choose if you would like to roll 1 or 2 Dice:");
+					while(input == 0) {
+						input = Integer.parseInt(keyboard.nextLine().trim());
+						if(!(input == 1 || input == 2)) {
+							System.out.println("You can only choose between 1 or 2 Dice:");
+							input = 0;
+						}
 					}
 				}
 			}
-			if(numberOfArmies == 1) {
-				return 1;
-			}
 			else {
-				System.out.println("Choose if you would like to roll 1 or 2 Dice:");
-				while(input == 0) {
-					input = Integer.parseInt(keyboard.nextLine().trim());
-					if(!(input == 1 || input == 2)) {
-						System.out.println("You can only choose between 1 or 2 Dice:");
-						input = 0;
+				for(Territory territory : assignedTerritories) {
+					if(territory.name.equalsIgnoreCase(attackerCounter)) {
+						for(Territory neighbor : territory.neighbours) {
+							if(neighbor.name.equalsIgnoreCase(defenderCountry))
+								numberOfArmies = neighbor.numberOfArmies;
+						}
 					}
+				}
+				if(numberOfArmies == 1) {
+					return 1;
+				}
+				else {
+					return 2;
 				}
 			}
 		}
@@ -676,59 +709,116 @@ public class Player extends Observable {
 					}
 					if(validOpponentCountry(attackFrom, attackAt)) {
 						boolean finishedAttackingThatTerritory = false;		//finished attacking the present territory
-						 do {
-							Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
-							System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
-							String opponent = opponentPlayer(attackFrom, attackAt);
-							System.out.println("Choose Attacker's number of dice");
-							Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt));
-							System.out.println("Choose Defender's number of dice");
-							Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt));
-							while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
-								int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
-								int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
-								if(attackerDiceValue > defenderDiceValue) {
-									reduceArmy("defender", attackFrom, attackAt);
-									//check if the opponent lost
-									if(checkDefenderArmiesNumberZero(attackFrom, attackAt)) {
-										System.out.println("Enter the number of armies you would like to place in your new territory:");
-										moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
-										//remove this territory from the players list
-										for(Player player : Main.players) {
-											//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
-											if(player.name.equalsIgnoreCase(opponent)) {
-												for(Territory territory : Main.activeMap.territories) {
-													player.assignedTerritories.remove(territory);
+						System.out.println("Do you want to go ALLOUT?: Enter yes or no");
+						String isAllOut = keyboard.nextLine();
+						if(isAllOut.equalsIgnoreCase("no")) {
+							 do {
+								Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
+								System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
+								String opponent = opponentPlayer(attackFrom, attackAt);
+								System.out.println("Choose Attacker's number of dice");
+								Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, "no"));
+								System.out.println("Choose Defender's number of dice");
+								Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, "no"));
+								while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+									int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
+									if(attackerDiceValue > defenderDiceValue) {
+										reduceArmy("defender", attackFrom, attackAt);
+										//check if the opponent lost
+										if(checkDefenderArmiesNumberZero(attackFrom, attackAt)) {
+											System.out.println("Enter the number of armies you would like to place in your new territory:");
+											moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
+											//remove this territory from the players list
+											for(Player player : Main.players) {
+												//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
+												if(player.name.equalsIgnoreCase(opponent)) {
+													for(Territory territory : Main.activeMap.territories) {
+														player.assignedTerritories.remove(territory);
+													}
+												}
+											}
+											finishedAttackingThatTerritory = true;
+											//if all territories are owned by a single user
+											if(Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
+												gameCompleted = true;
+												attackDone = true;
+											}
+											break;
+										}
+									}
+									else {
+										reduceArmy("attacker", attackFrom, attackAt);
+										//check if you lost
+										for(Territory territory : assignedTerritories) {
+											if(territory.name.equalsIgnoreCase(attackFrom)) {
+												if(territory.numberOfArmies == 0) {
+													territory.numberOfArmies = 1;
+													attackDone = true;
+													finishedAttackingThatTerritory = true;
+													break;
 												}
 											}
 										}
-										finishedAttackingThatTerritory = true;
-										//if all territories are owned by a single user
-										if(Main.activeMap.allTerritoriesOwnBySinglePlayer()) {
-											gameCompleted = true;
-											attackDone = true;
-										}
-										break;
+										if(attackDone)	//to get out of while loop
+											break;
 									}
 								}
-								else {
-									reduceArmy("attacker", attackFrom, attackAt);
-									//check if you lost
-									for(Territory territory : assignedTerritories) {
-										if(territory.name.equalsIgnoreCase(attackFrom)) {
-											if(territory.numberOfArmies == 0) {
-												territory.numberOfArmies = 1;
+							} while(!finishedAttackingThatTerritory);
+						}
+						else {
+							do {
+								Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
+								System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
+								String opponent = opponentPlayer(attackFrom, attackAt);
+								Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, "yes"));
+								Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, "yes"));
+								while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+									int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
+									if(attackerDiceValue > defenderDiceValue) {
+										reduceArmy("defender", attackFrom, attackAt);
+										//check if the opponent lost
+										if(checkDefenderArmiesNumberZero(attackFrom, attackAt)) {
+											System.out.println("Enter the number of armies you would like to place in your new territory:");
+											moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
+											//remove this territory from the players list
+											for(Player player : Main.players) {
+												//VERIFY IF THE TERRITORY IS REMOVED ONLY FROM THE LOST DEFENDERS TERRITORIES LIST
+												if(player.name.equalsIgnoreCase(opponent)) {
+													for(Territory territory : Main.activeMap.territories) {
+														player.assignedTerritories.remove(territory);
+													}
+												}
+											}
+											finishedAttackingThatTerritory = true;
+											//if all territories are owned by a single user
+											if(Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
+												gameCompleted = true;
 												attackDone = true;
-												finishedAttackingThatTerritory = true;
-												break;
+											}
+											break;
+										}
+									}
+									else {
+										reduceArmy("attacker", attackFrom, attackAt);
+										//check if you lost
+										for(Territory territory : assignedTerritories) {
+											if(territory.name.equalsIgnoreCase(attackFrom)) {
+												if(territory.numberOfArmies == 0) {
+													territory.numberOfArmies = 1;
+													attackDone = true;
+													finishedAttackingThatTerritory = true;
+													break;
+												}
 											}
 										}
+										if(attackDone)	//to get out of while loop
+											break;
 									}
-									if(attackDone)	//to get out of while loop
-										break;
 								}
-							}
-						} while(!finishedAttackingThatTerritory);
+							} while(!finishedAttackingThatTerritory);
+						}
 					}
 					else {
 						System.out.println("Enter a valid country you would like to attack");
@@ -737,7 +827,7 @@ public class Player extends Observable {
 				else {
 					System.out.println("Enter a valid country you would like to attack from");
 				}
-				if(!gameCompleted && attackDone) {
+				if(!gameCompleted && !attackDone) {
 					System.out.println("Do you want to continue with the attack? Enter yes or no");
 					String input = keyboard.nextLine();
 					if(input.equalsIgnoreCase("no"))

@@ -478,7 +478,7 @@ public class Main {
 		mainView = new MainView();
 		mainView.startupPhaseView();
 		
-		while(!activeMap.allTerritoriesOwnBySinglePlayer()) {
+		while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
 			for(Player player : players) {
 				player.setCurrentGamePhase(GamePhase.REINFORCEMENT);	
 			}
