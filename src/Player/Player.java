@@ -771,9 +771,7 @@ public class Player extends Observable {
 								Vector<Integer> armies = returnArmiesLeft(attackFrom, attackAt);
 								System.out.println(attackFrom + ":" + armies.get(0) +   " vs " + attackAt + ":" + armies.get(1));
 								String opponent = opponentPlayer(attackFrom, attackAt);
-								System.out.println("Choose Attacker's number of dice");
 								Vector<Integer> attackerDice = rollDice(calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, "yes"));
-								System.out.println("Choose Defender's number of dice");
 								Vector<Integer> defenderDice = rollDice(calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, "yes"));
 								while(!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
 									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
@@ -829,7 +827,7 @@ public class Player extends Observable {
 				else {
 					System.out.println("Enter a valid country you would like to attack from");
 				}
-				if(!gameCompleted && attackDone) {
+				if(!gameCompleted && !attackDone) {
 					System.out.println("Do you want to continue with the attack? Enter yes or no");
 					String input = keyboard.nextLine();
 					if(input.equalsIgnoreCase("no"))
