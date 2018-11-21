@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Stack;
 
+import Card.Card;
 import Driver.Main;
 import Map.Map;
 import Map.Map.Territory;
@@ -90,6 +91,18 @@ public class WorldDominationView implements Observer {
 			else {
 				System.out.println(player.getName() + " doesn't own any continents");
 			}
+			
+			if(player.cards.isEmpty()) {
+				System.out.println("Player doesn't have any cards yet.");
+			}
+			else {
+				System.out.println("Player has following "
+						+ player.cards.size() + " cards.");
+				for(Card card : player.cards) {
+					System.out.println(card);
+				}
+			}
+			
 			System.out.println("====================================================");
 		}
 	}

@@ -1,5 +1,6 @@
 package Views;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import Driver.Main;
@@ -229,5 +230,33 @@ public Scanner keyboard;
 			playersCount = Integer.parseInt(keyboard.nextLine());
 		} while(playersCount >= Main.activeMap.territories.size());
 		return playersCount;
+	}
+	
+	/**
+	 * this method will display ask user to select 
+	 * one of the strategies for the player
+	 * 
+	 * @return the number of count of players.
+	 */
+	public String playerStrategyView() {
+		String playerStrategy = null;
+		ArrayList<String> validStrategies = new ArrayList<String>();
+		validStrategies.add("Human");
+		validStrategies.add("Aggressive");
+		validStrategies.add("Benevolent");
+		validStrategies.add("Random");
+		validStrategies.add("Cheater");
+		validStrategies.add("human");
+		validStrategies.add("aggressive");
+		validStrategies.add("benevolent");
+		validStrategies.add("random");
+		validStrategies.add("cheater");
+		while(playerStrategy == null || !validStrategies.contains(playerStrategy)) {
+			System.out.println("\nEnter the strategy for this player."
+					+ "\n(Note: the valid options are: Human, Aggressive, Benevolent"
+					+ ", Random, Cheater)");
+			playerStrategy = keyboard.nextLine();
+		}
+		return playerStrategy;
 	}
 }

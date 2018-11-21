@@ -1,5 +1,6 @@
 package Card;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import Map.Map.Territory;
@@ -66,6 +67,12 @@ public class Card {
 	public Player owner;
 	
 	/**
+	 * player names which all have owned this
+	 * territory card.
+	 */
+	public ArrayList<Player> previousOwners;
+	
+	/**
 	* This is the default constructor of the Card class and will be used to
 	* create the cardtype and territory 
 	* 
@@ -74,7 +81,34 @@ public class Card {
 	public Card(Territory territory) {
 		this.type = CardType.getRandomCard();
 		this.territory = territory;
-		this.owner = territory.owner;
+	}
+	
+	
+	/**
+	 * This method assigns the owner of the card to the player class
+	 * object passed as the parameter, it also adds the card to the player
+	 * cards list
+	 * @param player player class object whom we want to assign the card
+	 */
+	public void assignPlayer(Player player) {
+		this.owner = player;
+		player.cards.add(this);
+		this.previousOwners.add(player);
+	}
+	
+	/**
+	 * This method check if the card can be assigned to a
+	 * particular player or not
+	 * 
+	 * @param player player class object whom we want to assign the card
+	 * @return true or false depending on whether the player previous
+	 * owned this card or not
+	 */
+	public boolean canAssignedToPlayer(Player player) {
+		if(this.previousOwners.contains(player)) {
+			return false;
+		}
+		return true;
 	}
 	
 	/**

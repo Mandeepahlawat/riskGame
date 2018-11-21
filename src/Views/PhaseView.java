@@ -32,7 +32,7 @@ public class PhaseView implements Observer {
 		System.out.println("\n***********************"
 							+ player.getName()
 							+ " REINFORCEMENT PHASE BEGINS*****************************\n");
-		player.placeReinforcements(player.calculateReinforcementArmies());
+		player.reinforcement();
 	}
 	
 	/**

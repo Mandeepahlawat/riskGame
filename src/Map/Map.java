@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Stack;
 
+import Card.Card;
 import Player.Player;
 
 /**
@@ -174,7 +175,7 @@ public class Map extends Observable {
 	 * @return true if the map is connected.
 	 */
 	public boolean validateMap() {
-		this.territories.addAll(listOfAllTerritories);
+//		this.territories.addAll(listOfAllTerritories);
 		Stack<Territory> stack = new Stack<>();
 		stack.push(this.territories.get(0));
 		while (!stack.isEmpty()) {
@@ -205,13 +206,25 @@ public class Map extends Observable {
 			}
 		}
 
-		for (Map continentBeingVisited : this.continents) {
-			if (!continentBeingVisited.visited) {
-				System.out.println("INVALID MAP");
-				System.out.println(continentBeingVisited.name + " doesn't have any territory inside it");
-				return false;
+		if(this.continents != null) {
+			for (Map continentBeingVisited : this.continents) {
+				if (!continentBeingVisited.visited) {
+					System.out.println("INVALID MAP");
+					System.out.println(continentBeingVisited.name + " doesn't have any territory inside it");
+					return false;
+				}
+			}
+			
+			// call validateMap for each continent separately to check if
+			// continent is connected or not
+			for(Map continent : this.continents) {
+				if(!continent.validateMap()) {
+					System.out.println(continent.name + " is not valid as it's not connected");
+					return false;
+				}
 			}
 		}
+		
 
 		return true;
 	}
@@ -229,6 +242,7 @@ public class Map extends Observable {
 		public boolean visited = false;
 		public Player owner;
 		public int numberOfArmies;
+		public Card card;
 
 		/**
 		 * This method is the constructor of the Territory class.
@@ -241,6 +255,7 @@ public class Map extends Observable {
 			this.name = name;
 			this.continent = null;
 			this.neighbours = new ArrayList<Territory>();
+			this.card = new Card(this);
 			listOfAllTerritories.add(this);
 		}
 

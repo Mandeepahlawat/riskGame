@@ -15,8 +15,13 @@ import java.nio.file.Path;
 
 import Map.Map;
 import Map.Map.Territory;
+import Player.Aggressive;
+import Player.Benevolent;
+import Player.Cheater;
+import Player.Human;
 import Player.Player;
 import Player.Player.GamePhase;
+import Player.RandomStrategy;
 import Views.MainView;
 import Views.PhaseView;
 import Views.WorldDominationView;
@@ -443,12 +448,35 @@ public class Main {
 	public static void startUp() {
 		mapSelection();
 		buildMap();
+		activeMap.territories.addAll(Map.listOfAllTerritories);
 		if(activeMap.validateMap()) {
 			Main.players = new ArrayList<Player>();
 			int playersCount = mainView.playerCountView();		
 			
 			for(int i = 0; i < playersCount; ++i) {
 				Player player = new Player("Player" + i);
+				String stratgey = mainView.playerStrategyView();
+				
+				switch(stratgey.toLowerCase()) {
+					case "human":
+						player.setPlayerStrategy(new Human(player));
+						break;
+					case "aggressive":
+						player.setPlayerStrategy(new Aggressive(player));
+						break;
+					case "benevolent":
+						player.setPlayerStrategy(new Benevolent(player));
+						break;
+					case "random":
+						player.setPlayerStrategy(new RandomStrategy(player));
+						break;
+					case "cheater":
+						player.setPlayerStrategy(new Cheater(player));
+						break;
+				}
+				
+				
+				
 				PhaseView view = new PhaseView();
 				player.addObserver(view);
 				players.add(player);
