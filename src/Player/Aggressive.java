@@ -60,11 +60,11 @@ public class Aggressive implements Strategy {
 	@Override
 	public void placeReinforcements(int reinforcements) {
 		Territory territory = player.territoryWithMaxArmy(player.assignedTerritories);
+		System.out.println("\nPlayer " + player.getName() + " places " + reinforcements
+				+ " in " + territory.name + " as this has maximum armies");
 		System.out.println("Armies count before move: " + territory.name + ": " + territory.numberOfArmies
 				+ " armies");
 		territory.numberOfArmies += reinforcements;
-		System.out.println("\nPlayer " + player.getName() + " places " + reinforcements
-				+ " in " + territory.name);
 		System.out.println("Armies count after move: " + territory.name + ": " + territory.numberOfArmies
 				+ " armies");
 	}

@@ -1006,10 +1006,23 @@ public class Player extends Observable {
 		int maxArmies = 0;
 		for(Territory territory : territories) {
 			if(territory.numberOfArmies >= maxArmies) {
+				maxArmies = territory.numberOfArmies;
 				territoryWithMaxArmy = territory;
 			}
 		}
 		return territoryWithMaxArmy;
+	}
+	
+	public Territory territoryWithMinArmy(ArrayList<Territory> territories) {
+		Territory territoryWithMinArmy = null;
+		int minArmies = Integer.MAX_VALUE;
+		for(Territory territory : territories) {
+			if(territory.numberOfArmies <= minArmies) {
+				minArmies = territory.numberOfArmies;
+				territoryWithMinArmy = territory;
+			}
+		}
+		return territoryWithMinArmy;
 	}
 	
 	/**
