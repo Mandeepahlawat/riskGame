@@ -260,28 +260,28 @@ public class Human implements Strategy {
 								break;
 							} else {
 								Vector<Integer> attackerDice, defenderDice;
-//								if (allOutMode) {
-//									attackerDice = rollDice(
-//											player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, allOutMode));
-//									defenderDice = rollDice(
-//											player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, allOutMode));
-//								} else {
-//									System.out.println("Choose Attacker's number of dice");
-//									attackerDice = rollDice(
-//											player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, allOutMode));
-//									System.out.println("Choose Defender's number of dice");
-//									defenderDice = rollDice(
-//											player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, allOutMode));
-//								}
-//								while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
-//									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
-//									int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
-//									if (attackerDiceValue > defenderDiceValue) {
-//										player.reduceArmy("defender", attackFrom, attackAt);
-//									} else {
-//										player.reduceArmy("attacker", attackFrom, attackAt);
-//									}
-//								}
+								if (allOutMode) {
+									attackerDice = player.rollDice(
+											player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, allOutMode));
+									defenderDice = player.rollDice(
+											player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, allOutMode));
+								} else {
+									System.out.println("Choose Attacker's number of dice");
+									attackerDice = player.rollDice(
+											player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, allOutMode));
+									System.out.println("Choose Defender's number of dice");
+									defenderDice = player.rollDice(
+											player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, allOutMode));
+								}
+								while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+									int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
+									if (attackerDiceValue > defenderDiceValue) {
+										player.reduceArmy("defender", attackFrom, attackAt);
+									} else {
+										player.reduceArmy("attacker", attackFrom, attackAt);
+									}
+								}
 							}
 						}
 					} else {
