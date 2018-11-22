@@ -81,6 +81,7 @@ public class Card {
 	public Card(Territory territory) {
 		this.type = CardType.getRandomCard();
 		this.territory = territory;
+		this.previousOwners = new ArrayList<Player>();
 	}
 	
 	
@@ -91,6 +92,7 @@ public class Card {
 	 * @param player player class object whom we want to assign the card
 	 */
 	public void assignPlayer(Player player) {
+		System.out.println(player.getName() + " get a card of type: " + this.type);
 		this.owner = player;
 		player.cards.add(this);
 		this.previousOwners.add(player);

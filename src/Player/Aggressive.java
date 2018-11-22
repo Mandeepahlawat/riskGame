@@ -83,8 +83,7 @@ public class Aggressive implements Strategy {
 			territory = player.territoryWithMaxArmy(territories);
 		}
 		
-		territories.remove(territory);
-		Territory adjacentTerritoryWithMaxArmy = player.territoryWithMaxArmy(territories);
+		Territory adjacentTerritoryWithMaxArmy = player.territoryWithMaxArmy(territory.neighbours);
 		
 		int armiesToMove = adjacentTerritoryWithMaxArmy.numberOfArmies - 1;
 		

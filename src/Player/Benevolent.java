@@ -75,14 +75,13 @@ public class Benevolent implements Strategy {
 		while(!player.validAssignedCountry(territory.name)) {
 			territories.remove(territory);
 			if(territories.isEmpty()) {
-				System.out.println("Player doesn't have any adjacent territories. Please run the program again.");
-				System.exit(0);
+				System.out.println("Player doesn't have any adjacent territories.");
+				return;
 			}
 			territory = player.territoryWithMinArmy(territories);
 		}
 		
-		territories.remove(territory);
-		Territory adjacentTerritoryWithMaxArmy = player.territoryWithMaxArmy(territories);
+		Territory adjacentTerritoryWithMaxArmy = player.territoryWithMaxArmy(territory.neighbours);
 		
 		int armiesToMove = adjacentTerritoryWithMaxArmy.numberOfArmies - 1;
 		

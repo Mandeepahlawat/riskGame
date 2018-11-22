@@ -2,6 +2,7 @@ package Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Observable;
 import java.util.Random;
 import java.util.Scanner;
@@ -1005,7 +1006,7 @@ public class Player extends Observable {
 		Territory territoryWithMaxArmy = null;
 		int maxArmies = 0;
 		for(Territory territory : territories) {
-			if(territory.numberOfArmies >= maxArmies) {
+			if(territory.numberOfArmies >= maxArmies && territory.owner == this) {
 				maxArmies = territory.numberOfArmies;
 				territoryWithMaxArmy = territory;
 			}
@@ -1017,13 +1018,53 @@ public class Player extends Observable {
 		Territory territoryWithMinArmy = null;
 		int minArmies = Integer.MAX_VALUE;
 		for(Territory territory : territories) {
-			if(territory.numberOfArmies <= minArmies) {
+			if(territory.numberOfArmies <= minArmies && territory.owner == this) {
 				minArmies = territory.numberOfArmies;
 				territoryWithMinArmy = territory;
 			}
 		}
 		return territoryWithMinArmy;
 	}
+	
+	public Territory getRandomTerritory(ArrayList<Territory> territories) {
+		return territories.get(new Random().nextInt(territories.size()));
+	}
+	
+	public HashSet<Territory> getTerritoriesWithNeighboursToOthers() {
+		HashSet<Territory> territories = new HashSet<Territory>(); 
+		for(Territory territory : assignedTerritories) {
+			for(Territory neighbour : territory.neighbours) {
+				if(neighbour.owner != this) {
+					territories.add(territory);
+					break;
+				}
+			}
+		}
+		return territories;
+	}
+	
+	public HashSet<Territory> getTerritoriesWithNeighboursToOthers(Territory territory) {
+		HashSet<Territory> territories = new HashSet<Territory>(); 
+		for(Territory neighbour : territory.neighbours) {
+			if(neighbour.owner != this) {
+				territories.add(neighbour);
+			}
+		}
+		return territories;
+	}
+	
+	public void addNewOwnedTerritory(Territory territory) {
+		Player previousOwner = territory.owner;
+		previousOwner.assignedTerritories.remove(territory);
+		previousOwner.totalArmiesCount -= territory.numberOfArmies;
+		territory.owner = this;
+		this.assignedTerritories.add(territory);
+		if(territory.card.canAssignedToPlayer(this)) {
+			territory.card.assignPlayer(this);
+		}
+	}
+	
+	
 	
 	/**
 	 * This method is used to automatically decides which
