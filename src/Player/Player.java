@@ -13,6 +13,7 @@ import Card.Card;
 import Card.Card.CardType;
 import Map.Map;
 import Map.Map.Territory;
+import Player.Player.GamePhase;
 
 /**
 * This class is used to create players,
@@ -231,6 +232,7 @@ public class Player extends Observable {
 	 */
 	public void reinforcement() {
 		playerStrategy.placeReinforcements(playerStrategy.calculateReinforcementArmies());
+		setCurrentGamePhase(GamePhase.ATTACK);
 	}
 	
 	/**
@@ -238,6 +240,7 @@ public class Player extends Observable {
 	 */
 	public void attack() {
 		playerStrategy.attack();
+//		setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 	
 	/**
@@ -988,14 +991,71 @@ public class Player extends Observable {
 	 * @param cardIndex3 a integer value.
 	 */
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
-		Card card1 = cards.get(cardIndex1 - 1);
-		Card card2 = cards.get(cardIndex2 - 1);
-		Card card3 = cards.get(cardIndex3 - 1);
+		Card card1 = cards.get(cardIndex1);
+		Card card2 = cards.get(cardIndex2);
+		Card card3 = cards.get(cardIndex3);
 		
 		cards.remove(card1);
 		cards.remove(card2);
 		cards.remove(card3);
 		Card.cardExchangeValue += 5;
+	}
+	
+	public Territory territoryWithMaxArmy(ArrayList<Territory> territories) {
+		Territory territoryWithMaxArmy = null;
+		int maxArmies = 0;
+		for(Territory territory : territories) {
+			if(territory.numberOfArmies >= maxArmies) {
+				territoryWithMaxArmy = territory;
+			}
+		}
+		return territoryWithMaxArmy;
+	}
+	
+	/**
+	 * This method is used to automatically decides which
+	 * combination of card indexes the player can exchange
+	 * @return an array list of card indexes
+	 */
+	public ArrayList<Integer> getCardIndexesToExchange() {
+		ArrayList<Integer> cardIndexes = new ArrayList<Integer>();
+		
+		if(cards.size() == 3) {
+			cardIndexes.add(0);
+			cardIndexes.add(1);
+			cardIndexes.add(2);
+		}
+		else {
+			ArrayList<CardType> cardTypes = new ArrayList<CardType>();
+			for(Card card : cards) {
+				cardTypes.add(card.type);
+			}
+			
+			for(Card card : cards) {
+				ArrayList<CardType> tempTypes = new ArrayList<CardType>(cardTypes);
+				int oldSize = tempTypes.size();
+				for(int i = 0; i < 3; ++i) {
+					tempTypes.remove(card.type);
+				}
+				int newSize = tempTypes.size();
+				if(newSize - oldSize >= 3) {
+					cardIndexes.clear();
+					for(int i = 0; i <= cardTypes.size(); ++i) {
+						if(cardIndexes.size() <= 3 && card.type.equals(cardTypes.get(i))) {
+							cardIndexes.add(i);							
+						}
+					}
+				}
+				else{
+					cardIndexes.add(cardTypes.indexOf(card.type));
+				}
+				if(cardIndexes.size() == 3) {
+					break;
+				}
+			}
+		}
+		
+		return cardIndexes;
 	}
 	
 	/**
@@ -1013,9 +1073,9 @@ public class Player extends Observable {
 	 * @return false if the given condition doesn't satifies.
 	 */
 	public boolean validCardIndexesToExchange(int cardIndex1, int cardIndex2, int cardIndex3) {
-		CardType cardType1 = cards.get(cardIndex1 - 1).type;
-		CardType cardType2 = cards.get(cardIndex2 - 1).type;
-		CardType cardType3 = cards.get(cardIndex3 - 1).type;
+		CardType cardType1 = cards.get(cardIndex1).type;
+		CardType cardType2 = cards.get(cardIndex2).type;
+		CardType cardType3 = cards.get(cardIndex3).type;
 		
 		if(cardType1 != cardType2) {
 			if(cardType2 != cardType3 && cardType1 != cardType3) {

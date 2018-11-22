@@ -111,7 +111,6 @@ public class Human implements Strategy{
 					}
 				}
 			}
-		player.setCurrentGamePhase(GamePhase.ATTACK);
 	}
 
 	/**

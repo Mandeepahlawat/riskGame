@@ -1,5 +1,7 @@
 package Player;
 
+import Player.Player.GamePhase;
+
 public class Benevolent implements Strategy {
 	/**
 	 * The player to which this strategy belongs to
@@ -35,8 +37,7 @@ public class Benevolent implements Strategy {
 
 	@Override
 	public void attack() {
-		// TODO Auto-generated method stub
-		
+		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 
 }
