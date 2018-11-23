@@ -245,7 +245,7 @@ public class Human implements Strategy {
 							System.out.println(
 									attackFrom + ":" + armies.get(0) + " vs " + attackAt + ":" + armies.get(1));
 							opponent = player.opponentPlayer(attackFrom, attackAt);
-							// attacker = attackingPlayer(attackFrom, attackAt);
+							attacker = player.attackingPlayer(attackFrom, attackAt);
 
 							if (armies.get(0) == 1) {
 								System.out.println("The attacker cannot proceed with the attack with just 1 army");
@@ -261,17 +261,17 @@ public class Human implements Strategy {
 							} else {
 								Vector<Integer> attackerDice, defenderDice;
 								if (allOutMode) {
-									attackerDice = player.rollDice(
-											player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, allOutMode));
-									defenderDice = player.rollDice(
-											player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, allOutMode));
+									attackerDice = player.rollDice(player.calculateNumberOfDiceAllowed("attacker",
+											attackFrom, attackAt, allOutMode));
+									defenderDice = player.rollDice(player.calculateNumberOfDiceAllowed("defender",
+											attackFrom, attackAt, allOutMode));
 								} else {
 									System.out.println("Choose Attacker's number of dice");
-									attackerDice = player.rollDice(
-											player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt, allOutMode));
+									attackerDice = player.rollDice(player.calculateNumberOfDiceAllowed("attacker",
+											attackFrom, attackAt, allOutMode));
 									System.out.println("Choose Defender's number of dice");
-									defenderDice = player.rollDice(
-											player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt, allOutMode));
+									defenderDice = player.rollDice(player.calculateNumberOfDiceAllowed("defender",
+											attackFrom, attackAt, allOutMode));
 								}
 								while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
 									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
@@ -292,8 +292,39 @@ public class Human implements Strategy {
 				}
 			}
 
+			if (defenderLost) {
+				for (Player player : Main.players) {
+					// remove territory from the defeated player's list
+					if (player.getName().equalsIgnoreCase(opponent)) {
+						for (Territory territory : Main.activeMap.territories) {
+							if (territory.name.equals(attackAt)) {
+								player.assignedTerritories.remove(territory);
+							}
+						}
+					}
+					// add territory to the conquerer's list
+					if (player.getName().equalsIgnoreCase(attacker)) {
+						for (Territory territory : Main.activeMap.territories) {
+							if (territory.name.equals(attackAt)) {
+								player.assignedTerritories.add(territory);
+							}
+						}
+					}
+					System.out.println("Enter the number of armies you would like to place in your new territory:");
+					player.moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
+				}
+			}
+
+			// if all territories are owned by a single user
+			if (Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
+				gameCompleted = true;
+				attackDone = true;
+			}
+
 			if (!gameCompleted) {
 				player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+			} else {
+				System.out.println("\nGame Completed!\n" + player.getName() + "wins!!");
 			}
 		}
 	}
