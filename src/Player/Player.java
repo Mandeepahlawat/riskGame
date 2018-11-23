@@ -461,6 +461,30 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 * The public method opponentPlayer will return name of 
+	 * the player who is present in neighbour country.  
+	 * 
+	 * @param fromCountry will have player present
+	 * country as a string value.
+	 * 
+	 * @param toCountry is a string value in which 
+	 * player mention's the name of the country to 
+	 * check neighbour.
+	 * 
+	 * @return name of the player in neighbour country 
+	 * only if it passes the conditions if not it will 
+	 * return null value.
+	 */
+	public String attackingPlayer(String fromCountry, String toCountry) {
+		for (Territory territory : assignedTerritories) {
+			if (territory.name.equalsIgnoreCase(fromCountry)) {
+				return territory.owner.name;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * The public method to check if a player can attack
 	 * from this country which is present here.
 	 * 
