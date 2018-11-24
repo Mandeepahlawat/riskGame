@@ -259,4 +259,49 @@ public Scanner keyboard;
 		}
 		return playerStrategy;
 	}
+	
+	public String getGameModeView() {
+		String gameMode = null;
+		ArrayList<String> validGameModes = new ArrayList<String>();
+		validGameModes.add("Single mode");
+		validGameModes.add("Turnament mode");
+		validGameModes.add("Single mode".toLowerCase());
+		validGameModes.add("Turnament mode".toLowerCase());
+		while(gameMode == null || !validGameModes.contains(gameMode)) {
+			System.out.println("\nEnter the game mode you want to play"
+					+ "\n(Note: the valid options are: Single mode and Turnament mode)");
+			gameMode = keyboard.nextLine();
+		}
+		return gameMode;
+	}
+	
+	public int chooseNumberOfMapsView() {
+		int numberOfMaps = 0;
+		while(numberOfMaps <= 0 || numberOfMaps > 5) {
+			System.out.println("\nEnter the number of Maps"
+					+ "\n(Note: the valid value is 1 to 5)");
+			numberOfMaps = Integer.parseInt(keyboard.nextLine());
+		}
+		return numberOfMaps;
+	}
+	
+	public int chooseNumberOfGamesView() {
+		int numberOfGames = 0;
+		while(numberOfGames <= 0 || numberOfGames > 5) {
+			System.out.println("\nEnter the number of games for this Map"
+					+ "\n(Note: the valid value is 1 to 5)");
+			numberOfGames = Integer.parseInt(keyboard.nextLine());
+		}
+		return numberOfGames;
+	}
+	
+	public int chooseNumberOfTurnsForEachGameView() {
+		int numberOfTurns = 0;
+		while(numberOfTurns <= 10 || numberOfTurns > 50) {
+			System.out.println("\nEnter the number of turns for this game"
+					+ "\n(Note: the valid value is 10 to 50)");
+			numberOfTurns = Integer.parseInt(keyboard.nextLine());
+		}
+		return numberOfTurns;
+	}
 }

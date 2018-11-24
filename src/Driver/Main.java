@@ -60,6 +60,18 @@ public class Main {
 	 * object of Mainview created.
 	 */
 	public static MainView mainView;
+	/**
+	 * game mode being played
+	 */
+	public static String gameMode;
+	/**
+	 * maximum number of game turns in tournament mode
+	 */
+	public static int maxGameTurns;
+	/**
+	 * boolean value if game is finished or not
+	 */
+	public static boolean gameFinished;
 	
 	/**
 	* This method is used to validate the new map line
@@ -450,6 +462,7 @@ public class Main {
 		buildMap();
 		activeMap.territories.addAll(Map.listOfAllTerritories);
 		if(activeMap.validateMap()) {
+			
 			Main.players = new ArrayList<Player>();
 			int playersCount = mainView.playerCountView();		
 			
@@ -475,8 +488,6 @@ public class Main {
 						break;
 				}
 				
-				
-				
 				PhaseView view = new PhaseView();
 				player.addObserver(view);
 				players.add(player);
@@ -498,21 +509,56 @@ public class Main {
 	public static void main(String[] args) {
 		userEnteredContinentLines = new ArrayList<String>();
 		userEnteredTerritoryLines = new ArrayList<String>();
-		
-		activeMap = new Map();
-		WorldDominationView worldDominationView = new WorldDominationView();
-		activeMap.addObserver(worldDominationView);
+		gameFinished = false;
 		
 		mainView = new MainView();
-		mainView.startupPhaseView();
 		
-		while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
-			for(Player player : players) {
-				player.setCurrentGamePhase(GamePhase.REINFORCEMENT);	
+		gameMode = mainView.getGameModeView();
+		
+		if(gameMode.equalsIgnoreCase("turnament mode")) {
+			int numberOfMaps = mainView.chooseNumberOfMapsView();
+			for(int i = 0; i < numberOfMaps; ++i) {
+				activeMap = new Map();
+				WorldDominationView worldDominationView = new WorldDominationView();
+				activeMap.addObserver(worldDominationView);
+				
+				int numberOfGame = mainView.chooseNumberOfGamesView();
+				for(int j = 0; j < numberOfGame; ++j) {
+					int numberOfTurns = mainView.chooseNumberOfTurnsForEachGameView();
+					mainView.startupPhaseView();
+					
+					int currentTurnCount = 0;
+					while(!activeMap.allTerritoriesOwnBySinglePlayer(true) && currentTurnCount < numberOfTurns) {
+						currentTurnCount++;
+						for(Player player : players) {
+							player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
+							if(gameFinished) {
+								break;
+							}
+						}
+					}
+					if(currentTurnCount >= numberOfTurns) {
+						System.out.println("Number of Turns exhausted");
+					}
+					System.out.println("======== Game finished ========");
+					gameFinished = false;
+				}
 			}
 		}
-		
-		System.out.println("Game finished");
+		else {
+			activeMap = new Map();
+			WorldDominationView worldDominationView = new WorldDominationView();
+			activeMap.addObserver(worldDominationView);
+			
+			mainView.startupPhaseView();
+			
+			while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
+				for(Player player : players) {
+					player.setCurrentGamePhase(GamePhase.REINFORCEMENT);	
+				}
+			}
+			System.out.println("======== Game finished ========");
+		}
 		
 	}
 }

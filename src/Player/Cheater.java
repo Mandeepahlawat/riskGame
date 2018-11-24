@@ -96,8 +96,7 @@ public class Cheater implements Strategy {
 			}
 		}
 		if(Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
-			System.out.println("Game finished");
-			System.exit(0);
+			Main.gameFinished = true;
 		}
 		else {
 			player.setCurrentGamePhase(GamePhase.FORTIFICATION);

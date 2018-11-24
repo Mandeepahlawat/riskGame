@@ -248,7 +248,9 @@ public class Player extends Observable {
 	 * fortification phase of the player object
 	 */
 	public void fortification() {
-		playerStrategy.fortification();
+		if(!Main.gameFinished) {
+			playerStrategy.fortification();
+		}
 	}
 	
 //	/**
