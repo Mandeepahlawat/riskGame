@@ -1064,6 +1064,7 @@ public class Player extends Observable {
 	 */
 	public ArrayList<Integer> getCardIndexesToExchange() {
 		ArrayList<Integer> cardIndexes = new ArrayList<Integer>();
+		ArrayList<CardType> addedCardTypes = new ArrayList<CardType>();
 		
 		if(cards.size() == 3) {
 			cardIndexes.add(0);
@@ -1083,15 +1084,17 @@ public class Player extends Observable {
 					tempTypes.remove(card.type);
 				}
 				int newSize = tempTypes.size();
-				if(newSize - oldSize >= 3) {
+				if(oldSize - newSize >= 3) {
 					cardIndexes.clear();
-					for(int i = 0; i <= cardTypes.size(); ++i) {
+					addedCardTypes.clear();
+					for(int i = 0; i < cardTypes.size(); ++i) {
 						if(cardIndexes.size() <= 3 && card.type.equals(cardTypes.get(i))) {
-							cardIndexes.add(i);							
+							cardIndexes.add(i);	
+							addedCardTypes.add(cardTypes.get(i));
 						}
 					}
 				}
-				else{
+				else if(!addedCardTypes.contains(card.type)){
 					cardIndexes.add(cardTypes.indexOf(card.type));
 				}
 				if(cardIndexes.size() == 3) {
@@ -1149,15 +1152,31 @@ public class Player extends Observable {
 			return true;
 		}
 		
-		ArrayList<CardType> cardTypes = new ArrayList<CardType>();
+		ArrayList<CardType> differentCardTypes = new ArrayList<CardType>();
+		
 		for(Card card : cards) {
-			if(!cardTypes.contains(card.type)) {
-				cardTypes.add(card.type);
+			if(!differentCardTypes.contains(card.type)) {
+				differentCardTypes.add(card.type);
 			}
 		}
 		
-		if(cardTypes.size() == 3) {
+		if(differentCardTypes.size() == 3) {
 			return true;
+		}
+		
+		ArrayList<CardType> cardTypes = new ArrayList<CardType>();
+		for(Card card : cards) {
+			cardTypes.add(card.type);
+		}
+		
+		for(Card card : cards) {
+			ArrayList<CardType> tempCardTypes = new ArrayList<CardType>(cardTypes);
+			for(int i = 0; i < 3; ++i) {
+				tempCardTypes.remove(card.type);
+			}
+			if(cardTypes.size() - tempCardTypes.size() >= 3) {
+				return true;
+			}
 		}
 		
 		return false;

@@ -1,11 +1,13 @@
 package Player;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import Card.Card;
 import Driver.Main;
 import Map.Map.Territory;
 import Player.Player.GamePhase;
+import Map.Map;
 
 public class Cheater implements Strategy {
 	/**
@@ -29,6 +31,12 @@ public class Cheater implements Strategy {
 			totalReinforcements += territory.numberOfArmies;
 		}
 		
+		if(player.ownedContinents().size() > 0) {
+			for(Map continent : player.ownedContinents()) {
+				totalReinforcements += continent.score;
+			}
+		}
+		
 		if(player.canExchangeCards()) {
 			totalReinforcements += Card.cardExchangeValue;
 			ArrayList<Integer> cardIndexes = player.getCardIndexesToExchange();
@@ -47,9 +55,19 @@ public class Cheater implements Strategy {
 		for(Territory territory : player.assignedTerritories) {
 			System.out.println("Armies count before move: " + territory.name + ": " + territory.numberOfArmies
 					+ " armies");
+			reinforcements = reinforcements - territory.numberOfArmies;
 			territory.numberOfArmies += territory.numberOfArmies;
 			System.out.println("Armies count after move: " + territory.name + ": " + territory.numberOfArmies
 					+ " armies");
+		}
+		while(reinforcements > 0) {
+			Territory territory = player.assignedTerritories.get(new Random().nextInt(player.assignedTerritories.size()));
+			System.out.println("Placing extra reinforcement army in: " + territory.name + " , before placing: " + territory.numberOfArmies
+					+ " armies");
+			territory.numberOfArmies += 1;
+			System.out.println("Armies count after move: " + territory.name + ": " + territory.numberOfArmies
+					+ " armies");
+			reinforcements -= 1;
 		}
 	}
 
@@ -60,6 +78,7 @@ public class Cheater implements Strategy {
 		for(Territory territory : player.getTerritoriesWithNeighboursToOthers()) {
 			System.out.println("Armies count before move: " + territory.name + ": " + territory.numberOfArmies
 					+ " armies");
+			player.totalArmiesCount += territory.numberOfArmies;
 			territory.numberOfArmies += territory.numberOfArmies;
 			System.out.println("Armies count after move: " + territory.name + ": " + territory.numberOfArmies
 					+ " armies");
