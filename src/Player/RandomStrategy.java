@@ -1,6 +1,7 @@
 package Player;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import Card.Card;
 import Driver.Main;
@@ -75,15 +76,15 @@ public class RandomStrategy implements Strategy {
 		while(!player.validAssignedCountry(territory.name)) {
 			territories.remove(territory);
 			if(territories.isEmpty()) {
-				System.out.println("Player doesn't have any adjacent territories. Please run the program again.");
-				System.exit(0);
+				System.out.println("Player doesn't have any adjacent territories.");
+				return;
 			}
 			territory = player.getRandomTerritory(territories);
 		}
 		
 		Territory adjacentRandomTerritory = player.getRandomTerritory(territory.neighbours);
 		
-		int armiesToMove = adjacentRandomTerritory.numberOfArmies - 1;
+		int armiesToMove = new Random().nextInt(adjacentRandomTerritory.numberOfArmies);
 		
 		System.out.println("Player " + player.getName() + " moving " + armiesToMove + " armies from "
 				+ adjacentRandomTerritory.name + " to " + territory.name);

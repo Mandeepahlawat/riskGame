@@ -101,6 +101,7 @@ public class Benevolent implements Strategy {
 
 	@Override
 	public void attack() {
+		System.out.println("Skiping attack phase as Benevolent player never attacks");
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 

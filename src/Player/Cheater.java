@@ -61,7 +61,7 @@ public class Cheater implements Strategy {
 					+ " armies");
 		}
 		while(reinforcements > 0) {
-			Territory territory = player.assignedTerritories.get(new Random().nextInt(player.assignedTerritories.size()));
+			Territory territory = player.getRandomTerritory(player.assignedTerritories);
 			System.out.println("Placing extra reinforcement army in: " + territory.name + " , before placing: " + territory.numberOfArmies
 					+ " armies");
 			territory.numberOfArmies += 1;
