@@ -294,18 +294,11 @@ public class Human implements Strategy {
 			if (defenderLost) {
 				for (Player player : Main.players) {
 					// remove territory from the defeated player's list
-					if (player.getName().equalsIgnoreCase(opponent)) {
-						for (Territory territory : Main.activeMap.territories) {
-							if (territory.name.equals(attackAt)) {
-								player.assignedTerritories.remove(territory);
-							}
-						}
-					}
-					// add territory to the conquerer's list
+					// add territory to the conquerer's list					
 					if (player.getName().equalsIgnoreCase(attacker)) {
 						for (Territory territory : Main.activeMap.territories) {
 							if (territory.name.equals(attackAt)) {
-								player.assignedTerritories.add(territory);
+								player.addNewOwnedTerritory(territory);
 							}
 						}
 					}

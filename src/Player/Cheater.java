@@ -26,7 +26,7 @@ public class Cheater implements Strategy {
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
 		for(Territory territory : player.assignedTerritories) {
-			totalReinforcements += (territory.numberOfArmies * 2);
+			totalReinforcements += territory.numberOfArmies;
 		}
 		
 		if(player.canExchangeCards()) {

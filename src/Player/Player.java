@@ -1047,6 +1047,7 @@ public class Player extends Observable {
 		Player previousOwner = territory.owner;
 		previousOwner.assignedTerritories.remove(territory);
 		previousOwner.totalArmiesCount -= territory.numberOfArmies;
+		this.totalArmiesCount += territory.numberOfArmies;
 		territory.owner = this;
 		this.assignedTerritories.add(territory);
 		if(territory.card.canAssignedToPlayer(this)) {
