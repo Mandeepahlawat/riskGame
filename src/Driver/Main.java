@@ -461,7 +461,7 @@ public class Main {
 		mapSelection();
 		buildMap();
 		activeMap.territories.addAll(Map.listOfAllTerritories);
-		if(activeMap.validateMap()) {
+		if(activeMap.validateMap(false)) {
 			
 			Main.players = new ArrayList<Player>();
 			int playersCount = mainView.playerCountView();		

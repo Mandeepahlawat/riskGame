@@ -174,8 +174,13 @@ public class Map extends Observable {
 	 * 
 	 * @return true if the map is connected.
 	 */
-	public boolean validateMap() {
-//		this.territories.addAll(listOfAllTerritories);
+	public boolean validateMap(boolean isContinent) {
+		
+		//make all countries not visited
+		for (Territory territoryBeingVisited : this.territories) {
+			territoryBeingVisited.visited = false;
+		}
+		
 		Stack<Territory> stack = new Stack<>();
 		stack.push(this.territories.get(0));
 		while (!stack.isEmpty()) {
@@ -187,13 +192,20 @@ public class Map extends Observable {
 				System.out.println(territoryBeingVisited.name + " is not assigned any continent");
 				return false;
 			}
-
 			else if (territoryBeingVisited.continent.visited == false) {
 				territoryBeingVisited.continent.visited = true;
 			}
+			
 			for (Territory neighbour : territoryBeingVisited.neighbours) {
-				if (!neighbour.visited) {
-					stack.push(neighbour);
+				if(!isContinent) {
+					if (!neighbour.visited) {
+						stack.push(neighbour);
+					}
+				}
+				else {
+					if (!neighbour.visited && neighbour.continent.name.equals(territoryBeingVisited.continent.name)) {
+						stack.push(neighbour);
+					}
 				}
 			}
 		}
@@ -218,7 +230,7 @@ public class Map extends Observable {
 			// call validateMap for each continent separately to check if
 			// continent is connected or not
 			for(Map continent : this.continents) {
-				if(!continent.validateMap()) {
+				if(!continent.validateMap(true)) {
 					System.out.println(continent.name + " is not valid as it's not connected");
 					return false;
 				}
