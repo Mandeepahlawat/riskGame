@@ -264,12 +264,12 @@ public Scanner keyboard;
 		String gameMode = null;
 		ArrayList<String> validGameModes = new ArrayList<String>();
 		validGameModes.add("Single mode");
-		validGameModes.add("Turnament mode");
+		validGameModes.add("tournament mode");
 		validGameModes.add("Single mode".toLowerCase());
-		validGameModes.add("Turnament mode".toLowerCase());
+		validGameModes.add("Tournament mode".toLowerCase());
 		while(gameMode == null || !validGameModes.contains(gameMode)) {
 			System.out.println("\nEnter the game mode you want to play"
-					+ "\n(Note: the valid options are: Single mode and Turnament mode)");
+					+ "\n(Note: the valid options are: Single mode and Tournament mode)");
 			gameMode = keyboard.nextLine();
 		}
 		return gameMode;

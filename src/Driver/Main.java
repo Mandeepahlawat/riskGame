@@ -515,7 +515,7 @@ public class Main {
 		
 		gameMode = mainView.getGameModeView();
 		
-		if(gameMode.equalsIgnoreCase("turnament mode")) {
+		if(gameMode.equalsIgnoreCase("tournament mode")) {
 			int numberOfMaps = mainView.chooseNumberOfMapsView();
 			for(int i = 0; i < numberOfMaps; ++i) {
 				activeMap = new Map();
