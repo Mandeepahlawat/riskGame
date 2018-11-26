@@ -259,8 +259,8 @@ public class Map_Test {
 			}
 			
 		}
-		System.out.println(Main.activeMap.validateMap());
-		assertTrue(Main.activeMap.validateMap());
+		System.out.println(Main.activeMap.validateMap(false));
+		assertTrue(Main.activeMap.validateMap(false));
 	}
 	 
 	/**
@@ -316,8 +316,8 @@ public class Map_Test {
 			}
 			
 		}
-		System.out.println(Main.activeMap.validateMap());
-		assertFalse(Main.activeMap.validateMap());
+		System.out.println(Main.activeMap.validateMap(false));
+		assertFalse(Main.activeMap.validateMap(false));
 	}
 
 }

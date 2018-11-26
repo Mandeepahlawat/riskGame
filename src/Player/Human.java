@@ -319,5 +319,8 @@ public class Human implements Strategy {
 				System.out.println("\nGame Completed!\n" + player.getName() + "wins!!");
 			}
 		}
+		else {
+			player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+		}
 	}
 }
