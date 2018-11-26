@@ -72,6 +72,10 @@ public class Main {
 	 * boolean value if game is finished or not
 	 */
 	public static boolean gameFinished;
+	/**
+	 * String value of map file path to load in case of tournament mode
+	 */
+	public static String mapFilePath;
 	
 	/**
 	* This method is used to validate the new map line
@@ -169,6 +173,7 @@ public class Main {
 	public static void editMap(String filePath) {
 		if(filePath == null) {
 			filePath = mainView.fileNameToEditOrLoadView();
+			mapFilePath = filePath;
 		}
 		
 		try {
@@ -279,7 +284,15 @@ public class Main {
 	* 
 	*/
 	public static void loadMap(){
-		String filePath = mainView.fileNameToEditOrLoadView();
+		String filePath;
+		if(mapFilePath == null) {
+			filePath = mainView.fileNameToEditOrLoadView();
+			mapFilePath = filePath;
+		}
+		else {
+			filePath = mapFilePath;
+		}
+		
 		try {
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
 			for (String line : allLines) {
@@ -326,14 +339,31 @@ public class Main {
 	}
 	
 	/**
+	 * This method checks if there are any
+	 * players with no territories assigned
+	 * @return null if all players has territories otherwise returns player
+	 */
+	public static Player playerWithNoTerritory() {
+		for(Player player : players) {
+			if(player.assignedTerritories.size() == 0) {
+				return player;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * This method Assigns the initial territories randomly
 	 * to the players in the game.
 	 */
 	public static void assignInitialTerritories() {
 		for (Territory territory : Main.activeMap.territories) {
 			if (territory.owner == null) {
-				Random rand = new Random();
-				Player player = Main.players.get(rand.nextInt(Main.players.size()));
+				Player player = playerWithNoTerritory();
+				if(player == null) {
+					Random rand = new Random();
+					player = Main.players.get(rand.nextInt(Main.players.size()));
+				}
 				territory.owner = player;
 				player.assignedTerritories.add(territory);
 			}
@@ -458,12 +488,17 @@ public class Main {
 	 * 
 	 */
 	public static void startUp() {
-		mapSelection();
+		if(mapFilePath == null) {
+			mapSelection();
+		}
+		else {
+			loadMap();
+		}
+		
 		buildMap();
 		activeMap.territories.addAll(Map.listOfAllTerritories);
 		if(activeMap.validateMap(false)) {
 			
-			Main.players = new ArrayList<Player>();
 			int playersCount = mainView.playerCountView();		
 			
 			for(int i = 0; i < playersCount; ++i) {
@@ -509,6 +544,8 @@ public class Main {
 	public static void main(String[] args) {
 		userEnteredContinentLines = new ArrayList<String>();
 		userEnteredTerritoryLines = new ArrayList<String>();
+		players = new ArrayList<Player>();
+		
 		gameFinished = false;
 		
 		mainView = new MainView();
@@ -517,23 +554,37 @@ public class Main {
 		
 		if(gameMode.equalsIgnoreCase("tournament mode")) {
 			int numberOfMaps = mainView.chooseNumberOfMapsView();
-			for(int i = 0; i < numberOfMaps; ++i) {
-				activeMap = new Map();
-				WorldDominationView worldDominationView = new WorldDominationView();
-				activeMap.addObserver(worldDominationView);
-				
+			for(int i = 0; i < numberOfMaps; ++i) {	
+				mapFilePath = null;
 				int numberOfGame = mainView.chooseNumberOfGamesView();
 				for(int j = 0; j < numberOfGame; ++j) {
+					userEnteredContinentLines.clear();
+					userEnteredTerritoryLines.clear();
+					players.clear();
+					totalInitialArmies = 0;
+					
+					activeMap = new Map();
+					Map.listOfAllTerritories.clear();
+					Map.listOfAllContinents.clear();
+					
+					WorldDominationView worldDominationView = new WorldDominationView();
+					activeMap.addObserver(worldDominationView);
+					
 					int numberOfTurns = mainView.chooseNumberOfTurnsForEachGameView();
 					mainView.startupPhaseView();
 					
 					int currentTurnCount = 0;
 					while(!activeMap.allTerritoriesOwnBySinglePlayer(true) && currentTurnCount < numberOfTurns) {
 						currentTurnCount++;
+						System.out.println("---------------------------------------------------------");
+						System.out.println("----------Turn : " + currentTurnCount + " ---------------");
+						System.out.println("---------------------------------------------------------");
 						for(Player player : players) {
-							player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
-							if(gameFinished) {
-								break;
+							if(player.assignedTerritories.size() > 0) {
+								player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
+								if(gameFinished) {
+									break;
+								}
 							}
 						}
 					}
@@ -554,7 +605,9 @@ public class Main {
 			
 			while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
 				for(Player player : players) {
-					player.setCurrentGamePhase(GamePhase.REINFORCEMENT);	
+					if(player.assignedTerritories.size() > 0) {
+						player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
+					}
 				}
 			}
 			System.out.println("======== Game finished ========");

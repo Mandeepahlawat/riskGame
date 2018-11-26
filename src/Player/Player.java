@@ -703,14 +703,15 @@ public class Player extends Observable {
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
 				while(numberOfArmiesToMove >= territory.numberOfArmies) {
 					Scanner input = new Scanner(System.in);
-					System.out.println("Enter a valid number of troops:");
+					System.out.println("Enter a valid number of troops. "
+							+ "Valid number of troops should be less than : " +  territory.numberOfArmies);
 					numberOfArmiesToMove = input.nextInt();
 				}
 				territory.numberOfArmies = territory.numberOfArmies - numberOfArmiesToMove;
 				for(Territory neighbor : territory.neighbours) {
 					if(neighbor.name.equalsIgnoreCase(defenderCountry)) {
-						neighbor.numberOfArmies = numberOfArmiesToMove;
-						assignedTerritories.add(neighbor);
+						neighbor.numberOfArmies += numberOfArmiesToMove;
+//						assignedTerritories.add(neighbor);
 						break;
 					}
 				}
@@ -1049,11 +1050,27 @@ public class Player extends Observable {
 		Player previousOwner = territory.owner;
 		previousOwner.assignedTerritories.remove(territory);
 		previousOwner.totalArmiesCount -= territory.numberOfArmies;
+		if(previousOwner.assignedTerritories.size() == 0) {
+			previousOwner.gotEliminated(this);
+		}
+		
 		this.totalArmiesCount += territory.numberOfArmies;
 		territory.owner = this;
 		this.assignedTerritories.add(territory);
 		if(territory.card.canAssignedToPlayer(this)) {
 			territory.card.assignPlayer(this);
+		}
+	}
+	
+	public void gotEliminated(Player playerWhoEliminated) {
+		System.out.println(" ======= " + this.name + " got eliminated =======");
+		if(this.cards.size() > 0) {
+			System.out.println(" ======= Assigning " + this.name + " cards to " 
+					+ playerWhoEliminated.getName() + " =======");
+			for(Card card : cards) {
+				playerWhoEliminated.cards.add(card);
+			}
+			cards.clear();
 		}
 	}
 	

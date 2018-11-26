@@ -38,7 +38,8 @@ public class WorldDominationView implements Observer {
 			System.out.print("\t"
 					+ territory.name 
 					+ " Armies : " + territory.numberOfArmies
-					+ ", Continent: " + territory.continent.name);
+					+ ", Continent: " + territory.continent.name
+					+ ", Owner: " + territory.owner.getName());
 		}
 		else {
 			System.out.print(territory.name 

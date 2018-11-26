@@ -259,26 +259,36 @@ public class Human implements Strategy {
 								break;
 							} else {
 								Vector<Integer> attackerDice, defenderDice;
+								int attackerDiceCount = 0;
+								int defenderDiceCount = 0;
 								if (allOutMode) {
-									attackerDice = player.rollDice(player.calculateNumberOfDiceAllowed("attacker",
-											attackFrom, attackAt, allOutMode));
-									defenderDice = player.rollDice(player.calculateNumberOfDiceAllowed("defender",
-											attackFrom, attackAt, allOutMode));
+									attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker",
+											attackFrom, attackAt, allOutMode);
+									attackerDice = player.rollDice(attackerDiceCount);
+									
+									defenderDiceCount = player.calculateNumberOfDiceAllowed("defender",
+											attackFrom, attackAt, allOutMode);
+									defenderDice = player.rollDice(defenderDiceCount);
 								} else {
 									System.out.println("Choose Attacker's number of dice");
-									attackerDice = player.rollDice(player.calculateNumberOfDiceAllowed("attacker",
-											attackFrom, attackAt, allOutMode));
+									attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker",
+											attackFrom, attackAt, allOutMode);
+									attackerDice = player.rollDice(attackerDiceCount);
+									
 									System.out.println("Choose Defender's number of dice");
-									defenderDice = player.rollDice(player.calculateNumberOfDiceAllowed("defender",
-											attackFrom, attackAt, allOutMode));
+									defenderDiceCount = player.calculateNumberOfDiceAllowed("defender",
+											attackFrom, attackAt, allOutMode);
+									defenderDice = player.rollDice(defenderDiceCount);
 								}
 								while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
 									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
 									int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
 									if (attackerDiceValue > defenderDiceValue) {
 										player.reduceArmy("defender", attackFrom, attackAt);
+										Map.findTerritory(attackAt).owner.totalArmiesCount--;
 									} else {
 										player.reduceArmy("attacker", attackFrom, attackAt);
+										player.totalArmiesCount--;
 									}
 								}
 							}
@@ -301,9 +311,9 @@ public class Human implements Strategy {
 								player.addNewOwnedTerritory(territory);
 							}
 						}
+						System.out.println("Enter the number of armies you would like to place in your new territory:");
+						player.moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
 					}
-					System.out.println("Enter the number of armies you would like to place in your new territory:");
-					player.moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
 				}
 			}
 

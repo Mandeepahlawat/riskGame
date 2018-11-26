@@ -297,7 +297,7 @@ public Scanner keyboard;
 	
 	public int chooseNumberOfTurnsForEachGameView() {
 		int numberOfTurns = 0;
-		while(numberOfTurns <= 10 || numberOfTurns > 50) {
+		while(numberOfTurns < 10 || numberOfTurns > 50) {
 			System.out.println("\nEnter the number of turns for this game"
 					+ "\n(Note: the valid value is 10 to 50)");
 			numberOfTurns = Integer.parseInt(keyboard.nextLine());

@@ -59,7 +59,7 @@ public class Map extends Observable {
 	 */
 	public static Territory findTerritory(String territoryName) {
 		for (Territory territory : listOfAllTerritories) {
-			if (territory.name.equals(territoryName)) {
+			if (territory.name.equalsIgnoreCase(territoryName)) {
 				return territory;
 			}
 		}
