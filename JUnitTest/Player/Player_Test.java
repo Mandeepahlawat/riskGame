@@ -655,4 +655,11 @@ public class Player_Test {
 		System.out.println("roll"+player.rollDice(2));
 		assertNotNull(player.rollDice(2));
 	}
+	
+	@Test
+	public void testGetRandomTerritory() {
+		Territory t1 = new Territory("Africa");
+		player.assignedTerritories.add(t1);
+		assertTrue(player.getRandomTerritory(player.assignedTerritories).name.equals("Africa"));//since randome its tested using single value
+	}
 }
