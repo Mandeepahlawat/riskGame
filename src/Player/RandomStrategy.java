@@ -25,15 +25,18 @@ public class RandomStrategy implements Strategy {
 	public Player player;
 	
 	/**
+	 * 
 	 * constructor for this class and sets the
 	 * player data member
-	 * @param player
+	 * 
+	 * @param player assign the player value.
 	 */
 	public RandomStrategy(Player player) {
 		this.player = player;
 	}
 	
 	/**
+	 *
 	 * Calculation of reinforcement armies,
 	 * which will vary depending on the strategy.
 	 * 
@@ -73,11 +76,13 @@ public class RandomStrategy implements Strategy {
 	}
 
 	/**
+	 * 
 	 * Placement of reinforcement armies,
 	 * which will vary depending on the strategy.
 	 * 
 	 * @param reinforcements - number of reinforcements
 	 * to be place.
+	 * 
 	 */
 	
 	@Override
@@ -95,6 +100,7 @@ public class RandomStrategy implements Strategy {
 
 	
 	/**
+	 *
 	 * Fortification phase, whose implementation will
 	 * vary depending on the strategy.
 	 * 
@@ -132,8 +138,10 @@ public class RandomStrategy implements Strategy {
 	}
 
 	/**
+	 * 
 	 * Attack phase, whose implementation will
 	 * vary depending on the strategy.
+	 *
 	 */
 	
 	@Override
