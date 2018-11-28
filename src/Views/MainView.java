@@ -259,7 +259,13 @@ public Scanner keyboard;
 		}
 		return playerStrategy;
 	}
-	
+
+	/**
+	 * This method will display the mode of the game
+	 * which a player wants to play.
+	 * 
+	 * @return string value as gamemode
+	 */
 	public String getGameModeView() {
 		String gameMode = null;
 		ArrayList<String> validGameModes = new ArrayList<String>();
@@ -275,6 +281,15 @@ public Scanner keyboard;
 		return gameMode;
 	}
 	
+	/**
+	 * 
+	 * This method will display the number
+	 * of maps in the game.
+	 *  
+	 * @return integer value of the number of maps 
+	 * in the game.
+	 *
+	 */
 	public int chooseNumberOfMapsView() {
 		int numberOfMaps = 0;
 		while(numberOfMaps <= 0 || numberOfMaps > 5) {
@@ -285,6 +300,13 @@ public Scanner keyboard;
 		return numberOfMaps;
 	}
 	
+	/**
+	 *This method will print the number of games 
+	 *for the particular map in the game under
+	 *the given conditions.
+	 * 
+	 * @return The number of games
+	 */
 	public int chooseNumberOfGamesView() {
 		int numberOfGames = 0;
 		while(numberOfGames <= 0 || numberOfGames > 5) {
@@ -294,7 +316,14 @@ public Scanner keyboard;
 		}
 		return numberOfGames;
 	}
-	
+	/**
+	 * 
+	 * This method will print the number of turns 
+	 * under given condition in the game
+	 * 
+	 * @return the number of turns in the game
+	 * 
+	 */
 	public int chooseNumberOfTurnsForEachGameView() {
 		int numberOfTurns = 0;
 		while(numberOfTurns < 10 || numberOfTurns > 50) {
