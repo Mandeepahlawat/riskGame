@@ -14,7 +14,7 @@ import Map.Map.Territory;
 import Card.*;
 import Card.Card.CardType;
 /**
- * This is the JUnit Test cases for Map class. this implements all
+ * This is the JUnit Test cases for Player class. this implements all
  * the test related to the units within this class.
  *
  * @author Arun
@@ -656,6 +656,11 @@ public class Player_Test {
 		assertNotNull(player.rollDice(2));
 	}
 	
+	/**
+	 * method testGetRandomTerritory
+	 * 
+	 * to test getRandomTerritory method in the Player class
+	 */
 	@Test
 	public void testGetRandomTerritory() {
 		Territory t1 = new Territory("Africa");
