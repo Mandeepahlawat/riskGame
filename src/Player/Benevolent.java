@@ -8,6 +8,16 @@ import Map.Map;
 import Map.Map.Territory;
 import Player.Player.GamePhase;
 
+/**
+ * 
+ * The Benevolent class is implementing functions 
+ * in Strategy interface
+ * 
+ * @author mandeepahlawat
+ * @version 1.0
+ * @since 24-11-2018
+ *
+ */
 public class Benevolent implements Strategy {
 	/**
 	 * The player to which this strategy belongs to
@@ -15,14 +25,26 @@ public class Benevolent implements Strategy {
 	public Player player;
 	
 	/**
+	 * 
 	 * constructor for this class and sets the
-	 * player data member
-	 * @param player
+	 * player data member.
+	 * 
+	 * @param player assign the player value.
+	 *
 	 */
 	public Benevolent(Player player) {
 		this.player = player;
 	}
 	
+	
+	/**
+	 *
+	 * Calculation of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @return int value of the total reinforcement armies
+	 * 
+	 */
 	@Override
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
@@ -54,6 +76,16 @@ public class Benevolent implements Strategy {
 		return totalReinforcements;
 	}
 
+	/**
+	 * 
+	 * Placement of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @param reinforcements - number of reinforcements
+	 * to be place.
+	 * 
+	 */
+	
 	@Override
 	public void placeReinforcements(int reinforcements) {
 		Territory territory = player.territoryWithMinArmy(player.assignedTerritories);
@@ -67,6 +99,12 @@ public class Benevolent implements Strategy {
 		
 	}
 
+	/**
+	 *
+	 * Fortification phase, whose implementation will
+	 * vary depending on the strategy.
+	 * 
+	 */
 	@Override
 	public void fortification() {
 		ArrayList<Territory> territories = new ArrayList<Territory>(player.assignedTerritories);
@@ -99,10 +137,20 @@ public class Benevolent implements Strategy {
 		
 	}
 
+	/**
+	 * 
+	 * Attack phase, whose implementation will
+	 * vary depending on the strategy.
+	 *
+	 */
 	@Override
 	public void attack() {
 		System.out.println("Skiping attack phase as Benevolent player never attacks");
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 
+	 @Override
+	 public String toString() {
+		 return "benevolent";
+	 }
 }
