@@ -351,7 +351,11 @@ public class Human implements Strategy {
 		}
 	}
 	
-	 @Override
+	/**
+	 * This Method will return string value.
+	 * 
+	 */
+	@Override
 	 public String toString() {
 		 return "human";
 	 }
