@@ -103,6 +103,10 @@ public class Cheater implements Strategy {
 		}
 	}
 	
+	 @Override
+	 public String toString() {
+		 return "cheater";
+	 }
 	
 
 }

@@ -105,4 +105,8 @@ public class Benevolent implements Strategy {
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 
+	 @Override
+	 public String toString() {
+		 return "benevolent";
+	 }
 }
