@@ -561,28 +561,19 @@ public class Player extends Observable {
 	 * 
 	 * @param losingPlayer will have string value type in it.
 	 * 
-	 * @param attackerCounter will have string value type in it.
+	 * @param attackerCountry will have string value type in it.
 	 * 
 	 * @param defenderCountry will have string value type in it.
 	 *
 	 */
-	public void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
+	public void reduceArmy(String losingPlayer, String attackerCountry, String defenderCountry) {
 		if(losingPlayer.equalsIgnoreCase("attacker")) {
-			for(Territory territory : assignedTerritories) {
-				if(territory.name.equalsIgnoreCase(attackerCounter)) {
-					territory.numberOfArmies--;
-				}
-			}
+			Territory territory = Map.findTerritory(attackerCountry);
+			territory.numberOfArmies--;
 		}
 		else {
-			for(Territory territory : assignedTerritories) {
-				if(territory.name.equalsIgnoreCase(attackerCounter)) {
-					for(Territory neighbor : territory.neighbours) {
-						if(neighbor.name.equalsIgnoreCase(defenderCountry))
-							neighbor.numberOfArmies--;
-					}
-				}
-			}
+			Territory territory = Map.findTerritory(defenderCountry);
+			territory.numberOfArmies--;
 		}		
 	}
 	
@@ -645,32 +636,27 @@ public class Player extends Observable {
 	 * The method will move armies to new territory 
 	 * conquered only if defender looses it.
 	 * 
-	 * @param attackerCounter will have string value type in it.
+	 * @param attackerCountry will have string value type in it.
 	 * 
 	 * @param defenderCountry will have string value type in it.
 	 * 
 	 * @param numberOfArmiesToMove a integer value will have number of armies to move value in it.
 	 *
 	 */
-	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
-		for(Territory territory : assignedTerritories) {
-			if(territory.name.equalsIgnoreCase(attackerCounter)) {
-				while(numberOfArmiesToMove >= territory.numberOfArmies) {
-					Scanner input = new Scanner(System.in);
-					System.out.println("Enter a valid number of troops. "
-							+ "Valid number of troops should be less than : " +  territory.numberOfArmies);
-					numberOfArmiesToMove = input.nextInt();
-				}
-				territory.numberOfArmies = territory.numberOfArmies - numberOfArmiesToMove;
-				for(Territory neighbor : territory.neighbours) {
-					if(neighbor.name.equalsIgnoreCase(defenderCountry)) {
-						neighbor.numberOfArmies += numberOfArmiesToMove;
-						break;
-					}
-				}
-				break;
-			}
+	public void moveArmiesToNewTerritory(String attackerCountry, String defenderCountry, int numberOfArmiesToMove) {
+		Territory attacker = Map.findTerritory(attackerCountry);
+		Territory defender = Map.findTerritory(defenderCountry);
+		
+		while(numberOfArmiesToMove >= attacker.numberOfArmies) {
+			Scanner input = new Scanner(System.in);
+			System.out.println("Enter a valid number of troops. "
+					+ "Valid number of troops should be less than : " +  attacker.numberOfArmies);
+			numberOfArmiesToMove = input.nextInt();
 		}
+		
+		attacker.numberOfArmies -= numberOfArmiesToMove;
+		defender.numberOfArmies += numberOfArmiesToMove;
+		
 	}
 	
 	/**

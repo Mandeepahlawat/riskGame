@@ -120,19 +120,25 @@ public class Aggressive implements Strategy {
 
 		Territory adjacentTerritoryWithMaxArmy = player.territoryWithMaxArmy(territory.neighbours);
 
-		int armiesToMove = adjacentTerritoryWithMaxArmy.numberOfArmies - 1;
+		if(adjacentTerritoryWithMaxArmy.numberOfArmies > 1) {
+			int armiesToMove = adjacentTerritoryWithMaxArmy.numberOfArmies - 1;
 
-		System.out.println("Player " + player.getName() + " moving " + armiesToMove + " armies from "
-				+ adjacentTerritoryWithMaxArmy.name + " to " + territory.name);
+			System.out.println("Player " + player.getName() + " moving " + armiesToMove + " armies from "
+					+ adjacentTerritoryWithMaxArmy.name + " to " + territory.name);
 
-		System.out.println("Armies count before move: " + territory.name + ": " + territory.numberOfArmies + " , "
-				+ adjacentTerritoryWithMaxArmy.name + " : " + adjacentTerritoryWithMaxArmy.numberOfArmies);
+			System.out.println("Armies count before move: " + territory.name + ": " + territory.numberOfArmies + " , "
+					+ adjacentTerritoryWithMaxArmy.name + " : " + adjacentTerritoryWithMaxArmy.numberOfArmies);
 
-		territory.numberOfArmies += armiesToMove;
-		adjacentTerritoryWithMaxArmy.numberOfArmies -= armiesToMove;
+			territory.numberOfArmies += armiesToMove;
+			adjacentTerritoryWithMaxArmy.numberOfArmies -= armiesToMove;
 
-		System.out.println("Armies count after the move: " + territory.name + ": " + territory.numberOfArmies + " , "
-				+ adjacentTerritoryWithMaxArmy.name + " : " + adjacentTerritoryWithMaxArmy.numberOfArmies);
+			System.out.println("Armies count after the move: " + territory.name + ": " + territory.numberOfArmies + " , "
+					+ adjacentTerritoryWithMaxArmy.name + " : " + adjacentTerritoryWithMaxArmy.numberOfArmies);
+		}
+		else {
+			System.out.println("Skipping fortification as aggressive maximises number of armies and adjacent territory only has 1 army");
+		}
+		
 
 	}
 
@@ -151,7 +157,7 @@ public class Aggressive implements Strategy {
 		String attackFrom = "", attackAt = "", opponent = "", attacker = "";
 
 		HashSet<Territory> opponents;
-		ArrayList<Territory> listOfTerritories = player.assignedTerritories;
+		ArrayList<Territory> listOfTerritories = new ArrayList<Territory>(player.assignedTerritories);
 		Territory strongest;
 
 		while (true) {
@@ -168,7 +174,8 @@ public class Aggressive implements Strategy {
 		}
 
 		for (Territory countryBeingAttacked : opponents) {
-			
+			attackDone = false;
+			defenderLost = false;
 			attackAt = countryBeingAttacked.name;
 			boolean strongestHasArmy = true;
 
@@ -221,22 +228,19 @@ public class Aggressive implements Strategy {
 					}
 				}
 			}
-		}
-
-		if (defenderLost) {
-			for (Player player : Main.players) {
-				// remove territory from the defeated player's list
-				// add territory to the conquerer's list
-				if (player.getName().equalsIgnoreCase(attacker)) {
-					for (Territory territory : Main.activeMap.territories) {
-						if (territory.name.equals(attackAt)) {
-							player.addNewOwnedTerritory(territory);
-						}
+			if (defenderLost) {
+				for (Player player : Main.players) {
+					// remove territory from the defeated player's list
+					// add territory to the conquerer's list
+					if (player.getName().equalsIgnoreCase(attacker)) {
+						Territory territory = Map.findTerritory(attackAt);
+						player.addNewOwnedTerritory(territory);
+						
+						Random random = new Random();
+						int armiesToMove = random.nextInt(strongest.numberOfArmies-1) + 1;
+						System.out.println("Moving "+ armiesToMove + " armies to newly conquered territory");
+						player.moveArmiesToNewTerritory(attackFrom, attackAt, armiesToMove);
 					}
-					Random random = new Random();
-					int armiesToMove = random.nextInt(strongest.numberOfArmies-1);
-					System.out.println("Moving "+ armiesToMove + "to newly conquered territory");
-					player.moveArmiesToNewTerritory(attackFrom, attackAt, armiesToMove);
 				}
 			}
 		}
