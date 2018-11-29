@@ -94,6 +94,7 @@ public class Main {
 	public static String mapFilePath;
 	
 	/**
+	*
 	* This method is used to validate the new map line
 	* entered by the user.
 	* 
@@ -105,6 +106,7 @@ public class Main {
 	* line in map.
 	* 
 	* @return True if new line is valid otherwise False.
+	*
 	*/
 	public static boolean validateMapLine(boolean isContinent, String newLine) {
 		if(isContinent) {
@@ -133,6 +135,7 @@ public class Main {
 	}
 	
 	/**
+	*
 	* This method lets user to build
 	* a new map and then displays the full map to the user
 	* on the screen.
@@ -161,6 +164,7 @@ public class Main {
 	}
 	
 	/**
+	*
 	* This method replaces the content of a line number in a
 	* file with the new content.
 	* 
@@ -171,6 +175,7 @@ public class Main {
 	* @param filePath The path of the file to be edited.
 	* 
 	* @throws java.io.IOException in some circumstance.
+	*
 	*/
 	public static void setLineText(int lineNumber, String newData, String filePath) throws IOException {
 	    Path path = Paths.get(filePath);
@@ -180,11 +185,13 @@ public class Main {
 	}
 	
 	/**
+	* 
 	* This method lets user to edit an existing map based on the
 	* line number selected and then displays the new map
 	* 
 	* @param filePath The path of the file to be edited, if the path is null
 	* then user will be asked to input the file path.
+	*
 	*/
 	public static void editMap(String filePath) {
 		if(filePath == null) {
@@ -300,11 +307,13 @@ public class Main {
 	}
 	
     /**
+	* 
 	* This method is used for populating the data
 	* of userEnteredPlayerLines array list.
 	* 
 	* @param allLines A list of strings which contains
 	* all the lines inside map file.
+	*
 	*/
 	public static void populateUserEnteredPlayerLines(List<String> allLines) {
 		Integer playerLineStartIndex = null;
@@ -326,11 +335,13 @@ public class Main {
 	}
 	
 	/**
+	* 
 	* This method is used for populating the data
 	* of userEnteredCardLines array list.
 	* 
 	* @param allLines A list of strings which contains
 	* all the lines inside map file.
+	* 
 	*/
 	public static void populateUserEnteredCardLines(List<String> allLines) {
 		Integer cardLineStartIndex = null;
@@ -348,6 +359,15 @@ public class Main {
 		}
 	}
 
+	/**
+	 * This method will save the date entered in the game.
+	 * 
+	 * 
+	 * @param fileName holds the string value in it.
+	 * 
+	 * @param playerIndex 
+	 *
+	 */
 	public static void saveGameData(String fileName, int playerIndex) {
 		String gameData = null;
 
@@ -398,6 +418,12 @@ public class Main {
         }  
 	}
 	
+	/**
+	 * 
+	 * This method will build the players 
+	 * and also the cards in the game.
+	 * 
+	 */
 	public static void buildPlayersAndCards() {
 		userEnteredPlayerLines.removeAll(Arrays.asList("", null));
 		userEnteredCardLines.removeAll(Arrays.asList("", null));
@@ -474,7 +500,17 @@ public class Main {
 			++i;
 		}
 	}
-
+/**
+ * 
+ * This method will find the particular player
+ * in the game.
+ * 
+ * @param name holds the string value in it.
+ *
+ * @return players name if the conditions passed 
+ * else it will return null. 
+ *
+ */
 	public static Player findPlayer(String name) {
 		for(Player player : players) {
 			if(player.getName().equalsIgnoreCase(name)) {
@@ -484,6 +520,14 @@ public class Main {
 		return null;
 	}
 	
+	/**
+	 *
+	 *This method will build map from 
+	 *saved data in the game.
+	 * 
+	 * @param filePath it will have file's path.
+	 *
+	 */
 	public static void buildMapFromSaveData(String filePath) {
 		try {
 			List<String> allLines = Files.readAllLines(Paths.get(filePath));
@@ -503,7 +547,13 @@ public class Main {
 		activeMap.territories.addAll(Map.listOfAllTerritories);
 		buildPlayersAndCards();
 	}
-	
+	/**
+	 *
+	 *This method will check all the stages 
+	 *It will only continue if all the 
+	 *conditions are passed.
+	 * 
+	 */
 	 public static void playGame() {
 		 while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
 			 for(Player player : players) {
