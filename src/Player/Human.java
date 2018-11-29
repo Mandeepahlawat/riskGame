@@ -242,7 +242,7 @@ public class Human implements Strategy {
 					attackDone = true;
 					break;
 				}
-				if (player.canattackFromThisCountry(attackFrom)) {
+				if (player.canAttackFromThisCountry(attackFrom)) {
 					System.out.println("Enter the country you want to attack (Enter 'exit' to skip attack phase)");
 					attackAt = keyboard.nextLine();
 					if (attackAt.equalsIgnoreCase("exit")) {
