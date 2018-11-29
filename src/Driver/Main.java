@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import Card.Card;
+import Card.Card.CardType;
 
 import java.nio.file.Path;
 
@@ -503,7 +504,24 @@ public class Main {
 		buildPlayersAndCards();
 	}
 	
-	
+	 public static void playGame() {
+		 while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
+			 for(Player player : players) {
+				 if(player.assignedTerritories.size() > 0) {
+					 player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
+					 if(!Main.gameFinished) {
+						 if(mainView.wantToSaveGame()) {
+							 String fileName = mainView.fileNameToSaveView();
+							 saveGameData(fileName, players.indexOf(player));
+						 }
+					 }
+				 }
+			 }
+		 }
+		 System.out.println("======== Game finished ========");
+	 }
+	 
+	 
 	/**
 	* This method loads the Map and displays its content.
 	* 

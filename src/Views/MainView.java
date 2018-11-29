@@ -304,4 +304,9 @@ public Scanner keyboard;
 		}
 		return numberOfTurns;
 	}
+	
+	public boolean wantToSaveGame() {
+		System.out.println("\nDo you want to save this game? Enter yes or no");
+		return keyboard.nextLine().equalsIgnoreCase("yes");
+	}
 }
