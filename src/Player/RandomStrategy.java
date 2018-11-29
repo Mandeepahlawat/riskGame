@@ -167,14 +167,14 @@ public class RandomStrategy implements Strategy {
 					attackFrom = player.assignedTerritories.get(random.nextInt(player.assignedTerritories.size())).name;
 				}
 				if (player.canAttackFromThisCountry(attackFrom)) {
-					System.out.println("Attacker chose to attack from "+ attackFrom + "randomly");
+					System.out.println("Attacker chose to attack from "+ attackFrom + " randomly");
 					Territory attacking = Map.findTerritory(attackFrom);
 					attackAt = attacking.neighbours.get(random.nextInt(attacking.neighbours.size())).name;
 					while(!player.validOpponentCountry(attackFrom, attackAt)) {
 						attackAt = attacking.neighbours.get(random.nextInt(attacking.neighbours.size())).name;
 					}
 					if (player.validOpponentCountry(attackFrom, attackAt)) {
-						System.out.println("Attacker chose to attack "+ attackAt + "randomly");
+						System.out.println("Attacker chose to attack "+ attackAt + " randomly");
 						boolean finishedAttackingThatTerritory = false; // finished attacking the present territory
 						boolean allOutMode = false;
 
