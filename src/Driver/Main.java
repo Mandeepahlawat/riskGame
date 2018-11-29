@@ -92,6 +92,28 @@ public class Main {
 	 * String value of map file path to load in case of tournament mode
 	 */
 	public static String mapFilePath;
+	/**
+	 * number of maps being used in the tournament mode
+	 */
+	public static int numberOfMaps;
+	/**
+	 * file paths of the maps in tournament mode
+	 */
+	public static ArrayList<String> mapFilePaths;
+	/**
+	 * number of game for each map
+	 */
+	public static ArrayList<Integer> numberOfGame;
+	/**
+	 * number of turns to be played before draw for each game
+	 * in the map
+	 */
+	public static ArrayList<ArrayList<Integer>> numberOfTurns;
+	/**
+	 * tournament result containing player name or draw for each
+	 * map and each game
+	 */
+	public static ArrayList<ArrayList<String>> tournamentResult;
 	
 	/**
 	* This method is used to validate the new map line
@@ -695,6 +717,13 @@ public class Main {
 		assignInitialArmies();
 		int playersCount = players.size();
 		
+		if(Main.gameMode.equalsIgnoreCase("tournament mode")) {
+			for(int i = 0; i < playersCount; ++i) {
+				players.get(i).placeArmiesAutomatically();
+			}
+			return;
+		}
+		
 		if (mainView.wantToPlaceArmiesManually()) {
 			boolean armiesLeftToPlace = true;
 			while(armiesLeftToPlace) {
@@ -742,33 +771,38 @@ public class Main {
 		activeMap.territories.addAll(Map.listOfAllTerritories);
 		if(activeMap.validateMap(false)) {
 			
-			int playersCount = mainView.playerCountView();		
-			
-			for(int i = 0; i < playersCount; ++i) {
-				Player player = new Player("Player" + i);
-				String stratgey = mainView.playerStrategyView();
-				
-				switch(stratgey.toLowerCase()) {
-					case "human":
-						player.setPlayerStrategy(new Human(player));
-						break;
-					case "aggressive":
-						player.setPlayerStrategy(new Aggressive(player));
-						break;
-					case "benevolent":
-						player.setPlayerStrategy(new Benevolent(player));
-						break;
-					case "random":
-						player.setPlayerStrategy(new RandomStrategy(player));
-						break;
-					case "cheater":
-						player.setPlayerStrategy(new Cheater(player));
-						break;
+			if((gameMode.equalsIgnoreCase("tournament mode") && Main.players.isEmpty()) 
+					|| gameMode.equalsIgnoreCase("single mode")){
+					
+					int playersCount = mainView.playerCountView();		
+					
+					for(int i = 0; i < playersCount; ++i) {
+						Player player = new Player("Player" + i);
+						String stratgey = mainView.playerStrategyView();
+						
+						switch(stratgey.toLowerCase()) {
+							case "human":
+								player.setPlayerStrategy(new Human(player));
+								break;
+							case "aggressive":
+								player.setPlayerStrategy(new Aggressive(player));
+								break;
+							case "benevolent":
+								player.setPlayerStrategy(new Benevolent(player));
+								break;
+							case "random":
+								player.setPlayerStrategy(new RandomStrategy(player));
+								break;
+							case "cheater":
+								player.setPlayerStrategy(new Cheater(player));
+								break;
+						}
+						
+						PhaseView view = new PhaseView();
+						player.addObserver(view);
+						players.add(player);
+					
 				}
-				
-				PhaseView view = new PhaseView();
-				player.addObserver(view);
-				players.add(player);
 			}
 			
 			assignTerritoriesAndArmies();
@@ -791,6 +825,10 @@ public class Main {
 		userEnteredCardLines = new ArrayList<String>();
 		players = new ArrayList<Player>();
 		cards = new ArrayList<Card>();
+		numberOfTurns = new ArrayList<ArrayList<Integer>>();
+		tournamentResult = new ArrayList<ArrayList<String>>();
+		mapFilePaths = new ArrayList<String>();
+		numberOfGame = new ArrayList<Integer>();
 
 		gameFinished = false;
 
@@ -808,30 +846,44 @@ public class Main {
 		}
 		else {
 			gameMode = mainView.getGameModeView();
-
 			if(gameMode.equalsIgnoreCase("tournament mode")) {
-				int numberOfMaps = mainView.chooseNumberOfMapsView();
+				numberOfMaps = mainView.chooseNumberOfMapsView();
 				for(int i = 0; i < numberOfMaps; ++i) {	
-					mapFilePath = null;
-					int numberOfGame = mainView.chooseNumberOfGamesView();
-					for(int j = 0; j < numberOfGame; ++j) {
+					Main.mapFilePaths.add(mainView.getTournamentMapPathsView(i+1));
+					Main.numberOfGame.add(mainView.chooseNumberOfGamesView(i+1));
+					
+					ArrayList<Integer> turnCount = new ArrayList<Integer>();
+					for(int j = 0; j < numberOfGame.get(i); ++j) {
+						turnCount.add(mainView.chooseNumberOfTurnsForEachGameView(i+1, j+1));
+					}
+					Main.numberOfTurns.add(turnCount);
+				}
+				
+				for(int i = 0; i < numberOfMaps; ++i) {	
+					mapFilePath = Main.mapFilePaths.get(i);
+					ArrayList<String> gameResult = new ArrayList<String>();
+					
+					for(int j = 0; j < numberOfGame.get(i); ++j) {
 						userEnteredContinentLines.clear();
 						userEnteredTerritoryLines.clear();
-						players.clear();
 						totalInitialArmies = 0;
-
+						
 						activeMap = new Map();
 						Map.listOfAllTerritories.clear();
 						Map.listOfAllContinents.clear();
 
 						WorldDominationView worldDominationView = new WorldDominationView();
 						activeMap.addObserver(worldDominationView);
-
-						int numberOfTurns = mainView.chooseNumberOfTurnsForEachGameView();
+						
+						int numberOfTurnsForThisGame = Main.numberOfTurns.get(i).get(j);
+						
+						Player.resetPlayersData();
+						
 						mainView.startupPhaseView();
-
+						
 						int currentTurnCount = 0;
-						while(!activeMap.allTerritoriesOwnBySinglePlayer(true) && currentTurnCount < numberOfTurns) {
+						
+						while(!activeMap.allTerritoriesOwnBySinglePlayer(true) && currentTurnCount < numberOfTurnsForThisGame) {
 							currentTurnCount++;
 							System.out.println("---------------------------------------------------------");
 							System.out.println("----------Turn : " + currentTurnCount + " ---------------");
@@ -840,18 +892,29 @@ public class Main {
 								if(player.assignedTerritories.size() > 0) {
 									player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
 									if(gameFinished) {
+										gameResult.add(player.getName());
 										break;
 									}
 								}
 							}
 						}
-						if(currentTurnCount >= numberOfTurns) {
+						if(currentTurnCount >= numberOfTurnsForThisGame) {
+							gameResult.add("Draw");
 							System.out.println("Number of Turns exhausted");
 						}
-						System.out.println("======== Game finished ========");
+						System.out.println("======== Map - " + (i+1) + " Game - " + (j+1) + " is finished ========");
 						gameFinished = false;
 					}
+					tournamentResult.add(gameResult);
 				}
+				
+				System.out.println("====================*********** Tournament Results ****************=================================");
+				for(int i = 0; i < tournamentResult.size(); ++i) {
+					for(int j = 0; j < tournamentResult.get(i).size(); ++ j) {
+						System.out.println("======== Map - " + (i+1) + " Game - " + (j+1) + " result - "+ tournamentResult.get(i).get(j));
+					}
+				}
+				System.out.print("====================***********************************************=================================");
 			}
 			else {
 				activeMap = new Map();

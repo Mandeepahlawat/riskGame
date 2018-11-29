@@ -241,20 +241,29 @@ public Scanner keyboard;
 	public String playerStrategyView() {
 		String playerStrategy = null;
 		ArrayList<String> validStrategies = new ArrayList<String>();
-		validStrategies.add("Human");
+		if(!Main.gameMode.equalsIgnoreCase("tournament mode")) {
+			validStrategies.add("Human");
+			validStrategies.add("human");
+		}
 		validStrategies.add("Aggressive");
 		validStrategies.add("Benevolent");
 		validStrategies.add("Random");
 		validStrategies.add("Cheater");
-		validStrategies.add("human");
 		validStrategies.add("aggressive");
 		validStrategies.add("benevolent");
 		validStrategies.add("random");
 		validStrategies.add("cheater");
 		while(playerStrategy == null || !validStrategies.contains(playerStrategy)) {
-			System.out.println("\nEnter the strategy for this player."
-					+ "\n(Note: the valid options are: Human, Aggressive, Benevolent"
-					+ ", Random, Cheater)");
+			if(!Main.gameMode.equalsIgnoreCase("tournament mode")) {
+				System.out.println("\nEnter the strategy for this player."
+						+ "\n(Note: the valid options are: Human, Aggressive, Benevolent"
+						+ ", Random, Cheater)");
+			}
+			else {
+				System.out.println("\nEnter the strategy for this player."
+						+ "\n(Note: the valid options are: Aggressive, Benevolent"
+						+ ", Random, Cheater)");
+			}
 			playerStrategy = keyboard.nextLine();
 		}
 		return playerStrategy;
@@ -307,10 +316,10 @@ public Scanner keyboard;
 	 * 
 	 * @return The number of games
 	 */
-	public int chooseNumberOfGamesView() {
+	public int chooseNumberOfGamesView(int index) {
 		int numberOfGames = 0;
 		while(numberOfGames <= 0 || numberOfGames > 5) {
-			System.out.println("\nEnter the number of games for this Map"
+			System.out.println("\nEnter the number of games for Map - " + index
 					+ "\n(Note: the valid value is 1 to 5)");
 			numberOfGames = Integer.parseInt(keyboard.nextLine());
 		}
@@ -324,10 +333,10 @@ public Scanner keyboard;
 	 * @return the number of turns in the game
 	 * 
 	 */
-	public int chooseNumberOfTurnsForEachGameView() {
+	public int chooseNumberOfTurnsForEachGameView(int mapIndex, int gameIndex) {
 		int numberOfTurns = 0;
 		while(numberOfTurns < 10 || numberOfTurns > 50) {
-			System.out.println("\nEnter the number of turns for this game"
+			System.out.println("\nEnter the number of turns for Map - " + mapIndex + " and game - " + gameIndex
 					+ "\n(Note: the valid value is 10 to 50)");
 			numberOfTurns = Integer.parseInt(keyboard.nextLine());
 		}
@@ -342,5 +351,10 @@ public Scanner keyboard;
 	public boolean loadFromSaveData() {
 		System.out.println("\nDo you want to load game from previous Data? Enter yes or no");
 		return keyboard.nextLine().equalsIgnoreCase("yes");
+	}
+	
+	public String getTournamentMapPathsView(int index) {
+		System.out.println("Enter the map file path for map - " + index);
+		return keyboard.nextLine();
 	}
 }

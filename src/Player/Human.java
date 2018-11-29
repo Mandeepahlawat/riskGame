@@ -325,11 +325,8 @@ public class Human implements Strategy {
 			if (defenderLost) {
 				for (Player player : Main.players) {					
 					if (player.getName().equalsIgnoreCase(attacker)) {
-						for (Territory territory : Main.activeMap.territories) {
-							if (territory.name.equals(attackAt)) {
-								player.addNewOwnedTerritory(territory);
-							}
-						}
+						Territory territory = Map.findTerritory(attackAt);
+						player.addNewOwnedTerritory(territory);
 						System.out.println("Enter the number of armies you would like to place in your new territory:");
 						player.moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
 					}

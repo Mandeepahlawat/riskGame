@@ -294,7 +294,7 @@ public class Player_Test {
 		t1.numberOfArmies = 5;
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories(); 
-		assertTrue(player.canattackFromThisCountry("Africa"));
+		assertTrue(player.canAttackFromThisCountry("Africa"));
 	}
 	/**
 	* This method is used to test function that validates the 
@@ -320,7 +320,7 @@ public class Player_Test {
 		t1.numberOfArmies = 1;
 		Main.activeMap.territories.add(t1);
 		Main.assignInitialTerritories(); 
-		assertFalse(player.canattackFromThisCountry("Africa"));
+		assertFalse(player.canAttackFromThisCountry("Africa"));
 	}
 	/**
 	* This method is used to test function that exchanges the card
