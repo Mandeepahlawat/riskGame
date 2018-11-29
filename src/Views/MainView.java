@@ -304,4 +304,14 @@ public Scanner keyboard;
 		}
 		return numberOfTurns;
 	}
+	
+	public boolean wantToSaveGame() {
+		System.out.println("\nDo you want to save this game? Enter yes or no");
+		return keyboard.nextLine().equalsIgnoreCase("yes");
+	}
+	
+	public boolean loadFromSaveData() {
+		System.out.println("\nDo you want to load game from previous Data? Enter yes or no");
+		return keyboard.nextLine().equalsIgnoreCase("yes");
+	}
 }

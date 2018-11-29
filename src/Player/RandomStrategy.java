@@ -105,4 +105,8 @@ public class RandomStrategy implements Strategy {
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 
+	 @Override
+	 public String toString() {
+		 return "random";
+	 }
 }

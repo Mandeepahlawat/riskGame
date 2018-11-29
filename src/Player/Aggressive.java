@@ -105,5 +105,10 @@ public class Aggressive implements Strategy {
 	public void attack() {
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
+	
+	 @Override
+	 public String toString() {
+		 return "aggressive";
+	 }
 
 }
