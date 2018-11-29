@@ -787,74 +787,82 @@ public class Main {
 	public static void main(String[] args) {
 		userEnteredContinentLines = new ArrayList<String>();
 		userEnteredTerritoryLines = new ArrayList<String>();
+		userEnteredPlayerLines = new ArrayList<String>();
+		userEnteredCardLines = new ArrayList<String>();
 		players = new ArrayList<Player>();
-		
+		cards = new ArrayList<Card>();
+
 		gameFinished = false;
-		
+
 		mainView = new MainView();
-		
-		gameMode = mainView.getGameModeView();
-		
-		if(gameMode.equalsIgnoreCase("tournament mode")) {
-			int numberOfMaps = mainView.chooseNumberOfMapsView();
-			for(int i = 0; i < numberOfMaps; ++i) {	
-				mapFilePath = null;
-				int numberOfGame = mainView.chooseNumberOfGamesView();
-				for(int j = 0; j < numberOfGame; ++j) {
-					userEnteredContinentLines.clear();
-					userEnteredTerritoryLines.clear();
-					players.clear();
-					totalInitialArmies = 0;
-					
-					activeMap = new Map();
-					Map.listOfAllTerritories.clear();
-					Map.listOfAllContinents.clear();
-					
-					WorldDominationView worldDominationView = new WorldDominationView();
-					activeMap.addObserver(worldDominationView);
-					
-					int numberOfTurns = mainView.chooseNumberOfTurnsForEachGameView();
-					mainView.startupPhaseView();
-					
-					int currentTurnCount = 0;
-					while(!activeMap.allTerritoriesOwnBySinglePlayer(true) && currentTurnCount < numberOfTurns) {
-						currentTurnCount++;
-						System.out.println("---------------------------------------------------------");
-						System.out.println("----------Turn : " + currentTurnCount + " ---------------");
-						System.out.println("---------------------------------------------------------");
-						for(Player player : players) {
-							if(player.assignedTerritories.size() > 0) {
-								player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
-								if(gameFinished) {
-									break;
-								}
-							}
-						}
-					}
-					if(currentTurnCount >= numberOfTurns) {
-						System.out.println("Number of Turns exhausted");
-					}
-					System.out.println("======== Game finished ========");
-					gameFinished = false;
-				}
-			}
-		}
-		else {
+
+		if(mainView.loadFromSaveData()) {
 			activeMap = new Map();
 			WorldDominationView worldDominationView = new WorldDominationView();
 			activeMap.addObserver(worldDominationView);
-			
-			mainView.startupPhaseView();
-			
-			while(!activeMap.allTerritoriesOwnBySinglePlayer(true)) {
-				for(Player player : players) {
-					if(player.assignedTerritories.size() > 0) {
-						player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
+
+			String fileName = mainView.fileNameToSaveView();
+			buildMapFromSaveData(fileName);
+			playGame();
+
+		}
+		else {
+			gameMode = mainView.getGameModeView();
+
+			if(gameMode.equalsIgnoreCase("tournament mode")) {
+				int numberOfMaps = mainView.chooseNumberOfMapsView();
+				for(int i = 0; i < numberOfMaps; ++i) {	
+					mapFilePath = null;
+					int numberOfGame = mainView.chooseNumberOfGamesView();
+					for(int j = 0; j < numberOfGame; ++j) {
+						userEnteredContinentLines.clear();
+						userEnteredTerritoryLines.clear();
+						players.clear();
+						totalInitialArmies = 0;
+
+						activeMap = new Map();
+						Map.listOfAllTerritories.clear();
+						Map.listOfAllContinents.clear();
+
+						WorldDominationView worldDominationView = new WorldDominationView();
+						activeMap.addObserver(worldDominationView);
+
+						int numberOfTurns = mainView.chooseNumberOfTurnsForEachGameView();
+						mainView.startupPhaseView();
+
+						int currentTurnCount = 0;
+						while(!activeMap.allTerritoriesOwnBySinglePlayer(true) && currentTurnCount < numberOfTurns) {
+							currentTurnCount++;
+							System.out.println("---------------------------------------------------------");
+							System.out.println("----------Turn : " + currentTurnCount + " ---------------");
+							System.out.println("---------------------------------------------------------");
+							for(Player player : players) {
+								if(player.assignedTerritories.size() > 0) {
+									player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
+									if(gameFinished) {
+										break;
+									}
+								}
+							}
+						}
+						if(currentTurnCount >= numberOfTurns) {
+							System.out.println("Number of Turns exhausted");
+						}
+						System.out.println("======== Game finished ========");
+						gameFinished = false;
 					}
 				}
 			}
-			System.out.println("======== Game finished ========");
+			else {
+				activeMap = new Map();
+				WorldDominationView worldDominationView = new WorldDominationView();
+				activeMap.addObserver(worldDominationView);
+
+				mainView.startupPhaseView();
+				playGame();
+			}
+
 		}
-		
+
 	}
 }
