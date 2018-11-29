@@ -64,7 +64,6 @@ public class RandomStrategy_Test {
 	 * this test the calculateReinforcementArmies method
 	 * condition if no continent capture
 	 */
-	
 	@Test
 	public void testCalculateReinforcementArmiesNoContinentCapture() {
 		Main.activeMap = new Map();
@@ -91,7 +90,6 @@ public class RandomStrategy_Test {
 	 * test class testPlaceReinforcements
 	 * this test the placeReinforcements method 
 	 */
-	
 	@Test
 	public void testPlaceReinforcements() {
 		Territory t1 = new Territory("Africa");

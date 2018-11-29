@@ -64,7 +64,6 @@ public class Human_Test {
 	 * this test the calculateReinforcementArmies method
 	 * condition if no continent capture
 	 */
-	
 	@Test
 	public void testCalculateReinforcementArmiesNoContinentCapture() {
 		Main.activeMap = new Map();

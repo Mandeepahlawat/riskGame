@@ -49,7 +49,6 @@ public class Card_Test {
 	/**
 	 * test the Card constructing method
 	 */
-	
 	@Test
 	public void testCardTerritoryCardType() {
 		Main.cards = new ArrayList<>();
@@ -85,7 +84,6 @@ public class Card_Test {
 	/**
 	 * test if the card cannot be assigned
 	 */
-	
 	@Test
 	public void testCanNotAssignedToPlayer() {
 		Main.cards = new ArrayList<>();

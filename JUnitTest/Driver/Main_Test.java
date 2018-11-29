@@ -315,6 +315,9 @@ public class Main_Test {
 		
 	}
  
+	/**
+	 * test method to build map from saved data
+	 */
 	@Test
 	public void testBuildMapFromSaveData() {
 		Main.cards=new ArrayList<>();
@@ -328,6 +331,9 @@ public class Main_Test {
 		//**success testing add the comparisons like continent before and after are same*** like that 
 	}
 	
+	/**
+	 * test method for saving data of map
+	 */
 	@Test
 	public void testSaveGameData() throws IOException {
 		

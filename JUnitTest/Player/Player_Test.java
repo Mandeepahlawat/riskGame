@@ -753,7 +753,6 @@ public class Player_Test {
 	 * this method is to test the method 
 	 * that return territory with max army 
 	 */
-	
 	@Test
 	public void testTerritoryWithMaxArmy() {
 		Territory t1 = new Territory("Africa");
@@ -776,7 +775,6 @@ public class Player_Test {
 	 * this method is to test the method 
 	 * that return territory with minimum army 
 	 */
-	
 	@Test
 	public void testTerritoryWithMinArmy() {
 		Territory t1 = new Territory("Africa");
@@ -837,7 +835,6 @@ public class Player_Test {
 	 * this method is to test the method 
 	 * that return empty hashset when territory dont have neighbor with other player
 	 */
-	
 	@Test
 	public void testFailGetTerritoriesWithNeighboursToOthers() { 
 		
