@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.junit.Before;
@@ -792,5 +794,98 @@ public class Player_Test {
 		assertTrue(maxTerritory.name.equals("Africa")); //0 is attacker 1 is defender
 	}
 	
+	/**
+	 * this method is to test the method 
+	 * that return territory having neighbor owner by other player
+	 */
+	@Test
+	public void testGetTerritoriesWithNeighboursToOthers() {
+		boolean territoryFound=false;
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=new Player("Player2");
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		
+		t1 = new Territory("India");
+		t1.owner=player;
+		t2 = new Territory("Pakistan");
+		t2.owner=player;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(); 
+		Iterator<Territory> it = territoryNeighborOther.iterator();
+		while(it.hasNext()) {
+			if(it.next().name.equals("Africa")) {
+				territoryFound=true;
+			}
+		}
+		assertTrue(territoryFound); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return empty hashset when territory dont have neighbor with other player
+	 */
+	
+	@Test
+	public void testFailGetTerritoriesWithNeighboursToOthers() { 
+		
+		Territory t1 = new Territory("India");
+		t1.owner=player;
+		Territory t2 = new Territory("Pakistan");
+		t2.owner=player;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(); 
+		
+		assertTrue(territoryNeighborOther.isEmpty()); //0 is attacker 1 is defender
+	}
+	
+	@Test
+	public void testGetTerritoriesWithNeighboursToOthersSpecific() {
+		boolean territoryFound=false;
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=new Player("Player2");
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		Territory searchTerritory = t1;
+		
+		t1 = new Territory("India");
+		t1.owner=player;
+		t2 = new Territory("Pakistan");
+		t2.owner=player;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(searchTerritory); 
+		Iterator<Territory> it = territoryNeighborOther.iterator();
+		while(it.hasNext()) {
+			if(it.next().name.equals("Africa")) {
+				territoryFound=true;
+			}
+		}
+		assertTrue(territoryFound); //0 is attacker 1 is defender
+	}
 	
 }
