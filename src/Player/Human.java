@@ -341,7 +341,7 @@ public class Human implements Strategy {
 			}
 
 			if (!gameCompleted) {
-				player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+				attack();
 			} else {
 				System.out.println("\nGame Completed!\n" + player.getName() + "wins!!");
 			}

@@ -2,6 +2,7 @@ package Player;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -148,7 +149,6 @@ public class Aggressive implements Strategy {
 		boolean gameCompleted = false; // if all territories are conquered
 		boolean defenderLost = false;
 		String attackFrom = "", attackAt = "", opponent = "", attacker = "";
-		Scanner keyboard = new Scanner(System.in);
 
 		HashSet<Territory> opponents;
 		ArrayList<Territory> listOfTerritories = player.assignedTerritories;
@@ -233,8 +233,10 @@ public class Aggressive implements Strategy {
 							player.addNewOwnedTerritory(territory);
 						}
 					}
-					System.out.println("Enter the number of armies you would like to place in your new territory:");
-					player.moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
+					Random random = new Random();
+					int armiesToMove = random.nextInt(strongest.numberOfArmies-1);
+					System.out.println("Moving "+ armiesToMove + "to newly conquered territory");
+					player.moveArmiesToNewTerritory(attackFrom, attackAt, armiesToMove);
 				}
 			}
 		}

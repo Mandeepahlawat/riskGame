@@ -509,7 +509,7 @@ public class Main {
 			 for(Player player : players) {
 				 if(player.assignedTerritories.size() > 0) {
 					 player.setCurrentGamePhase(GamePhase.REINFORCEMENT);
-					 if(!Main.gameFinished) {
+					 if(player.playerStrategy.toString().equalsIgnoreCase("human") && !Main.gameFinished) {
 						 if(mainView.wantToSaveGame()) {
 							 String fileName = mainView.fileNameToSaveView();
 							 saveGameData(fileName, players.indexOf(player));
