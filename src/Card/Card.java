@@ -87,6 +87,7 @@ public class Card {
 		this.type = CardType.getRandomCard();
 		this.territory = territory;
 		this.previousOwners = new ArrayList<Player>();
+		Main.cards.add(this);
 	}
 	
 
