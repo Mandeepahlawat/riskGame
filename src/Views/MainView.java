@@ -333,12 +333,25 @@ public Scanner keyboard;
 		}
 		return numberOfTurns;
 	}
-	
+	/**
+	 * 
+	 * This method will ask the player to save 
+	 * the game or not
+	 * 
+	 * @return the option which matches the word yes.
+	 *
+	 */
 	public boolean wantToSaveGame() {
 		System.out.println("\nDo you want to save this game? Enter yes or no");
 		return keyboard.nextLine().equalsIgnoreCase("yes");
 	}
-	
+	/**
+	 *
+	 * This method will load data from saved previous one.
+	 * 
+	 * @return the option which matches the word yes. 
+	 *
+	 */
 	public boolean loadFromSaveData() {
 		System.out.println("\nDo you want to load game from previous Data? Enter yes or no");
 		return keyboard.nextLine().equalsIgnoreCase("yes");
