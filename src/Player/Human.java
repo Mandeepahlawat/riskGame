@@ -12,8 +12,7 @@ import Views.CardExchangeView;
 
 /**
  * 
- * The Human class is implementing functions 
- * in Strategy interface
+ * The Human class is implementing functions in Strategy interface
  * 
  * @author mandeepahlawat
  * @version 1.0
@@ -39,8 +38,8 @@ public class Human implements Strategy {
 
 	/**
 	 *
-	 * This method Calculate's the number of reinforcements 
-	 * that the player gets in each turn of the game.
+	 * This method Calculate's the number of reinforcements that the player gets in
+	 * each turn of the game.
 	 *
 	 * @return int the number of reinforcement armies.
 	 *
@@ -94,11 +93,11 @@ public class Human implements Strategy {
 
 	/**
 	 * 
-	 * This method defines Place Reinforcements in territories
-	 * which also print's out player name,armies left in it.
+	 * This method defines Place Reinforcements in territories which also print's
+	 * out player name,armies left in it.
 	 * 
-	 * @param reinforcements number of reinforcement 
-	 * armies the player in the second parameter gets.
+	 * @param reinforcements number of reinforcement armies the player in the second
+	 *                       parameter gets.
 	 * 
 	 */
 	@Override
@@ -128,9 +127,8 @@ public class Human implements Strategy {
 
 	/**
 	 * 
-	 * fortification method to allow a player to move 
-	 * one of his armies from one country he owns to 
-	 * another that is adjacent to it.
+	 * fortification method to allow a player to move one of his armies from one
+	 * country he owns to another that is adjacent to it.
 	 * 
 	 */
 	@Override
@@ -216,17 +214,15 @@ public class Human implements Strategy {
 
 	/**
 	 * 
-	 * The method will implement the attack phase. 
-	 * attackDone if all territories are
-	 * conquered or attack lost. gameCompleted if 
-	 * all territories are conquered.
+	 * The method will implement the attack phase. attackDone if all territories are
+	 * conquered or attack lost. gameCompleted if all territories are conquered.
 	 * 
 	 */
 	@Override
 	public void attack() {
 
-		boolean attackDone = false; 
-		boolean gameCompleted = false; 
+		boolean attackDone = false;
+		boolean gameCompleted = false;
 		boolean defenderLost = false;
 		String attackFrom = "", attackAt = "", opponent = "", attacker = "";
 
@@ -242,7 +238,7 @@ public class Human implements Strategy {
 					attackDone = true;
 					break;
 				}
-				if (player.canattackFromThisCountry(attackFrom)) {
+				if (player.canAttackFromThisCountry(attackFrom)) {
 					System.out.println("Enter the country you want to attack (Enter 'exit' to skip attack phase)");
 					attackAt = keyboard.nextLine();
 					if (attackAt.equalsIgnoreCase("exit")) {
@@ -277,38 +273,51 @@ public class Human implements Strategy {
 								defenderLost = true;
 								break;
 							} else {
-								Vector<Integer> attackerDice, defenderDice;
-								int attackerDiceCount = 0;
-								int defenderDiceCount = 0;
-								if (allOutMode) {
-									attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker",
-											attackFrom, attackAt, allOutMode);
-									attackerDice = player.rollDice(attackerDiceCount);
-									
-									defenderDiceCount = player.calculateNumberOfDiceAllowed("defender",
-											attackFrom, attackAt, allOutMode);
-									defenderDice = player.rollDice(defenderDiceCount);
-								} else {
-									System.out.println("Choose Attacker's number of dice");
-									attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker",
-											attackFrom, attackAt, allOutMode);
-									attackerDice = player.rollDice(attackerDiceCount);
-									
-									System.out.println("Choose Defender's number of dice");
-									defenderDiceCount = player.calculateNumberOfDiceAllowed("defender",
-											attackFrom, attackAt, allOutMode);
-									defenderDice = player.rollDice(defenderDiceCount);
+								String continueAttack = "yes";
+								if(!allOutMode) {
+								System.out.println("Do you want continue the attack? yes or no");
+								continueAttack = keyboard.nextLine();
 								}
-								while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
-									int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
-									int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
-									if (attackerDiceValue > defenderDiceValue) {
-										player.reduceArmy("defender", attackFrom, attackAt);
-										Map.findTerritory(attackAt).owner.totalArmiesCount--;
+								if (continueAttack.equalsIgnoreCase("yes")) {
+									Vector<Integer> attackerDice, defenderDice;
+									int attackerDiceCount = 0;
+									int defenderDiceCount = 0;
+									if (allOutMode) {
+										attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker", attackFrom,
+												attackAt, allOutMode, false);
+										attackerDice = player.rollDice(attackerDiceCount);
+
+										defenderDiceCount = player.calculateNumberOfDiceAllowed("defender", attackFrom,
+												attackAt, allOutMode, false);
+										defenderDice = player.rollDice(defenderDiceCount);
 									} else {
-										player.reduceArmy("attacker", attackFrom, attackAt);
-										player.totalArmiesCount--;
+										System.out.println("Choose Attacker's number of dice");
+										attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker", attackFrom,
+												attackAt, allOutMode, false);
+										attackerDice = player.rollDice(attackerDiceCount);
+
+										System.out.println("Choose Defender's number of dice");
+										defenderDiceCount = player.calculateNumberOfDiceAllowed("defender", attackFrom,
+												attackAt, allOutMode, false);
+										defenderDice = player.rollDice(defenderDiceCount);
 									}
+									while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+										int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+										int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
+										if (attackerDiceValue > defenderDiceValue) {
+											player.reduceArmy("defender", attackFrom, attackAt);
+											Map.findTerritory(attackAt).owner.totalArmiesCount--;
+										} else {
+											player.reduceArmy("attacker", attackFrom, attackAt);
+											player.totalArmiesCount--;
+										}
+									}
+								}
+								else {
+									System.out.println("Leaving attack in the middle.");
+									finishedAttackingThatTerritory = true;
+									attackDone = true;
+									break;
 								}
 							}
 						}
@@ -321,32 +330,27 @@ public class Human implements Strategy {
 			}
 
 			if (defenderLost) {
-				for (Player player : Main.players) {					
+				for (Player player : Main.players) {
 					if (player.getName().equalsIgnoreCase(attacker)) {
-						for (Territory territory : Main.activeMap.territories) {
-							if (territory.name.equals(attackAt)) {
-								player.addNewOwnedTerritory(territory);
-							}
-						}
+						Territory territory = Map.findTerritory(attackAt);
+						player.addNewOwnedTerritory(territory);
 						System.out.println("Enter the number of armies you would like to place in your new territory:");
 						player.moveArmiesToNewTerritory(attackFrom, attackAt, keyboard.nextInt());
 					}
 				}
 			}
 
-		
 			if (Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
 				gameCompleted = true;
 				attackDone = true;
 			}
 
 			if (!gameCompleted) {
-				player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+				attack();
 			} else {
 				System.out.println("\nGame Completed!\n" + player.getName() + "wins!!");
 			}
-		}
-		else {
+		} else {
 			player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 		}
 	}
