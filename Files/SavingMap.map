@@ -1,0 +1,38 @@
+
+
+[Continents]
+Asia=9
+South America=10
+North America=4
+
+[Territories]
+USA, 1, 2, North America, canada, mexico, brazil, china
+canada, 1, 2, North America, USA
+mexico, 1, 2, North America, USA, brazil
+brazil, 1, 2, South America, USA, mexico
+china, 1, 2, Asia, USA, nepal
+india, 1, 2, Asia, pakistan, nepal
+pakistan, 1, 2, Asia, india
+nepal, 1, 2, Asia, india, china
+
+[Player]
+Player1, null, 20
+Player2, null, 20
+Player3, null, 20
+Player4, null, 20
+Player5, null, 20
+Player6, null, 20
+Player0, human, 53, USA(25), mexico(10), brazil(18)
+Player1, random, 40, canada(10), india(10), pakistan(7), nepal(6), china(7)
+
+[Card]
+5
+
+INFANTRY, USA, 
+CAVALRY, canada, 
+CAVALRY, mexico, 
+CAVALRY, brazil, 
+ARTILLERY, india, 
+CAVALRY, pakistan, 
+INFANTRY, nepal, 
+INFANTRY, china, 
