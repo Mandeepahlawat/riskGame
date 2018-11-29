@@ -440,6 +440,38 @@ public class Main {
 			player.addObserver(view);
 			players.add(player);
 		}
+		
+		// needs to clear as each territory generates a card automatically
+		// remove all those cards and assign proper card to each territory
+		Main.cards.clear();
+
+		int i = 0;
+		for(String cardLine : userEnteredCardLines) {
+			if(i == 0) {
+				Card.cardExchangeValue = Integer.parseInt(cardLine);
+			}
+			else {
+				ArrayList<String> cardData = new ArrayList<String>(Arrays.asList(cardLine.split(",")));
+				cardData.removeAll(Arrays.asList("", null, " "));
+
+				Territory territory = Map.findTerritory(cardData.get(1).trim());
+				Card card = new Card(territory, CardType.valueOf(cardData.get(0).trim()));
+
+				if(cardData.size() >= 3) {
+					Player player = Main.findPlayer(cardData.get(2));
+
+					card.owner = player;
+					player.cards.add(card);
+					territory.card = card;
+					for(String previousOwner : cardData.subList(3, cardData.size())) {
+						Player previousPlayer = Main.findPlayer(previousOwner);
+						card.previousOwners.add(previousPlayer);
+					}
+				}
+
+			}
+			++i;
+		}
 	}
 
 	/**
