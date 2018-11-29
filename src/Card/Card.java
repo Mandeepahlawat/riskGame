@@ -68,16 +68,20 @@ public class Card {
 	public Player owner;
 	
 	/**
-	 * player names which all have owned this
+	 *
+	 * list of player names which all have owned this
 	 * territory card.
+	 *
 	 */
 	public ArrayList<Player> previousOwners;
 	
 	/**
+	*
 	* This is the default constructor of the Card class and will be used to
 	* create the cardtype and territory 
 	* 
 	* @param territory the new territory 
+	*
 	*/
 	public Card(Territory territory) {
 		this.type = CardType.getRandomCard();
@@ -88,10 +92,12 @@ public class Card {
 	
 
     /**
+	*
 	* This is the default constructor of the Card class and will be used to
 	* create the cardtype and territory 
 	* 
 	* @param territory the new territory 
+	*
 	*/
 	public Card(Territory territory, CardType type) {
 		this.type = type;
@@ -104,7 +110,9 @@ public class Card {
 	 * This method assigns the owner of the card to the player class
 	 * object passed as the parameter, it also adds the card to the player
 	 * cards list
+	 * 
 	 * @param player player class object whom we want to assign the card
+	 *
 	 */
 	public void assignPlayer(Player player) {
 		System.out.println(player.getName() + " get a card of type: " + this.type);

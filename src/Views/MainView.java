@@ -342,17 +342,37 @@ public Scanner keyboard;
 		}
 		return numberOfTurns;
 	}
-	
+	/**
+	 * 
+	 * This method will ask the player to save 
+	 * the game or not
+	 * 
+	 * @return the option which matches the word yes.
+	 *
+	 */
 	public boolean wantToSaveGame() {
 		System.out.println("\nDo you want to save this game? Enter yes or no");
 		return keyboard.nextLine().equalsIgnoreCase("yes");
 	}
-	
+	/**
+	 *
+	 * This method will load data from saved previous one.
+	 * 
+	 * @return the option which matches the word yes. 
+	 *
+	 */
 	public boolean loadFromSaveData() {
 		System.out.println("\nDo you want to load game from previous Data? Enter yes or no");
 		return keyboard.nextLine().equalsIgnoreCase("yes");
 	}
-	
+	/**
+	 * This method will get the tournment maps paths view 
+	 * 
+	 * @param index a integer vaule
+	 * 
+	 * @return Asks for user's input
+	 *
+	 */
 	public String getTournamentMapPathsView(int index) {
 		System.out.println("Enter the map file path for map - " + index);
 		return keyboard.nextLine();

@@ -146,7 +146,10 @@ public class Cheater implements Strategy {
 		}
 	}
 	
-	 @Override
+	/**
+	 * This Method will return string value.
+	 */
+	@Override
 	 public String toString() {
 		 return "cheater";
 	 }
