@@ -32,6 +32,7 @@ import Map.Map.*;
 public class Main_Test {
 	
 	public static final String FILE_NAME = "Files\\returnMap.map";
+	public static final String SAVED_FILE_NAME = "Files\\NewMap2.map";
 
 	/**
 	* This method is used to validate the new map line
@@ -46,6 +47,10 @@ public class Main_Test {
 	* 
 	* return True if new line is valid otherwise False
 	*/
+	@Test
+	public void testBefore() {
+		Main.cards=new ArrayList<>();
+	}
 	@Test
 	public void testValidateMapLineForInteger() {
 		boolean returnStat=	Main.validateMapLine(true, "Northern Islands=12");			/*Continent Edit*/
@@ -308,4 +313,15 @@ public class Main_Test {
 		
 	}
  
+	@Test
+	public void testBuildMapFromSaveData() {
+		Main.cards=new ArrayList<>();
+		Main.activeMap = new Map();
+		Main.userEnteredContinentLines = new ArrayList<String>();
+		Main.userEnteredTerritoryLines = new ArrayList<String>();
+		Main.userEnteredPlayerLines = new ArrayList<>();
+		Main.userEnteredCardLines = new ArrayList<>();
+		Main.buildMapFromSaveData(SAVED_FILE_NAME);
+		//**success testing add the comparisons like continent before and after are same*** like that 
+	}
 }
