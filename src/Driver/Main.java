@@ -347,7 +347,55 @@ public class Main {
 		}
 	}
 
+	public static void saveGameData(String fileName, int playerIndex) {
+		String gameData = null;
 
+		gameData = "\n\n[Continents]"; 
+
+		for(Map continent : Map.listOfAllContinents) {
+			gameData += "\n" + continent.name + '=' + continent.score;
+		}
+
+		gameData += "\n\n[Territories]";
+		for(Territory territory : Map.listOfAllTerritories) {
+			gameData += "\n" + territory.name + ", 1, 2, " + territory.continent.name;
+			for(Territory neighbour : territory.neighbours) {
+				gameData += ", " + neighbour.name;
+			}
+		}
+
+		gameData += "\n\n[Player]";
+		// format = name, strategy, totalArmiesCount, assignedTerritories 
+		for(Player player : Main.players) {
+			gameData += "\n" + player.getName() + ", " + player.playerStrategy + ", " + player.totalArmiesCount;
+			for(Territory territory : player.assignedTerritories) {
+				gameData += ", " + territory.name + "(" + territory.numberOfArmies +")";
+			}
+		}
+
+		gameData += "\n\n[Card]";
+		// cardExchangeValue
+		// format = type, territory, owner, previousOwners
+		gameData += "\n" + Card.cardExchangeValue + "\n";
+		for(Card card : Main.cards) {
+			gameData += "\n" + card + ", " + card.territory.name + ", ";
+			if(card.owner != null) {
+				gameData += card.owner.getName();
+
+				for(Player owner : card.previousOwners) {
+					gameData += ", " + owner.getName();
+				}
+			}
+		}
+
+		try {  
+            Writer w = new FileWriter(fileName);  
+            w.write(gameData);  
+            w.close();  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }  
+	}
 
 	/**
 	* This method loads the Map and displays its content.
