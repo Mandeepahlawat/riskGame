@@ -365,7 +365,14 @@ public Scanner keyboard;
 		System.out.println("\nDo you want to load game from previous Data? Enter yes or no");
 		return keyboard.nextLine().equalsIgnoreCase("yes");
 	}
-	
+	/**
+	 * This method will get the tournment maps paths view 
+	 * 
+	 * @param index a integer vaule
+	 * 
+	 * @return Asks for user's input
+	 *
+	 */
 	public String getTournamentMapPathsView(int index) {
 		System.out.println("Enter the map file path for map - " + index);
 		return keyboard.nextLine();
