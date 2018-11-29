@@ -200,11 +200,11 @@ public class Aggressive implements Strategy {
 						int defenderDiceCount = 0;
 
 						attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker", attackFrom, attackAt,
-								allOutMode);
+								allOutMode, false);
 						attackerDice = player.rollDice(attackerDiceCount);
 
 						defenderDiceCount = player.calculateNumberOfDiceAllowed("defender", attackFrom, attackAt,
-								allOutMode);
+								allOutMode, false);
 						defenderDice = player.rollDice(defenderDiceCount);
 
 						while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {

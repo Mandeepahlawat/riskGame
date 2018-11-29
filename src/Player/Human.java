@@ -277,26 +277,28 @@ public class Human implements Strategy {
 								defenderLost = true;
 								break;
 							} else {
+								System.out.println("Do you want to leave the attack? yes or no");
+								String continueAttack = keyboard.nextLine();
 								Vector<Integer> attackerDice, defenderDice;
 								int attackerDiceCount = 0;
 								int defenderDiceCount = 0;
 								if (allOutMode) {
 									attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker",
-											attackFrom, attackAt, allOutMode);
+											attackFrom, attackAt, allOutMode, false);
 									attackerDice = player.rollDice(attackerDiceCount);
 									
 									defenderDiceCount = player.calculateNumberOfDiceAllowed("defender",
-											attackFrom, attackAt, allOutMode);
+											attackFrom, attackAt, allOutMode, false);
 									defenderDice = player.rollDice(defenderDiceCount);
 								} else {
 									System.out.println("Choose Attacker's number of dice");
 									attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker",
-											attackFrom, attackAt, allOutMode);
+											attackFrom, attackAt, allOutMode, false);
 									attackerDice = player.rollDice(attackerDiceCount);
 									
 									System.out.println("Choose Defender's number of dice");
 									defenderDiceCount = player.calculateNumberOfDiceAllowed("defender",
-											attackFrom, attackAt, allOutMode);
+											attackFrom, attackAt, allOutMode, false);
 									defenderDice = player.rollDice(defenderDiceCount);
 								}
 								while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
