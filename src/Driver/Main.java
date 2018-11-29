@@ -396,6 +396,51 @@ public class Main {
             e.printStackTrace();  
         }  
 	}
+	
+	public static void buildPlayersAndCards() {
+		userEnteredPlayerLines.removeAll(Arrays.asList("", null));
+		userEnteredCardLines.removeAll(Arrays.asList("", null));
+
+		for(String playerLine : userEnteredPlayerLines) {
+			ArrayList<String> playerData = new ArrayList<String>(Arrays.asList(playerLine.split(",")));
+
+			Player player = new Player(playerData.get(0).trim());
+
+			switch(playerData.get(1).trim().toLowerCase()) {
+				case "human":
+					player.setPlayerStrategy(new Human(player));
+					break;
+				case "aggressive":
+					player.setPlayerStrategy(new Aggressive(player));
+					break;
+				case "benevolent":
+					player.setPlayerStrategy(new Benevolent(player));
+					break;
+				case "random":
+					player.setPlayerStrategy(new RandomStrategy(player));
+					break;
+				case "cheater":
+					player.setPlayerStrategy(new Cheater(player));
+					break;
+			}
+
+			player.totalArmiesCount = Integer.parseInt(playerData.get(2).trim());
+
+			for(String territoryNameAndArmy : playerData.subList(3, playerData.size())) {
+				String territoryName = territoryNameAndArmy.split("\\(")[0];
+				String armies = territoryNameAndArmy.split("\\(")[1].split("\\)")[0];
+
+				Territory territory = Map.findTerritory(territoryName.trim());
+				player.assignedTerritories.add(territory);
+				territory.owner = player;
+				territory.numberOfArmies = Integer.parseInt(armies);
+			}
+
+			PhaseView view = new PhaseView();
+			player.addObserver(view);
+			players.add(player);
+		}
+	}
 
 	/**
 	* This method loads the Map and displays its content.
