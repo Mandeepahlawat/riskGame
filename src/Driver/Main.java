@@ -474,6 +474,15 @@ public class Main {
 		}
 	}
 
+	public static Player findPlayer(String name) {
+		for(Player player : players) {
+			if(player.getName().equalsIgnoreCase(name)) {
+				return player;
+			}
+		}
+		return null;
+	}
+	
 	/**
 	* This method loads the Map and displays its content.
 	* 
