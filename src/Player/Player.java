@@ -1001,4 +1001,18 @@ public class Player extends Observable {
 		}
 		return ownedContinents;
 	}
+	
+	/**
+	 * This method is used to resets all the data
+	 * related to players currently playing the game
+	 */
+	public static void resetPlayersData() {
+		for(Player player : Main.players) {
+			player.cards.clear();
+			player.assignedTerritories.clear();
+			player.initialArmyCount = 0;
+			player.armiesLeft = 0;
+			player.totalArmiesCount = 0;
+		}
+	}
 }
