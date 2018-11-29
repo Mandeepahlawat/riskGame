@@ -483,6 +483,27 @@ public class Main {
 		return null;
 	}
 	
+	public static void buildMapFromSaveData(String filePath) {
+		try {
+			List<String> allLines = Files.readAllLines(Paths.get(filePath));
+			for (String line : allLines) {
+				System.out.println(line);
+			}
+			populateUserEnteredContinentLines(allLines);
+			populateUserEnteredTerritoryLines(allLines);
+			populateUserEnteredPlayerLines(allLines);
+			populateUserEnteredCardLines(allLines);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
+
+		buildMap();
+		activeMap.territories.addAll(Map.listOfAllTerritories);
+		buildPlayersAndCards();
+	}
+	
+	
 	/**
 	* This method loads the Map and displays its content.
 	* 
