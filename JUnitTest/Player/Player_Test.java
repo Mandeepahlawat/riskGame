@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +17,7 @@ import Map.Map.Territory;
 import Card.*;
 import Card.Card.CardType;
 /**
- * This is the JUnit Test cases for Map class. this implements all
+ * This is the JUnit Test cases for Player class. this implements all
  * the test related to the units within this class.
  *
  * @author Arun
@@ -32,6 +35,7 @@ public class Player_Test {
 	public void testBefore() {
 		player = new Player("Player1");
 		Main.players = new ArrayList<>();
+		Main.cards=new ArrayList<>();
 	}
 
 	/**
@@ -350,7 +354,7 @@ public class Player_Test {
 		player.cards.add(c2);
 		player.cards.add(c3);
 		int beforeSize = player.cards.size();
-		player.exchangeCards(1,2,3);
+		player.exchangeCards(0,1,2);
 		int afterSize = player.cards.size();
 		System.out.println("After: "+player.cards.size());
 		assertTrue(beforeSize==3&&afterSize==0); 
@@ -530,7 +534,7 @@ public class Player_Test {
 		player.cards.add(c1);
 		player.cards.add(c2);
 		player.cards.add(c3); 
-		assertTrue(player.validCardIndexesToExchange(1, 2, 3));
+		assertTrue(player.validCardIndexesToExchange(0,1,2));
 	}
 
 	/**
@@ -566,7 +570,7 @@ public class Player_Test {
 		player.cards.add(c1);
 		player.cards.add(c2);
 		player.cards.add(c3); 
-		assertFalse(player.validCardIndexesToExchange(1, 2, 3));
+		assertFalse(player.validCardIndexesToExchange(0,1,2));
 	}
 	/**
 	* This method is used to test function that returns the list of continents owned
@@ -654,5 +658,333 @@ public class Player_Test {
 		Territory t1 = new Territory("Asia");
 		System.out.println("roll"+player.rollDice(2));
 		assertNotNull(player.rollDice(2));
+	}
+	
+	/**
+	 * method testGetRandomTerritory
+	 * 
+	 * to test getRandomTerritory method in the Player class
+	 */
+	@Test
+	public void testGetRandomTerritory() {
+		Territory t1 = new Territory("Africa");
+		player.assignedTerritories.add(t1);
+		assertTrue(player.getRandomTerritory(player.assignedTerritories).name.equals("Africa"));//since randome its tested using single value
+	}
+	
+	/**
+	 * this method test the return of attacking player name
+	 */
+	@Test
+	public void testAttackingPlayer() {
+		Territory t1 = new Territory("Africa");
+		t1.owner=player;
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		assertTrue(player.attackingPlayer("Africa", "Asia").equals("Player1"));
+	}
+	
+	/**
+	 * This method test the reduce army method for a player
+	 * for an attacker
+	 */
+	@Test
+	public void testReduceArmyForAttacker() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		t2.numberOfArmies=5;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		System.out.println("Before reduce army "+ t1.numberOfArmies);
+		player.reduceArmy("attacker", "Africa", "Asia");
+		assertTrue(t1.numberOfArmies==4 && t2.numberOfArmies==5);//reduced by 1
+	}
+	
+	/**
+	 * This method test the reduce army method for a player
+	 * for a Defender
+	 */
+	@Test
+	public void testReduceArmyForDefender() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		t2.numberOfArmies=5;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		System.out.println("Before reduce army "+ t1.numberOfArmies);
+		player.reduceArmy("defender", "Africa", "Asia");
+		assertTrue(t1.numberOfArmies==5 && t2.numberOfArmies==4);//reduced by 1
+	}
+	
+	/**
+	 * this method is to test the number of armies 
+	 * within attacker and defender countries
+	 */
+	@Test
+	public void testReturnArmiesLeft() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		t2.numberOfArmies=10;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		Vector<Integer> armies=player.returnArmiesLeft("Africa", "Asia");
+		assertTrue(armies.get(0).equals(5) && armies.get(1).equals(10)); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return territory with max army 
+	 */
+	@Test
+	public void testTerritoryWithMaxArmy() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=player;
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		
+		Territory maxTerritory = player.territoryWithMaxArmy(player.assignedTerritories);
+		assertTrue(maxTerritory.name.equals("Asia")); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return territory with minimum army 
+	 */
+	@Test
+	public void testTerritoryWithMinArmy() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=player;
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		
+		Territory maxTerritory = player.territoryWithMinArmy(player.assignedTerritories);
+		assertTrue(maxTerritory.name.equals("Africa")); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return territory having neighbor owner by other player
+	 */
+	@Test
+	public void testGetTerritoriesWithNeighboursToOthers() {
+		boolean territoryFound=false;
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=new Player("Player2");
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		
+		t1 = new Territory("India");
+		t1.owner=player;
+		t2 = new Territory("Pakistan");
+		t2.owner=player;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(); 
+		Iterator<Territory> it = territoryNeighborOther.iterator();
+		while(it.hasNext()) {
+			if(it.next().name.equals("Africa")) {
+				territoryFound=true;
+			}
+		}
+		assertTrue(territoryFound); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return empty hashset when territory dont have neighbor with other player
+	 */
+	@Test
+	public void testFailGetTerritoriesWithNeighboursToOthers() { 
+		
+		Territory t1 = new Territory("India");
+		t1.owner=player;
+		Territory t2 = new Territory("Pakistan");
+		t2.owner=player;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(); 
+		
+		assertTrue(territoryNeighborOther.isEmpty()); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method test neighbor territories
+	 */
+	@Test
+	public void testGetTerritoriesWithNeighboursToOthersSpecific() {
+		boolean territoryFound=false;
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=new Player("Player2");
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		Territory searchTerritory = t1;
+		
+		t1 = new Territory("India");
+		t1.owner=player;
+		t2 = new Territory("Pakistan");
+		t2.owner=player;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(1).neighbours.add(t2);
+		
+		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(searchTerritory); 
+		Iterator<Territory> it = territoryNeighborOther.iterator();
+		while(it.hasNext()) {
+			if(it.next().name.equals("Asia")) {
+				territoryFound=true;
+			}
+		}
+		assertTrue(territoryFound); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method tests the newly added territory owner
+	 */
+	@Test
+	public void testAddNewOwnedTerritoryOwner() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Player player2 = new Player("Player2");
+		player2.totalArmiesCount=10;
+		player2.addNewOwnedTerritory(t1);
+		System.out.println(t1.numberOfArmies+" "+t1.owner.getName());
+		assertEquals("Player2", t1.owner.getName());
+	}
+	/**
+	 *
+	 * this method tests the newly added armies to new territory owner
+	 *
+	 */
+	@Test
+	public void testAddNewOwnedTerritoryTotalArmies() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Player player2 = new Player("Player2");
+		player2.totalArmiesCount=10;
+		player2.addNewOwnedTerritory(t1);
+		System.out.println(t1.numberOfArmies+" "+t1.owner.getName());
+		assertEquals(15, player2.totalArmiesCount);
+	}
+	
+	/**
+	 * this method test the eliminated players card being empty
+	 */
+	@Test
+	public void testGotEliminated() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1);
+		c1.type = CardType.ARTILLERY;// invalid if two card of same type is exchanging
+		c2.type = CardType.ARTILLERY;
+		c3.type = CardType.INFANTRY;
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3);
+		Player player2 = new Player("Player2");
+		player2.totalArmiesCount=10;
+		player.gotEliminated(player2);
+		assertTrue(player.cards.isEmpty());
+	}
+	/**
+	 * this method test card indexeds to be exchanged
+	 */
+	@Test
+	public void testGetCardIndexesToExchangeWith3Cards() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1);
+		c1.type = CardType.ARTILLERY;// invalid if two card of same type is exchanging
+		c2.type = CardType.ARTILLERY;
+		c3.type = CardType.INFANTRY;
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3);
+		 
+		ArrayList<Integer> indexes = player.getCardIndexesToExchange();
+		assertTrue(indexes.equals(new ArrayList<Integer>(Arrays.asList(0,1,2))));
+	}
+	/**
+	 * this method test card indexeds to be exchanged
+	 */
+	@Test
+	public void testGetCardIndexesToExchangeWithout3Cards() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1);
+		c1.type = CardType.ARTILLERY;// invalid if two card of same type is exchanging 
+		c3.type = CardType.INFANTRY;
+		player.cards.add(c1); 
+		player.cards.add(c3); 
+		 
+		ArrayList<Integer> indexes = player.getCardIndexesToExchange();
+		assertTrue(indexes.equals(new ArrayList<Integer>(Arrays.asList(0,1))));
 	}
 }

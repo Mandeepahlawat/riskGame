@@ -32,7 +32,10 @@ import Map.Map.*;
 public class Main_Test {
 	
 	public static final String FILE_NAME = "Files\\returnMap.map";
+	public static final String SAVED_FILE_NAME = "Files\\NewMap2.map";
+	public static final String SAVING_FILE_NAME = "Files\\SavingMap.map";
 
+	
 	/**
 	* This method is used to validate the new map line
 	* entered by the user.
@@ -46,6 +49,10 @@ public class Main_Test {
 	* 
 	* return True if new line is valid otherwise False
 	*/
+	@Test
+	public void testBefore() {
+		Main.cards=new ArrayList<>();
+	}
 	@Test
 	public void testValidateMapLineForInteger() {
 		boolean returnStat=	Main.validateMapLine(true, "Northern Islands=12");			/*Continent Edit*/
@@ -308,4 +315,45 @@ public class Main_Test {
 		
 	}
  
+	/**
+	 * test method to build map from saved data
+	 */
+	@Test
+	public void testBuildMapFromSaveData() {
+		Main.cards=new ArrayList<>();
+		Main.activeMap = new Map();
+		Main.userEnteredContinentLines = new ArrayList<String>();
+		Main.userEnteredTerritoryLines = new ArrayList<String>();
+		Main.userEnteredPlayerLines = new ArrayList<>();
+		Main.userEnteredCardLines = new ArrayList<>();
+		Main.buildMapFromSaveData(SAVED_FILE_NAME);
+		assertTrue(Main.userEnteredContinentLines.contains("North America=4") && Main.userEnteredTerritoryLines.contains("canada, 1, 2, North America, USA") && Main.userEnteredCardLines.contains("CAVALRY, pakistan, "));
+		//**success testing add the comparisons like continent before and after are same*** like that 
+	}
+	
+	/**
+	 * test method for saving data of map
+	 */
+	@Test
+	public void testSaveGameData() throws IOException {
+		
+		Main.cards=new ArrayList<>();
+		Main.activeMap = new Map();
+		Main.userEnteredContinentLines = new ArrayList<String>();
+		Main.userEnteredTerritoryLines = new ArrayList<String>();
+		Main.userEnteredPlayerLines = new ArrayList<>();
+		Main.userEnteredCardLines = new ArrayList<>();
+		Main.buildMapFromSaveData(SAVED_FILE_NAME);
+		Main.saveGameData(SAVING_FILE_NAME, 1);
+		 
+		String path = SAVED_FILE_NAME;
+		Path expPath = Paths.get(path);
+		List<String> linesOfSavedMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
+		path = SAVING_FILE_NAME;
+		expPath = Paths.get(path);
+		List<String> linesOfSavingMethod=Files.readAllLines(expPath, StandardCharsets.UTF_8); 
+		System.out.println(linesOfSavedMethod+"         "+linesOfSavingMethod);
+		assertTrue(linesOfSavedMethod.equals(linesOfSavingMethod)); 
+	}
+
 }
