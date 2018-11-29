@@ -9,6 +9,15 @@ import Map.Map;
 import Map.Map.Territory;
 import Player.Player.GamePhase;
 
+/**
+ * The RandomStrategy class is implementing functions 
+ * in Strategy interface
+ * 
+ * @author mandeepahlawat
+ * @version 1.0
+ * @since 24-11-2018
+ *
+ */
 public class RandomStrategy implements Strategy {
 	/**
 	 * The player to which this strategy belongs to
@@ -16,13 +25,24 @@ public class RandomStrategy implements Strategy {
 	public Player player;
 	
 	/**
+	 * 
 	 * constructor for this class and sets the
 	 * player data member
-	 * @param player
+	 * 
+	 * @param player assign the player value.
 	 */
 	public RandomStrategy(Player player) {
 		this.player = player;
 	}
+	
+	/**
+	 *
+	 * Calculation of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @return int value of the reinforcement armies
+	 * 
+	 */
 	
 	@Override
 	public int calculateReinforcementArmies() {
@@ -55,6 +75,16 @@ public class RandomStrategy implements Strategy {
 		return totalReinforcements;
 	}
 
+	/**
+	 * 
+	 * Placement of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @param reinforcements - number of reinforcements
+	 * to be place.
+	 * 
+	 */
+	
 	@Override
 	public void placeReinforcements(int reinforcements) {
 		Territory territory = player.getRandomTerritory(player.assignedTerritories);
@@ -68,6 +98,13 @@ public class RandomStrategy implements Strategy {
 		
 	}
 
+	
+	/**
+	 *
+	 * Fortification phase, whose implementation will
+	 * vary depending on the strategy.
+	 * 
+	 */
 	@Override
 	public void fortification() {
 		ArrayList<Territory> territories = new ArrayList<Territory>(player.assignedTerritories);
@@ -100,6 +137,13 @@ public class RandomStrategy implements Strategy {
 		
 	}
 
+	/**
+	 * 
+	 * Attack phase, whose implementation will
+	 * vary depending on the strategy.
+	 *
+	 */
+	
 	@Override
 	public void attack() {
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);

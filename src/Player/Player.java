@@ -25,6 +25,7 @@ import Player.Player.GamePhase;
 * @author Mandeep Ahlawat
 * @version 1.0
 * @since   2018-10-27 
+*
 */
 public class Player extends Observable {
 	
@@ -33,17 +34,17 @@ public class Player extends Observable {
 	 *
 	 */
 	public enum GamePhase {
-		/**
-		 * This is a REINFORCEMENT phase in the game.
-		 */
+	/**
+	* This is a REINFORCEMENT phase in the game.
+	*/
 		REINFORCEMENT,
-		/**
-		 * This is a ATTACK phase in the game.
-		 */
+	/**
+	* This is a ATTACK phase in the game.
+	*/
 		ATTACK,
-		/**
-		 * This is a FORTIFICATION phase in the game.
-		 */
+	/**
+	* This is a FORTIFICATION phase in the game.
+	*/
 		FORTIFICATION;	
 	}
 	/**
@@ -97,9 +98,11 @@ public class Player extends Observable {
 	public Strategy playerStrategy;
 	
 	/**
+	*
 	* This method is the constructor of the Player class.
 	* 
 	* @param name A String value of the player name.
+	*
 	*/
 	public Player(String name) {
 		idCounter++;
@@ -111,14 +114,18 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * This method sets the player strategy
+	 * 
 	 * @param strategy object which we wants to set
+	 *
 	 */
 	public void setPlayerStrategy(Strategy strategy) {
 		this.playerStrategy = strategy;
 	}
 	
 	/**
+	* 
 	* This is a getter method, which gives the name of the player.
 	* 
 	* @return name of the player.
@@ -129,9 +136,11 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * This method is used to set the state
 	 * of the object to changed and notify
 	 * all its observers
+	 *
 	 */
 	public void setChangeAndNotifyObservers() {
 		setChanged();
@@ -139,6 +148,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	* 
 	* This is a setter method, which sets the
 	* initial army count and the number of armies left
 	* for each player.
@@ -153,11 +163,13 @@ public class Player extends Observable {
 	}
 	
 	/**
+	* 
 	* This is a helper method which gives the number of
 	* countries a player has with the number of armies in that
 	* country.
 	* 
 	* @return String value with a specific format.
+	*
 	*/
 	public String assignedTerritoryNamesWithArmies() {
 		String territoriesWithArmies = "";
@@ -168,6 +180,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * This method defines Initial placement of the armies
 	 * and also prints the player and the name of the country 
 	 * where they want to place a army.
@@ -199,6 +212,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 * 
 	 * This method defines in a helper method to place
 	 * number of armies for each player automatically
 	 * instead of going in a round robin fashion.
@@ -229,7 +243,9 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 * 
 	 * Reinforcement phase of the player object
+	 *
 	 */
 	public void reinforcement() {
 		playerStrategy.placeReinforcements(playerStrategy.calculateReinforcementArmies());
@@ -343,6 +359,7 @@ public class Player extends Observable {
 //	}
 	
 	/**
+	 *
 	 * The method setCurrentGamePhase will set current 
 	 * game phase according to the given phase value
 	 * in main function. 
@@ -350,6 +367,7 @@ public class Player extends Observable {
 	 * @param currentGamePhase will have one phase out 
 	 * of three phases mentioned in GamePhase as a input
 	 * from the main function.
+	 *
 	 */
 	public void setCurrentGamePhase(GamePhase currentGamePhase) {
 		this.currentGamePhase = currentGamePhase;
@@ -358,6 +376,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * To check if the players owns the country 
 	 * and check's the conditions and it will 
 	 * return true or false.
@@ -368,6 +387,7 @@ public class Player extends Observable {
 	 * @return true if the country belongs to the player. 
 	 * 
 	 * @return false if the country doesn't belongs to player.
+	 *
 	 */
 	public boolean validAssignedCountry(String country) {
 		for(Territory territory : assignedTerritories) {
@@ -383,8 +403,9 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * To check if the neighbour country is owned
-	 *  by the current player or not.
+	 * by the current player or not.
 	 * 
 	 * 
 	 * @param fromCountry is a string value in which
@@ -397,6 +418,7 @@ public class Player extends Observable {
 	 * @return true if the given condition satisfies.
 	 * 
 	 * @return false if the given condition doesn't satisfies.
+	 *
 	 */
 	public boolean validNeighborCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -411,6 +433,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The public method will have valid opponent's country 
 	 * which will be used in attack phase.
 	 * 
@@ -422,6 +445,7 @@ public class Player extends Observable {
 	 * 
 	 * @return true if the given conditions pass 
 	 * otherwise it will return false.
+	 *
 	 */
 	public boolean validOpponentCountry(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -436,6 +460,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The public method opponentPlayer will return name of 
 	 * the player who is present in neighbour country.  
 	 * 
@@ -449,6 +474,7 @@ public class Player extends Observable {
 	 * @return name of the player in neighbour country 
 	 * only if it passes the conditions if not it will 
 	 * return null value.
+	 *
 	 */
 	public String opponentPlayer(String fromCountry, String toCountry) {
 		for(Territory territory : assignedTerritories) {
@@ -463,6 +489,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The public method opponentPlayer will return name of 
 	 * the player who is present in neighbour country.  
 	 * 
@@ -476,6 +503,7 @@ public class Player extends Observable {
 	 * @return name of the player in neighbour country 
 	 * only if it passes the conditions if not it will 
 	 * return null value.
+	 *
 	 */
 	public String attackingPlayer(String fromCountry, String toCountry) {
 		for (Territory territory : assignedTerritories) {
@@ -487,6 +515,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The public method to check if a player can attack
 	 * from this country which is present here.
 	 * 
@@ -495,6 +524,7 @@ public class Player extends Observable {
 	 * 
 	 * @return true if the given conditions passes 
 	 * otherwise it will return false.
+	 *
 	 */
 	public boolean canattackFromThisCountry(String country) {
 		for(Territory territory : assignedTerritories) {
@@ -508,6 +538,7 @@ public class Player extends Observable {
 	
 
 	/**
+	 *
 	 * The public method will calculate the number 
 	 * of dice for attacker or defender depending on 
 	 * the number of armies that player has,will 
@@ -521,6 +552,7 @@ public class Player extends Observable {
 	 * @param defenderCountry string value of the defender country.
 	 * 
 	 * @return input provided in the method which is initialized to zero.
+	 *
 	 */
 	public int calculateNumberOfDiceAllowed(String status, String attackerCounter, String defenderCountry,
 			boolean isAllOut) {
@@ -590,6 +622,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * Public method will give the player's value
 	 * of dice after rolling in the game.
 	 * 
@@ -597,6 +630,7 @@ public class Player extends Observable {
 	 * give the dice number.
 	 * 
 	 * @return values of the dice a object defined in a method.
+	 *
 	 */
 	public Vector<Integer> rollDice(int numberOfDice){
 		Vector<Integer> diceValues = new Vector<Integer>(numberOfDice);
@@ -610,6 +644,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * Public method which reduces one army in the 
 	 * losing players territory.
 	 * 
@@ -618,6 +653,7 @@ public class Player extends Observable {
 	 * @param attackerCounter will have string value type in it.
 	 * 
 	 * @param defenderCountry will have string value type in it.
+	 *
 	 */
 	public void reduceArmy(String losingPlayer, String attackerCounter, String defenderCountry) {
 		if(losingPlayer.equalsIgnoreCase("attacker")) {
@@ -641,6 +677,7 @@ public class Player extends Observable {
 	
 
 	/**
+	 * 
 	 * The method will check the number of armies in 
 	 * the defender whether zero or not.
 	 * 
@@ -650,9 +687,11 @@ public class Player extends Observable {
 	 * 
 	 * @return true if all the conditions passes otherwise
 	 * return's false.
+	 *
 	 */
 	public boolean checkDefenderArmiesNumberZero(String attackerCounter, String defenderCountry) {
 		for(Territory territory : assignedTerritories) {
+		
 			if(territory.name.equalsIgnoreCase(attackerCounter)) {
 				for(Territory neighbor : territory.neighbours) {
 					if(neighbor.name.equalsIgnoreCase(defenderCountry))
@@ -665,6 +704,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The method will move armies to new territory 
 	 * conquered only if defender looses it.
 	 * 
@@ -673,6 +713,7 @@ public class Player extends Observable {
 	 * @param defenderCountry will have string value type in it.
 	 * 
 	 * @return returns a vector of number of armies left
+	 *
 	 */
 	public Vector<Integer> returnArmiesLeft(String attackerCounter, String defenderCountry) {
 		Vector<Integer> armies = new Vector<>();
@@ -689,6 +730,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The method will move armies to new territory 
 	 * conquered only if defender looses it.
 	 * 
@@ -697,6 +739,7 @@ public class Player extends Observable {
 	 * @param defenderCountry will have string value type in it.
 	 * 
 	 * @param numberOfArmiesToMove a integer value will have number of armies to move value in it.
+	 *
 	 */
 	public void moveArmiesToNewTerritory(String attackerCounter, String defenderCountry, int numberOfArmiesToMove) {
 		for(Territory territory : assignedTerritories) {
@@ -976,6 +1019,7 @@ public class Player extends Observable {
 //	}
 	
 	/**
+	 *
 	 * The method will exchange Cards between the players.
 	 * 
 	 * @param cardIndex1 a integer value.
@@ -983,6 +1027,7 @@ public class Player extends Observable {
 	 * @param cardIndex2 a integer value.
 	 * 
 	 * @param cardIndex3 a integer value.
+	 *
 	 */
 	public void exchangeCards(int cardIndex1, int cardIndex2, int cardIndex3) {
 		Card card1 = cards.get(cardIndex1);
@@ -995,6 +1040,15 @@ public class Player extends Observable {
 		Card.cardExchangeValue += 5;
 	}
 	
+	/**
+	 * This method will be having the maximum number of
+	 * army of a territory 
+	 * 
+	 * @param territories list of territories
+	 * 
+	 * @return maximum number of armies in a territory
+	 *
+	 */
 	public Territory territoryWithMaxArmy(ArrayList<Territory> territories) {
 		Territory territoryWithMaxArmy = null;
 		int maxArmies = 0;
@@ -1007,6 +1061,15 @@ public class Player extends Observable {
 		return territoryWithMaxArmy;
 	}
 	
+	/**
+	 * This method will be having the minimum number of
+	 * army of a territory 
+	 * 
+	 * @param territories list of territories
+	 * 
+	 * @return minimum number of armies in a territory
+	 *
+	 */
 	public Territory territoryWithMinArmy(ArrayList<Territory> territories) {
 		Territory territoryWithMinArmy = null;
 		int minArmies = Integer.MAX_VALUE;
@@ -1019,10 +1082,25 @@ public class Player extends Observable {
 		return territoryWithMinArmy;
 	}
 	
+	/**
+	 * This method will get the random  territory in the game.
+	 * 
+	 * @param territories list of territories
+	 * 
+	 * @return the size of the random territories.
+	 */
 	public Territory getRandomTerritory(ArrayList<Territory> territories) {
 		return territories.get(new Random().nextInt(territories.size()));
 	}
 	
+	/**
+	 * 
+	 * This method will get territories which is 
+	 * neighbour to other player in the game.
+	 * 
+	 * 
+	 * @return the number of territories
+	 */
 	public HashSet<Territory> getTerritoriesWithNeighboursToOthers() {
 		HashSet<Territory> territories = new HashSet<Territory>(); 
 		for(Territory territory : assignedTerritories) {
@@ -1036,6 +1114,16 @@ public class Player extends Observable {
 		return territories;
 	}
 	
+	/**
+	 * 
+	 * This method will get territories which is 
+	 * neighbour to other player in the game.
+	 * 
+	 * @param territory list of territories
+	 * 
+	 * @return the number of territories
+	 * 
+	 */
 	public HashSet<Territory> getTerritoriesWithNeighboursToOthers(Territory territory) {
 		HashSet<Territory> territories = new HashSet<Territory>(); 
 		for(Territory neighbour : territory.neighbours) {
@@ -1046,6 +1134,13 @@ public class Player extends Observable {
 		return territories;
 	}
 	
+	/**
+	 * This method will add new owned territory to a player 
+	 * eliminates the pervious owner in it.
+	 * 
+	 * @param territory list of territories
+	 * 
+	 */
 	public void addNewOwnedTerritory(Territory territory) {
 		Player previousOwner = territory.owner;
 		previousOwner.assignedTerritories.remove(territory);
@@ -1062,6 +1157,13 @@ public class Player extends Observable {
 		}
 	}
 	
+	/**
+	 * The method will display the name of the player
+	 * who got eliminated in the game
+	 * 
+	 * @param playerWhoEliminated 
+	 *
+	 */
 	public void gotEliminated(Player playerWhoEliminated) {
 		System.out.println(" ======= " + this.name + " got eliminated =======");
 		if(this.cards.size() > 0) {
@@ -1077,9 +1179,11 @@ public class Player extends Observable {
 	
 	
 	/**
+	 *
 	 * This method is used to automatically decides which
 	 * combination of card indexes the player can exchange
 	 * @return an array list of card indexes
+	 *
 	 */
 	public ArrayList<Integer> getCardIndexesToExchange() {
 		ArrayList<Integer> cardIndexes = new ArrayList<Integer>();
@@ -1126,6 +1230,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The method will check or valid the particular 
 	 * card which can be exchanged or not.
 	 * 
@@ -1138,6 +1243,7 @@ public class Player extends Observable {
 	 * @return  true if the given condition satifies.
 	 * 
 	 * @return false if the given condition doesn't satifies.
+	 *
 	 */
 	public boolean validCardIndexesToExchange(int cardIndex1, int cardIndex2, int cardIndex3) {
 		CardType cardType1 = cards.get(cardIndex1).type;
@@ -1158,6 +1264,7 @@ public class Player extends Observable {
 	}
 	
 	/**
+	 *
 	 * The boolean method canExchangeCards will 
 	 * gives clear clarity whether a player can 
 	 * exchange the card or not.
@@ -1165,6 +1272,7 @@ public class Player extends Observable {
 	 * @return true if the given condition satifies.
 	 * 
 	 * @return false if the given condition doesn't satifies.
+	 *
 	 */
 	public boolean canExchangeCards() {
 		if(cards.size() == 5) {
@@ -1202,10 +1310,13 @@ public class Player extends Observable {
 	}
 	
 	/**
-	 * the method will have list of owned 
+	 * 
+	 * The method will have list of owned 
 	 * continents of player in a game.
 	 * 
+	 * 
 	 * @return object of array list of owned continents.
+	 *
 	 */
 	public ArrayList<Map> ownedContinents() {
 		ArrayList<Map> ownedContinents = new ArrayList<Map>();

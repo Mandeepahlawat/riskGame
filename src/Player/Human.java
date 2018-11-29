@@ -10,6 +10,17 @@ import Map.Map.Territory;
 import Player.Player.GamePhase;
 import Views.CardExchangeView;
 
+/**
+ * 
+ * The Human class is implementing functions 
+ * in Strategy interface
+ * 
+ * @author mandeepahlawat
+ * @version 1.0
+ * @since 24-11-2018
+ *
+ */
+
 public class Human implements Strategy {
 	/**
 	 * The player to which this strategy belongs to
@@ -19,17 +30,20 @@ public class Human implements Strategy {
 	/**
 	 * constructor for this class and sets the player data member
 	 * 
-	 * @param player
+	 * @param player assign the player value.
+	 * 
 	 */
 	public Human(Player player) {
 		this.player = player;
 	}
 
 	/**
-	 * This method Calculate's the number of reinforcements that the player gets in
-	 * each turn of the game.
+	 *
+	 * This method Calculate's the number of reinforcements 
+	 * that the player gets in each turn of the game.
 	 *
 	 * @return int the number of reinforcement armies.
+	 *
 	 */
 	@Override
 	public int calculateReinforcementArmies() {
@@ -79,11 +93,12 @@ public class Human implements Strategy {
 	}
 
 	/**
-	 * This method defines Place Reinforcements in territories which also print's
-	 * out player name,armies left in it.
 	 * 
-	 * @param reinforcements number of reinforcement armies the player in the second
-	 *                       parameter gets.
+	 * This method defines Place Reinforcements in territories
+	 * which also print's out player name,armies left in it.
+	 * 
+	 * @param reinforcements number of reinforcement 
+	 * armies the player in the second parameter gets.
 	 * 
 	 */
 	@Override
@@ -113,8 +128,9 @@ public class Human implements Strategy {
 
 	/**
 	 * 
-	 * fortification method to allow a player to move one of his armies from one
-	 * country he owns to another that is adjacent to it.
+	 * fortification method to allow a player to move 
+	 * one of his armies from one country he owns to 
+	 * another that is adjacent to it.
 	 * 
 	 */
 	@Override
@@ -199,15 +215,18 @@ public class Human implements Strategy {
 	}
 
 	/**
-	 * The method will implement the attack phase. attackDone if all territories are
-	 * conquered or attack lost. gameCompleted if all territories are conquered.
+	 * 
+	 * The method will implement the attack phase. 
+	 * attackDone if all territories are
+	 * conquered or attack lost. gameCompleted if 
+	 * all territories are conquered.
 	 * 
 	 */
 	@Override
 	public void attack() {
 
-		boolean attackDone = false; // if all territories are conquered or attack lost
-		boolean gameCompleted = false; // if all territories are conquered
+		boolean attackDone = false; 
+		boolean gameCompleted = false; 
 		boolean defenderLost = false;
 		String attackFrom = "", attackAt = "", opponent = "", attacker = "";
 
@@ -302,9 +321,7 @@ public class Human implements Strategy {
 			}
 
 			if (defenderLost) {
-				for (Player player : Main.players) {
-					// remove territory from the defeated player's list
-					// add territory to the conquerer's list					
+				for (Player player : Main.players) {					
 					if (player.getName().equalsIgnoreCase(attacker)) {
 						for (Territory territory : Main.activeMap.territories) {
 							if (territory.name.equals(attackAt)) {
@@ -317,7 +334,7 @@ public class Human implements Strategy {
 				}
 			}
 
-			// if all territories are owned by a single user
+		
 			if (Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
 				gameCompleted = true;
 				attackDone = true;

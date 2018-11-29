@@ -9,6 +9,16 @@ import Map.Map.Territory;
 import Player.Player.GamePhase;
 import Map.Map;
 
+/**
+ * 
+ * The Cheater class is implementing functions 
+ * in Strategy interface
+ * 
+ * @author mandeepahlawat
+ * @version 1.0
+ * @since 24-11-2018
+ *
+ */
 public class Cheater implements Strategy {
 	/**
 	 * The player to which this strategy belongs to
@@ -16,14 +26,25 @@ public class Cheater implements Strategy {
 	public Player player;
 	
 	/**
+	 * 
 	 * constructor for this class and sets the
 	 * player data member
-	 * @param player
+	 * 
+	 * @param player assign the player value.
+	 * 
 	 */
 	public Cheater(Player player) {
 		this.player = player;
 	}
 	
+	/**
+	 *
+	 * Calculation of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @return int value of the total reinforcement armies
+	 * 
+	 */
 	@Override
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
@@ -48,6 +69,16 @@ public class Cheater implements Strategy {
 		return totalReinforcements;
 	}
 
+	/**
+	 * 
+	 * Placement of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @param reinforcements - number of reinforcements
+	 * to be place.
+	 * 
+	 */
+	
 	@Override
 	public void placeReinforcements(int reinforcements) {
 		System.out.println("\nPlayer " + player.getName() + " doubles the number of armies in each"
@@ -71,6 +102,12 @@ public class Cheater implements Strategy {
 		}
 	}
 
+	/**
+	 *
+	 * Fortification phase, whose implementation will
+	 * vary depending on the strategy.
+	 * 
+	 */
 	@Override
 	public void fortification() {
 		System.out.println("\nPlayer " + player.getName() + " doubles the number of armies in each"
@@ -85,6 +122,12 @@ public class Cheater implements Strategy {
 		}
 	}
 
+	/**
+	 * 
+	 * Attack phase, whose implementation will
+	 * vary depending on the strategy.
+	 *
+	 */
 	@Override
 	public void attack() {
 		ArrayList<Territory> assignedTerritoriesBeforeAttack = new ArrayList<Territory>(player.assignedTerritories);
