@@ -29,6 +29,7 @@ public class RandomStrategy_Test {
 	public void testBefore() {
 		player = new Player("Player1");
 		Main.players = new ArrayList<>();
+		Main.cards=new ArrayList<>();
 	}
 	
 	/**

@@ -35,6 +35,7 @@ public class Player_Test {
 	public void testBefore() {
 		player = new Player("Player1");
 		Main.players = new ArrayList<>();
+		Main.cards=new ArrayList<>();
 	}
 
 	/**
@@ -876,12 +877,12 @@ public class Player_Test {
 		t2.owner=player;
 		
 		player.assignedTerritories.add(t1);
-		player.assignedTerritories.get(0).neighbours.add(t2);
+		player.assignedTerritories.get(1).neighbours.add(t2);
 		
 		HashSet<Territory> territoryNeighborOther = player.getTerritoriesWithNeighboursToOthers(searchTerritory); 
 		Iterator<Territory> it = territoryNeighborOther.iterator();
 		while(it.hasNext()) {
-			if(it.next().name.equals("Africa")) {
+			if(it.next().name.equals("Asia")) {
 				territoryFound=true;
 			}
 		}

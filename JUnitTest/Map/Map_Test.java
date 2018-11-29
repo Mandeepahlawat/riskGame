@@ -40,12 +40,14 @@ public class Map_Test {
 	 */
 	@Before
 	public void testBefore() {
+		Main.cards=new ArrayList<>();
 		Map.listOfAllTerritories = new ArrayList<>();
 		Map.listOfAllContinents = new ArrayList<>();
 		actualTerritory =new Territory("Japan");
 		map=new Map();
 		map.addContinent("North America",5);
 		mapForContinent=new Map("Africa", 13);
+		
 	}
 	/**
 	* This method is used to test the Map.findTerritory operation
