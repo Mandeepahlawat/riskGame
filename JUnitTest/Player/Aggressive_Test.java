@@ -1,10 +1,10 @@
 package Player;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,14 +12,15 @@ import Driver.Main;
 import Map.Map;
 import Map.Map.Territory;
 /**
- * This is the JUnit Test cases for RandomStrategy class. this implements all
+ * This is the JUnit Test cases for Aggressive player class. this implements all
  * the test related to the units within this class.
  *
  * @author  Arun
  * @version 1.0
  * @since   2018-11-28 
- */
-public class RandomStrategy_Test {
+ */ 
+public class Aggressive_Test {
+
 	private Player player;
 	/**
 	 * test class testBefore that runs 
@@ -31,7 +32,6 @@ public class RandomStrategy_Test {
 		Main.players = new ArrayList<>();
 		Main.cards=new ArrayList<>();
 	}
-	
 	/**
 	 * test class testCalculateReinforcementArmiesContinentCapture
 	 * this test the calculateReinforcementArmies method
@@ -52,7 +52,7 @@ public class RandomStrategy_Test {
 		Main.activeMap.continents.get(0).territories.get(0).owner=player;
 		Main.activeMap.continents.get(1).territories.add(new Territory("India"));
 		Main.activeMap.continents.get(2).territories.add(new Territory("pakistan"));
-		Strategy playerStrategy = new RandomStrategy(player);
+		Aggressive playerStrategy = new Aggressive(player);
 		
 		//Main.activeMap.continents.get(0).territories.get(0).
 		System.out.println(playerStrategy.calculateReinforcementArmies());
@@ -80,7 +80,7 @@ public class RandomStrategy_Test {
 		Main.activeMap.continents.get(1).territories.add(new Territory("India"));
 		Main.activeMap.continents.get(2).territories.add(new Territory("pakistan"));
 		//Main.activeMap.continents.get(0).territories.get(0).owner=player;
-		Strategy playerStrategy = new RandomStrategy(player);
+		Aggressive playerStrategy = new Aggressive(player);
 		
 		//Main.activeMap.continents.get(0).territories.get(0).
 		System.out.println(playerStrategy.calculateReinforcementArmies());
@@ -95,12 +95,20 @@ public class RandomStrategy_Test {
 	@Test
 	public void testPlaceReinforcements() {
 		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=player;
+		
 		player.assignedTerritories.add(t1);
-		player.assignedTerritories.get(0).numberOfArmies=5;
-		Strategy playerStrategy = new RandomStrategy(player);
+		player.assignedTerritories.add(t2);
+		
+		Aggressive playerStrategy = new Aggressive(player);
 		playerStrategy.placeReinforcements(3);
 		System.out.println(player.assignedTerritories.get(0).numberOfArmies);
-		assertTrue(player.assignedTerritories.get(0).numberOfArmies==8); // altready 5 and now added 3
+		assertTrue(player.assignedTerritories.get(1).numberOfArmies==13); // altready 5 and now added 3
 	}
 		
 	/**
@@ -109,16 +117,50 @@ public class RandomStrategy_Test {
 	 */
 	@Test
 	public void testFortification() {
+		 
 		Territory t1 = new Territory("Africa");
-		player.assignedTerritories.add(t1);
-		player.assignedTerritories.get(0).numberOfArmies=5;
-		//create neighbour and assign the owner as the player
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
 		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
 		t2.owner=player;
-		t2.numberOfArmies=5;
-		//Asiigning to territory africa a neighbor africaneigh
-		player.assignedTerritories.get(0).neighbours.add(t2);
-		Strategy playerStrategy = new RandomStrategy(player);
+		t1=new Territory("India"); t1.owner=player;
+		t2.neighbours.add(t1);
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		
+		Aggressive playerStrategy = new Aggressive(player);
+		
+		System.out.println("start");
+		int armiesBeforeMoveT1 = t1.numberOfArmies;
+		int armiesBeforeMoveT2 = t2.numberOfArmies;
+		playerStrategy.fortification();
+		int armiesAfterMoveT1 = t1.numberOfArmies;
+		int armiesAfterMoveT2 = t2.numberOfArmies;
+		assertTrue((armiesBeforeMoveT1+armiesBeforeMoveT2)==(armiesAfterMoveT1+armiesAfterMoveT2));
+	}
+	  
+
+	/**
+	 * Test the Fortification method without own neighbor
+	 */
+	@Test
+	public void testFortificationWithoutNeighbor() {
+		 
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=player;  
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		
+		Aggressive playerStrategy = new Aggressive(player);
 		
 		System.out.println("start");
 		int armiesBeforeMoveT1 = t1.numberOfArmies;
