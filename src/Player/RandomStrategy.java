@@ -2,6 +2,8 @@ package Player;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.Vector;
 
 import Card.Card;
 import Driver.Main;
@@ -146,7 +148,147 @@ public class RandomStrategy implements Strategy {
 	
 	@Override
 	public void attack() {
-		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+
+		boolean attackDone = false;
+		boolean gameCompleted = false;
+		boolean defenderLost = false;
+		String attackFrom = "", attackAt = "", opponent = "", attacker = "";
+		Random random = new Random();
+
+		ArrayList<String> answers = new ArrayList<String>(); 
+		answers.add("yes");
+		answers.add("no");
+		String answer = answers.get(random.nextInt(2));
+
+		if (answer.equalsIgnoreCase("yes")) {
+			while (!attackDone) {
+				attackFrom = player.assignedTerritories.get(random.nextInt(player.assignedTerritories.size())).name;
+				while(!player.canAttackFromThisCountry(attackFrom)) {
+					attackFrom = player.assignedTerritories.get(random.nextInt(player.assignedTerritories.size())).name;
+				}
+				if (player.canAttackFromThisCountry(attackFrom)) {
+					System.out.println("Attacker chose to attack from "+ attackFrom + "randomly");
+					Territory attacking = Map.findTerritory(attackFrom);
+					attackAt = attacking.neighbours.get(random.nextInt(attacking.neighbours.size())).name;
+					while(!player.validOpponentCountry(attackFrom, attackAt)) {
+						attackAt = attacking.neighbours.get(random.nextInt(attacking.neighbours.size())).name;
+					}
+					if (player.validOpponentCountry(attackFrom, attackAt)) {
+						System.out.println("Attacker chose to attack "+ attackAt + "randomly");
+						boolean finishedAttackingThatTerritory = false; // finished attacking the present territory
+						boolean allOutMode = false;
+
+						String input = answers.get(random.nextInt(2));
+						if (input.equalsIgnoreCase("yes")) {
+							System.out.println("Attacking in all out mode");
+							allOutMode = true;
+						}
+						
+						while (!finishedAttackingThatTerritory) {
+							Vector<Integer> armies = player.returnArmiesLeft(attackFrom, attackAt);
+							System.out.println(
+									attackFrom + ":" + armies.get(0) + " vs " + attackAt + ":" + armies.get(1));
+							opponent = player.opponentPlayer(attackFrom, attackAt);
+							attacker = player.attackingPlayer(attackFrom, attackAt);
+
+							if (armies.get(0) == 1) {
+								System.out.println("The attacker cannot proceed with the attack with just 1 army");
+								finishedAttackingThatTerritory = true;
+								attackDone = true;
+								break;
+							} else if (armies.get(1) == 0) {
+								System.out.println(attackFrom + " won the battle!");
+								finishedAttackingThatTerritory = true;
+								attackDone = true;
+								defenderLost = true;
+								break;
+							} else {
+								String continueAttack = "yes";
+								if(!allOutMode) {
+								continueAttack = answers.get(random.nextInt(2));
+								if(continueAttack.equalsIgnoreCase("yes")) {
+									System.out.println("Player chose to continue attacking the territory");
+								}
+								}
+								if (continueAttack.equalsIgnoreCase("yes")) {
+									Vector<Integer> attackerDice, defenderDice;
+									int attackerDiceCount = 0;
+									int defenderDiceCount = 0;
+									if (allOutMode) {
+										attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker", attackFrom,
+												attackAt, allOutMode, false);
+										attackerDice = player.rollDice(attackerDiceCount);
+
+										defenderDiceCount = player.calculateNumberOfDiceAllowed("defender", attackFrom,
+												attackAt, allOutMode, false);
+										defenderDice = player.rollDice(defenderDiceCount);
+									} else {
+										attackerDiceCount = player.calculateNumberOfDiceAllowed("attacker", attackFrom,
+												attackAt, allOutMode, true);
+										System.out.println("Attacker chose to roll " + attackerDiceCount + " dice randomly.");
+										attackerDice = player.rollDice(attackerDiceCount);
+
+										defenderDiceCount = player.calculateNumberOfDiceAllowed("defender", attackFrom,
+												attackAt, allOutMode, true);
+										System.out.println("Attacker chose to roll " + defenderDiceCount + " dice randomly.");
+										defenderDice = player.rollDice(defenderDiceCount);
+									}
+									while (!attackerDice.isEmpty() && !defenderDice.isEmpty()) {
+										int attackerDiceValue = attackerDice.remove(attackerDice.size() - 1);
+										int defenderDiceValue = defenderDice.remove(defenderDice.size() - 1);
+										if (attackerDiceValue > defenderDiceValue) {
+											player.reduceArmy("defender", attackFrom, attackAt);
+											Map.findTerritory(attackAt).owner.totalArmiesCount--;
+										} else {
+											player.reduceArmy("attacker", attackFrom, attackAt);
+											player.totalArmiesCount--;
+										}
+									}
+								}
+								else {
+									System.out.println("Player chose to Leave attack in the middle.");
+									finishedAttackingThatTerritory = true;
+									attackDone = true;
+									break;
+								}
+							}
+						}
+					} else {
+						System.out.println("Enter a valid country you would like to attack");
+					}
+				} else {
+					System.out.println("Enter a valid country you would like to attack from");
+				}
+			}
+
+			if (defenderLost) {
+				for (Player player : Main.players) {
+					if (player.getName().equalsIgnoreCase(attacker)) {
+						Territory territory = Map.findTerritory(attackAt);
+						player.addNewOwnedTerritory(territory);
+						
+						Territory attacking = Map.findTerritory(attackFrom);
+						int armiesToMove = random.nextInt(attacking.numberOfArmies-1) + 1;
+						System.out.println("Player randomly chose to move "+ armiesToMove + " armies to newly conquered territory");
+						player.moveArmiesToNewTerritory(attackFrom, attackAt, armiesToMove);
+					}
+				}
+			}
+
+			if (Main.activeMap.allTerritoriesOwnBySinglePlayer(false)) {
+				gameCompleted = true;
+				attackDone = true;
+			}
+
+			if (!gameCompleted) {
+				player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+			} else {
+				System.out.println("\nGame Completed!\n" + player.getName() + "wins!!");
+			}
+		} else {
+			System.out.println("This player chose to skip attack phase");
+			player.setCurrentGamePhase(GamePhase.FORTIFICATION);
+		}
 	}
 
 	 @Override
