@@ -148,7 +148,9 @@ public class Benevolent implements Strategy {
 		System.out.println("Skiping attack phase as Benevolent player never attacks");
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
-
+/**
+ * This Method will return string value.
+ */
 	 @Override
 	 public String toString() {
 		 return "benevolent";
