@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.Stack;
+
+import Card.Card;
+
 import java.nio.file.Path;
 
 import Map.Map;
@@ -48,6 +51,10 @@ public class Main {
 	 * string of Arraylist userEnteredTerritoryLines.
 	 */
 	public static ArrayList<String> userEnteredTerritoryLines;
+	/**
+	* list of cards in the game.
+	*/
+	public static ArrayList<Card> cards;
 	/**
 	 * list of players in the game.
 	 */
