@@ -55,6 +55,14 @@ public class Main {
 	* list of cards in the game.
 	*/
 	public static ArrayList<Card> cards;
+	 /**
+	* string of Arraylist userEnteredPlayerLines.
+	*/
+	public static ArrayList<String> userEnteredPlayerLines;
+	/**
+	* string of Arraylist userEnteredCardLines.
+	*/
+	public static ArrayList<String> userEnteredCardLines;
 	/**
 	 * list of players in the game.
 	 */
@@ -273,19 +281,74 @@ public class Main {
 	*/
 	public static void populateUserEnteredTerritoryLines(List<String> allLines) {
 		Integer territoryLineStartIndex = null;
+		Integer territoryLineEndIndex = allLines.size();
 		int lineCount = 0;
 		for(String line : allLines) {
 			if(line.matches("\\[Territories\\]")) {
 				territoryLineStartIndex = lineCount + 1;
 			}
+			if(line.matches("\\[Player\\]")) {
+				territoryLineEndIndex = lineCount;
+			}
 			lineCount++;
 		}
 
 		if(territoryLineStartIndex != null) {
-			userEnteredTerritoryLines.addAll(allLines.subList(territoryLineStartIndex, allLines.size()));
+			userEnteredTerritoryLines.addAll(allLines.subList(territoryLineStartIndex, territoryLineEndIndex));
 		}
 	}
 	
+    /**
+	* This method is used for populating the data
+	* of userEnteredPlayerLines array list.
+	* 
+	* @param allLines A list of strings which contains
+	* all the lines inside map file.
+	*/
+	public static void populateUserEnteredPlayerLines(List<String> allLines) {
+		Integer playerLineStartIndex = null;
+		Integer playerLineEndIndex = null;
+		int lineCount = 0;
+		for(String line : allLines) {
+			if(line.matches("\\[Player\\]")) {
+				playerLineStartIndex = lineCount + 1;
+			}
+			if(line.matches("\\[Card\\]")) {
+				playerLineEndIndex = lineCount;
+			}
+			lineCount++;
+		}
+		
+		if(playerLineStartIndex != null && playerLineStartIndex != null) {
+			userEnteredPlayerLines.addAll(allLines.subList(playerLineStartIndex, playerLineEndIndex));
+		}
+	}
+	
+	/**
+	* This method is used for populating the data
+	* of userEnteredCardLines array list.
+	* 
+	* @param allLines A list of strings which contains
+	* all the lines inside map file.
+	*/
+	public static void populateUserEnteredCardLines(List<String> allLines) {
+		Integer cardLineStartIndex = null;
+		Integer cardLineEndIndex = allLines.size();
+		int lineCount = 0;
+		for(String line : allLines) {
+			if(line.matches("\\[Card\\]")) {
+				cardLineStartIndex = lineCount + 1;
+			}
+			lineCount++;
+		}
+		
+		if(cardLineStartIndex != null) {
+			userEnteredCardLines.addAll(allLines.subList(cardLineStartIndex, cardLineEndIndex));
+		}
+	}
+
+
+
 	/**
 	* This method loads the Map and displays its content.
 	* 
