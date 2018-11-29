@@ -146,6 +146,10 @@ public class Aggressive implements Strategy {
 		player.setCurrentGamePhase(GamePhase.FORTIFICATION);
 	}
 	
+	/**
+	 *This Method will return string value.
+	 *
+	 */
 	 @Override
 	 public String toString() {
 		 return "aggressive";
