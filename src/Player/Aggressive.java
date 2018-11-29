@@ -12,6 +12,15 @@ import Map.Map.Territory;
 import Player.Player.GamePhase;
 import Views.CardExchangeView;
 
+/**
+ * The Aggressive class is implementing functions 
+ * in Strategy interface
+ * 
+ * @author mandeepahlawat
+ * @version 1.0
+ * @since 24-11-2018
+ *
+ */
 public class Aggressive implements Strategy {
 	/**
 	 * The player to which this strategy belongs to
@@ -19,14 +28,25 @@ public class Aggressive implements Strategy {
 	public Player player;
 
 	/**
-	 * constructor for this class and sets the player data member
 	 * 
-	 * @param player
+	 * constructor for this class and sets the
+	 * player data member.
+	 * 
+	 * @param player assign the player value.
+	 *
 	 */
 	public Aggressive(Player player) {
 		this.player = player;
 	}
-
+	
+	/**
+	 *
+	 * Calculation of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @return int value of the total reinforcement armies
+	 * 
+	 */
 	@Override
 	public int calculateReinforcementArmies() {
 		int totalReinforcements = 0;
@@ -58,6 +78,15 @@ public class Aggressive implements Strategy {
 		return totalReinforcements;
 	}
 
+	/**
+	 * 
+	 * Placement of reinforcement armies,
+	 * which will vary depending on the strategy.
+	 * 
+	 * @param reinforcements - number of reinforcements
+	 * to be place.
+	 * 
+	 */
 	@Override
 	public void placeReinforcements(int reinforcements) {
 		Territory territory = player.territoryWithMaxArmy(player.assignedTerritories);
@@ -68,6 +97,12 @@ public class Aggressive implements Strategy {
 		System.out.println("Armies count after move: " + territory.name + ": " + territory.numberOfArmies + " armies");
 	}
 
+	/**
+	 *
+	 * Fortification phase, whose implementation will
+	 * vary depending on the strategy.
+	 * 
+	 */
 	@Override
 	public void fortification() {
 		ArrayList<Territory> territories = new ArrayList<Territory>(player.assignedTerritories);
@@ -100,6 +135,12 @@ public class Aggressive implements Strategy {
 
 	}
 
+	/**
+	 * 
+	 * Attack phase, whose implementation will
+	 * vary depending on the strategy.
+	 *
+	 */
 	@Override
 	public void attack() {
 
@@ -210,5 +251,10 @@ public class Aggressive implements Strategy {
 			System.out.println("\nGame Completed!\n" + player.getName() + "wins!!");
 		}
 	}
+	
+	 @Override
+	 public String toString() {
+		 return "aggressive";
+	 }
 
 }

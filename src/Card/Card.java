@@ -3,6 +3,7 @@ package Card;
 import java.util.ArrayList;
 import java.util.Random;
 
+import Driver.Main;
 import Map.Map.Territory;
 import Player.Player;
 
@@ -82,8 +83,22 @@ public class Card {
 		this.type = CardType.getRandomCard();
 		this.territory = territory;
 		this.previousOwners = new ArrayList<Player>();
+		Main.cards.add(this);
 	}
 	
+
+    /**
+	* This is the default constructor of the Card class and will be used to
+	* create the cardtype and territory 
+	* 
+	* @param territory the new territory 
+	*/
+	public Card(Territory territory, CardType type) {
+		this.type = type;
+		this.territory = territory;
+		this.previousOwners = new ArrayList<Player>();
+		Main.cards.add(this);
+	}
 	
 	/**
 	 * This method assigns the owner of the card to the player class
