@@ -209,117 +209,38 @@ public class Map_Test {
 	}
 	
 	/**
-	* This method is used to test if Map is a valid one. 
-	* 
-	* return True if all the territories are owned by a user
-	* 
-	* return False if not all the territories are owned by the user
-	*/
+	 * this method is to test the validity of a map passed 
+	 * 
+	 * passing a valid map
+	 */
 	@Test
-	public void testValidateMapForValidMap() throws IOException {
-		Main.userEnteredContinentLines = new ArrayList<>(); // need to initialize it here as we are initializing static variable inside the main method
-		Main.userEnteredTerritoryLines = new ArrayList<>();
-		String path = FILE_NAME;
-		Path expPath = Paths.get(path);
-		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
-		Main.populateUserEnteredContinentLines(linesBeforeRunningMethod); 
-		Main.populateUserEnteredTerritoryLines(linesBeforeRunningMethod);
-		 
-		
-		Main.userEnteredContinentLines.removeAll(Arrays.asList("", null));
-		Main.userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
-		
+	public void testValidateMap() {
+		Main.cards=new ArrayList<>();
 		Main.activeMap = new Map();
-		for(String continentLines : Main.userEnteredContinentLines) {
-			String continentName = continentLines.split("=")[0].trim();
-			int continentScore = Integer.parseInt(continentLines.split("=")[1].trim());
-			
-			if(!Main.activeMap.addContinent(continentName, continentScore)) {
-				System.out.println("Couldn't add continent because format is invalid"
-						+ "as the continent name already exists");
-				System.exit(0);
-			}
-			
-		}
-		
-		for(String territoryLines : Main.userEnteredTerritoryLines) {
-			List<String> territoryLineArray = new ArrayList<String>(); 
-			for(String territoryLine : territoryLines.split(",")) {
-				territoryLineArray.add(territoryLine.trim());
-			}
-			
-			Territory territory = Map.findTerritory(territoryLineArray.get(0));
-			if(territory == null) {
-				territory = new Territory(territoryLineArray.get(0));
-			}
-			territory.addNeighbours(String.join(",", territoryLineArray.subList(4, territoryLineArray.size())));
-			
-			if(!territory.assignContinent(territoryLineArray.get(3))) {
-				System.out.println("Couldn't assign continent because format is invalid as"
-						+ "the continent is already assigned to territory or doesn't exists.");
-				System.exit(0);
-			}
-			
-		}
-		System.out.println(Main.activeMap.validateMap(false));
-		assertTrue(Main.activeMap.validateMap(false));
+		Main.userEnteredContinentLines = new ArrayList<String>();
+		Main.userEnteredTerritoryLines = new ArrayList<String>();
+		Main.userEnteredPlayerLines = new ArrayList<>();
+		Main.userEnteredCardLines = new ArrayList<>();
+		Main.buildMapFromSaveData(FILE_NAME);
+		System.out.println("validmap:"+Main.activeMap.validateMap(false));
+		assertTrue(Main.activeMap.validateMap(false)); 
 	}
-	 
 	/**
-	* This method is used to test if Map is a valid one. 
-	* 
-	* return True if all the territories are owned by a user
-	* 
-	* return False if not all the territories are owned by the user
-	*/
+	 * this method is to test the validity of a map passed 
+	 * 
+	 * passing an invalid map
+	 */
 	@Test
-	public void testValidateMapForInValidMap() throws IOException {
-		Main.userEnteredContinentLines = new ArrayList<>(); // need to initialize it here as we are initializing static variable inside the main method
-		Main.userEnteredTerritoryLines = new ArrayList<>();
-		String path = INFILE_NAME;
-		Path expPath = Paths.get(path);
-		List<String> linesBeforeRunningMethod =Files.readAllLines(expPath, StandardCharsets.UTF_8);
-		Main.populateUserEnteredContinentLines(linesBeforeRunningMethod); 
-		Main.populateUserEnteredTerritoryLines(linesBeforeRunningMethod);
-		 
-		
-		Main.userEnteredContinentLines.removeAll(Arrays.asList("", null));
-		Main.userEnteredTerritoryLines.removeAll(Arrays.asList("", null));
-		
+	public void testInValidateMap() {
+		Main.cards=new ArrayList<>();
 		Main.activeMap = new Map();
-		for(String continentLines : Main.userEnteredContinentLines) {
-			String continentName = continentLines.split("=")[0].trim();
-			int continentScore = Integer.parseInt(continentLines.split("=")[1].trim());
-			
-			if(!Main.activeMap.addContinent(continentName, continentScore)) {
-				System.out.println("Couldn't add continent because format is invalid"
-						+ "as the continent name already exists");
-				System.exit(0);
-			}
-			
-		}
-		
-		for(String territoryLines : Main.userEnteredTerritoryLines) {
-			List<String> territoryLineArray = new ArrayList<String>(); 
-			for(String territoryLine : territoryLines.split(",")) {
-				territoryLineArray.add(territoryLine.trim());
-			}
-			
-			Territory territory = Map.findTerritory(territoryLineArray.get(0));
-			if(territory == null) {
-				territory = new Territory(territoryLineArray.get(0));
-			}
-			territory.addNeighbours(String.join(",", territoryLineArray.subList(4, territoryLineArray.size())));
-			
-			if(!territory.assignContinent(territoryLineArray.get(3))) {
-				System.out.println("Couldn't assign continent because format is invalid as"
-						+ "the continent is already assigned to territory or doesn't exists.");
-				System.exit(0);
-			}
-			
-		}
-		System.out.println(Main.activeMap.validateMap(false));
-		assertFalse(Main.activeMap.validateMap(false));
+		Main.userEnteredContinentLines = new ArrayList<String>();
+		Main.userEnteredTerritoryLines = new ArrayList<String>();
+		Main.userEnteredPlayerLines = new ArrayList<>();
+		Main.userEnteredCardLines = new ArrayList<>();
+		Main.buildMapFromSaveData(INFILE_NAME);
+		System.out.println("Invalidmap:"+Main.activeMap.validateMap(false));
+		assertFalse(Main.activeMap.validateMap(false)); 
 	}
 
 }

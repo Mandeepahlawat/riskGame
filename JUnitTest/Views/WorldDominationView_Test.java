@@ -26,6 +26,7 @@ public class WorldDominationView_Test {
 	*/
 	@Before
 	public void testBefore() {
+		Main.cards=new ArrayList<>();
 		worldView = new WorldDominationView();
 		player = new Player("Player1");
 		Main.players = new ArrayList<>();
@@ -40,6 +41,7 @@ public class WorldDominationView_Test {
 		Territory t1 = new Territory("Africa");
 		t1.addNeighbours("India,Pakistan");
 		t1.numberOfArmies=5;
+		t1.owner=player;
 		t1.continent=new Map();
 		t1.continent.name="Asia";
 		worldView = new WorldDominationView();
