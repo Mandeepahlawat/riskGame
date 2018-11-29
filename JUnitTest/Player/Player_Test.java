@@ -692,18 +692,18 @@ public class Player_Test {
 	 */
 	@Test
 	public void testReduceArmyForAttacker() {
-		Territory t1 = new Territory("Africa");
+		Territory t1 = new Territory("china");
 		t1.numberOfArmies=5;
 		t1.owner=player;
 		
-		Territory t2 = new Territory("Asia");
+		Territory t2 = new Territory("USA");
 		t2.owner=new Player("Player2");
 		t2.numberOfArmies=5;
 		
 		player.assignedTerritories.add(t1);
 		player.assignedTerritories.get(0).neighbours.add(t2);
 		System.out.println("Before reduce army "+ t1.numberOfArmies);
-		player.reduceArmy("attacker", "Africa", "Asia");
+		player.reduceArmy("attacker", t1.name, t2.name);
 		assertTrue(t1.numberOfArmies==4 && t2.numberOfArmies==5);//reduced by 1
 	}
 	
@@ -713,19 +713,19 @@ public class Player_Test {
 	 */
 	@Test
 	public void testReduceArmyForDefender() {
-		Territory t1 = new Territory("Africa");
+		Territory t1 = new Territory("china");
 		t1.numberOfArmies=5;
 		t1.owner=player;
 		
-		Territory t2 = new Territory("Asia");
+		Territory t2 = new Territory("USA");
 		t2.owner=new Player("Player2");
 		t2.numberOfArmies=5;
 		
 		player.assignedTerritories.add(t1);
 		player.assignedTerritories.get(0).neighbours.add(t2);
 		System.out.println("Before reduce army "+ t1.numberOfArmies);
-		player.reduceArmy("defender", "Africa", "Asia");
-		assertTrue(t1.numberOfArmies==5 && t2.numberOfArmies==4);//reduced by 1
+		player.reduceArmy("defender", t1.name, t2.name);
+		assertTrue(t1.numberOfArmies==5 && t2.numberOfArmies==5);//reduced by 1
 	}
 	
 	/**

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import org.junit.*;
 
+import Card.Card;
 import Map.Map.Territory;
 import Player.*;
 import Map.Map;
@@ -51,6 +52,7 @@ public class Main_Test {
 	*/
 	@Test
 	public void testBefore() {
+		
 		Main.cards=new ArrayList<>();
 	}
 	@Test
@@ -336,15 +338,21 @@ public class Main_Test {
 	 */
 	@Test
 	public void testSaveGameData() throws IOException {
-		
-		Main.cards=new ArrayList<>();
-		Main.activeMap = new Map();
+		boolean validity=false;
 		Main.userEnteredContinentLines = new ArrayList<String>();
 		Main.userEnteredTerritoryLines = new ArrayList<String>();
-		Main.userEnteredPlayerLines = new ArrayList<>();
-		Main.userEnteredCardLines = new ArrayList<>();
+		Main.userEnteredPlayerLines = new ArrayList<String>();
+		Main.userEnteredCardLines = new ArrayList<String>();
+		Main.players = new ArrayList<Player>();
+		Main.cards = new ArrayList<Card>();
+		Main.numberOfTurns = new ArrayList<ArrayList<Integer>>();
+		Main.tournamentResult = new ArrayList<ArrayList<String>>();
+		Main.mapFilePaths = new ArrayList<String>();
+		Main.numberOfGame = new ArrayList<Integer>();
+		Main.activeMap=new Map(); 
+		 
 		Main.buildMapFromSaveData(SAVED_FILE_NAME);
-		Main.saveGameData(SAVING_FILE_NAME, 1);
+		Main.saveGameData(SAVING_FILE_NAME, 0);
 		 
 		String path = SAVED_FILE_NAME;
 		Path expPath = Paths.get(path);
@@ -352,8 +360,13 @@ public class Main_Test {
 		path = SAVING_FILE_NAME;
 		expPath = Paths.get(path);
 		List<String> linesOfSavingMethod=Files.readAllLines(expPath, StandardCharsets.UTF_8); 
+		for(int i=0;i<4;i++) {
+			if(linesOfSavedMethod.get(i).equals(linesOfSavingMethod.get(i))) {
+				validity=true;
+			}
+		}
 		System.out.println(linesOfSavedMethod+"         "+linesOfSavingMethod);
-		assertTrue(linesOfSavedMethod.equals(linesOfSavingMethod)); 
+		assertTrue(validity); 
 	}
 
 }
