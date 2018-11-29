@@ -854,6 +854,9 @@ public class Player_Test {
 		assertTrue(territoryNeighborOther.isEmpty()); //0 is attacker 1 is defender
 	}
 	
+	/**
+	 * this method test neighbor territories
+	 */
 	@Test
 	public void testGetTerritoriesWithNeighboursToOthersSpecific() {
 		boolean territoryFound=false;
@@ -889,4 +892,102 @@ public class Player_Test {
 		assertTrue(territoryFound); //0 is attacker 1 is defender
 	}
 	
+	/**
+	 * this method tests the newly added territory owner
+	 */
+	@Test
+	public void testAddNewOwnedTerritoryOwner() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Player player2 = new Player("Player2");
+		player2.totalArmiesCount=10;
+		player2.addNewOwnedTerritory(t1);
+		System.out.println(t1.numberOfArmies+" "+t1.owner.getName());
+		assertEquals("Player2", t1.owner.getName());
+	}
+	/**
+	 *
+	 * this method tests the newly added armies to new territory owner
+	 *
+	 */
+	@Test
+	public void testAddNewOwnedTerritoryTotalArmies() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Player player2 = new Player("Player2");
+		player2.totalArmiesCount=10;
+		player2.addNewOwnedTerritory(t1);
+		System.out.println(t1.numberOfArmies+" "+t1.owner.getName());
+		assertEquals(15, player2.totalArmiesCount);
+	}
+	
+	/**
+	 * this method test the eliminated players card being empty
+	 */
+	@Test
+	public void testGotEliminated() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1);
+		c1.type = CardType.ARTILLERY;// invalid if two card of same type is exchanging
+		c2.type = CardType.ARTILLERY;
+		c3.type = CardType.INFANTRY;
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3);
+		Player player2 = new Player("Player2");
+		player2.totalArmiesCount=10;
+		player.gotEliminated(player2);
+		assertTrue(player.cards.isEmpty());
+	}
+	/**
+	 * this method test card indexeds to be exchanged
+	 */
+	@Test
+	public void testGetCardIndexesToExchangeWith3Cards() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1);
+		c1.type = CardType.ARTILLERY;// invalid if two card of same type is exchanging
+		c2.type = CardType.ARTILLERY;
+		c3.type = CardType.INFANTRY;
+		player.cards.add(c1);
+		player.cards.add(c2);
+		player.cards.add(c3);
+		 
+		ArrayList<Integer> indexes = player.getCardIndexesToExchange();
+		assertTrue(indexes.equals(new ArrayList<Integer>(Arrays.asList(0,1,2))));
+	}
+	/**
+	 * this method test card indexeds to be exchanged
+	 */
+	@Test
+	public void testGetCardIndexesToExchangeWithout3Cards() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		player.totalArmiesCount=10;
+		Card c1 = new Card(t1);
+		Card c2 = new Card(t1);
+		Card c3 = new Card(t1);
+		c1.type = CardType.ARTILLERY;// invalid if two card of same type is exchanging 
+		c3.type = CardType.INFANTRY;
+		player.cards.add(c1); 
+		player.cards.add(c3); 
+		 
+		ArrayList<Integer> indexes = player.getCardIndexesToExchange();
+		assertTrue(indexes.equals(new ArrayList<Integer>(Arrays.asList(0,1))));
+	}
 }
