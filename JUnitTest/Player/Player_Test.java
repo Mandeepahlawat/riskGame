@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -350,7 +351,7 @@ public class Player_Test {
 		player.cards.add(c2);
 		player.cards.add(c3);
 		int beforeSize = player.cards.size();
-		player.exchangeCards(1,2,3);
+		player.exchangeCards(0,1,2);
 		int afterSize = player.cards.size();
 		System.out.println("After: "+player.cards.size());
 		assertTrue(beforeSize==3&&afterSize==0); 
@@ -530,7 +531,7 @@ public class Player_Test {
 		player.cards.add(c1);
 		player.cards.add(c2);
 		player.cards.add(c3); 
-		assertTrue(player.validCardIndexesToExchange(1, 2, 3));
+		assertTrue(player.validCardIndexesToExchange(0,1,2));
 	}
 
 	/**
@@ -566,7 +567,7 @@ public class Player_Test {
 		player.cards.add(c1);
 		player.cards.add(c2);
 		player.cards.add(c3); 
-		assertFalse(player.validCardIndexesToExchange(1, 2, 3));
+		assertFalse(player.validCardIndexesToExchange(0,1,2));
 	}
 	/**
 	* This method is used to test function that returns the list of continents owned
@@ -667,4 +668,129 @@ public class Player_Test {
 		player.assignedTerritories.add(t1);
 		assertTrue(player.getRandomTerritory(player.assignedTerritories).name.equals("Africa"));//since randome its tested using single value
 	}
+	
+	/**
+	 * this method test the return of attacking player name
+	 */
+	@Test
+	public void testAttackingPlayer() {
+		Territory t1 = new Territory("Africa");
+		t1.owner=player;
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		assertTrue(player.attackingPlayer("Africa", "Asia").equals("Player1"));
+	}
+	
+	/**
+	 * This method test the reduce army method for a player
+	 * for an attacker
+	 */
+	@Test
+	public void testReduceArmyForAttacker() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		t2.numberOfArmies=5;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		System.out.println("Before reduce army "+ t1.numberOfArmies);
+		player.reduceArmy("attacker", "Africa", "Asia");
+		assertTrue(t1.numberOfArmies==4 && t2.numberOfArmies==5);//reduced by 1
+	}
+	
+	/**
+	 * This method test the reduce army method for a player
+	 * for a Defender
+	 */
+	@Test
+	public void testReduceArmyForDefender() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		t2.numberOfArmies=5;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		System.out.println("Before reduce army "+ t1.numberOfArmies);
+		player.reduceArmy("defender", "Africa", "Asia");
+		assertTrue(t1.numberOfArmies==5 && t2.numberOfArmies==4);//reduced by 1
+	}
+	
+	/**
+	 * this method is to test the number of armies 
+	 * within attacker and defender countries
+	 */
+	@Test
+	public void testReturnArmiesLeft() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.owner=new Player("Player2");
+		t2.numberOfArmies=10;
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.get(0).neighbours.add(t2);
+		
+		Vector<Integer> armies=player.returnArmiesLeft("Africa", "Asia");
+		assertTrue(armies.get(0).equals(5) && armies.get(1).equals(10)); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return territory with max army 
+	 */
+	
+	@Test
+	public void testTerritoryWithMaxArmy() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=player;
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		
+		Territory maxTerritory = player.territoryWithMaxArmy(player.assignedTerritories);
+		assertTrue(maxTerritory.name.equals("Asia")); //0 is attacker 1 is defender
+	}
+	
+	/**
+	 * this method is to test the method 
+	 * that return territory with minimum army 
+	 */
+	
+	@Test
+	public void testTerritoryWithMinArmy() {
+		Territory t1 = new Territory("Africa");
+		t1.numberOfArmies=5;
+		t1.owner=player;
+		
+		Territory t2 = new Territory("Asia");
+		t2.numberOfArmies=10;
+		t2.owner=player;
+		
+		
+		player.assignedTerritories.add(t1);
+		player.assignedTerritories.add(t2);
+		
+		Territory maxTerritory = player.territoryWithMinArmy(player.assignedTerritories);
+		assertTrue(maxTerritory.name.equals("Africa")); //0 is attacker 1 is defender
+	}
+	
+	
 }
